@@ -18,7 +18,7 @@ interface ShippingForm {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, totalCents, clearCart } = useCartStore();
+  const { items, totalCents } = useCartStore();
   const [loadingUser, setLoadingUser] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -89,7 +89,7 @@ export default function CheckoutPage() {
           user_id: userId,
           status: "pending",
           payment_status: "pending",
-          payment_provider: "manual",
+          payment_provider: "stripe",
           subtotal_cents: subtotal,
           shipping_cents: shippingCents,
           tax_cents: taxCents,
@@ -126,19 +126,40 @@ export default function CheckoutPage() {
         throw new Error("Could not create order items.");
       }
 
-      clearCart();
-      router.push(`/order/confirmation/${orderId}`);
-    } catch (err: unknown) {
-      let errorMessage = "Something went wrong during checkout.";
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId,
+          currency: "USD",
+          items: items.map((item) => ({
+            name: item.name,
+            quantity: item.quantity,
+            unit_amount_cents: item.priceCents,
+          })),
+        }),
+      });
 
-      if (err instanceof Error) {
-        errorMessage = err.message;
-      } else if (typeof err === "string") {
-        errorMessage = err;
+      if (!response.ok) {
+        console.error("Checkout session error", await response.text());
+        throw new Error("Unable to start Stripe checkout.");
       }
 
+      const { url } = await response.json();
+
+      if (!url) {
+        throw new Error("No checkout URL returned.");
+      }
+
+      window.location.href = url;
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong during checkout.";
       setError(errorMessage);
-    } finally {
       setSubmitting(false);
     }
   };
