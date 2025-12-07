@@ -1,40 +1,51 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { isAdminEmail } from "@/lib/isAdmin";
 
 export function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [checkingSession, setCheckingSession] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession()
+      const { data, error } = await supabase.auth.getSession();
       if (!error && data.session) {
-        setIsLoggedIn(true)
+        setIsLoggedIn(true);
       } else {
-        setIsLoggedIn(false)
+        setIsLoggedIn(false);
       }
-      setCheckingSession(false)
-    }
+      setCheckingSession(false);
+    };
 
-    checkSession()
+    checkSession();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(!!session)
-    })
+      setIsLoggedIn(!!session);
+    });
 
     return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      const email = data.user?.email ?? null;
+      setIsAdmin(isAdminEmail(email));
+    };
+    loadUser();
+  }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-  }
+    await supabase.auth.signOut();
+  };
 
   return (
     <header className="border-b border-zinc-900 bg-black/80 backdrop-blur">
@@ -82,6 +93,15 @@ export function Header() {
             Cart
           </Link>
 
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="text-xs text-amber-300 hover:text-amber-200"
+            >
+              Admin
+            </Link>
+          )}
+
           {!checkingSession && (
             <>
               {!isLoggedIn ? (
@@ -112,5 +132,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

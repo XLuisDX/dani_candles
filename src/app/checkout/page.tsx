@@ -23,6 +23,7 @@ export default function CheckoutPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   const [form, setForm] = useState<ShippingForm>({
     fullName: "",
@@ -48,6 +49,7 @@ export default function CheckoutPage() {
         return;
       }
       setUserId(data.session.user.id);
+      setUserEmail(data.session.user.email ?? null);
       setLoadingUser(false);
     };
 
@@ -87,6 +89,7 @@ export default function CheckoutPage() {
         .from("orders")
         .insert({
           user_id: userId,
+          customer_email: userEmail,
           status: "pending",
           payment_status: "pending",
           payment_provider: "stripe",
