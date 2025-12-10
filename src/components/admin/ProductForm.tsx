@@ -3,18 +3,21 @@
 import { useState } from "react"
 
 export interface ProductFormValues {
-  name: string
-  price: string
-  currencyCode: string
-  active: boolean
+  name: string;
+  price: string;
+  currencyCode: string;
+  active: boolean;
+  shortDescription: string;
+  description: string;
+  categoryId: string;
 }
 
 interface ProductFormProps {
-  initialValues?: ProductFormValues
-  mode: "create" | "edit"
-  onSubmit: (values: ProductFormValues) => Promise<void>
-  submitting?: boolean
-  error?: string | null
+  initialValues?: ProductFormValues;
+  mode: "create" | "edit";
+  onSubmit: (values: ProductFormValues) => Promise<void>;
+  submitting?: boolean;
+  error?: string | null;
 }
 
 export function ProductForm({
@@ -30,27 +33,32 @@ export function ProductForm({
       price: "",
       currencyCode: "USD",
       active: true,
+      shortDescription: "",
+      description: "",
+      categoryId: "",
     }
-  )
+  );
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
-    const target = e.target
-    const { name, value } = target
-    const checked = target instanceof HTMLInputElement ? target.checked : false
-    const type = target instanceof HTMLInputElement ? target.type : "select"
-    
+    const target = e.target;
+    const { name, value } = target;
+    const checked = target instanceof HTMLInputElement ? target.checked : false;
+    const type = target instanceof HTMLInputElement ? target.type : "text";
+
     setValues((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await onSubmit(values)
-  }
+    e.preventDefault();
+    await onSubmit(values);
+  };
 
   return (
     <form
@@ -71,11 +79,40 @@ export function ProductForm({
         />
       </div>
 
+      <div className="space-y-1">
+        <label className="text-xs font-medium text-zinc-300">
+          Short description
+        </label>
+        <textarea
+          name="shortDescription"
+          value={values.shortDescription}
+          onChange={handleChange}
+          rows={2}
+          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
+          placeholder="One or two lines that describe this candle..."
+        />
+        <p className="text-[10px] text-zinc-500">
+          Used in product cards and highlights. Keep it short and punchy.
+        </p>
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs font-medium text-zinc-300">
+          Full description
+        </label>
+        <textarea
+          name="description"
+          value={values.description}
+          onChange={handleChange}
+          rows={4}
+          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
+          placeholder="Story, scent notes, usage and care..."
+        />
+      </div>
+
       <div className="grid gap-4 md:grid-cols-[1.2fr_1fr]">
         <div className="space-y-1">
-          <label className="text-xs font-medium text-zinc-300">
-            Price
-          </label>
+          <label className="text-xs font-medium text-zinc-300">Price</label>
           <div className="flex items-center gap-2">
             <span className="rounded-lg border border-zinc-800 bg-zinc-950 px-2 py-2 text-xs text-zinc-400">
               $
@@ -95,9 +132,7 @@ export function ProductForm({
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-zinc-300">
-            Currency
-          </label>
+          <label className="text-xs font-medium text-zinc-300">Currency</label>
           <select
             name="currencyCode"
             value={values.currencyCode}
@@ -107,6 +142,23 @@ export function ProductForm({
             <option value="USD">USD</option>
           </select>
         </div>
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs font-medium text-zinc-300">
+          Category ID (uuid, optional)
+        </label>
+        <input
+          name="categoryId"
+          value={values.categoryId}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
+          placeholder="Leave empty or paste a valid category UUID"
+        />
+        <p className="text-[10px] text-zinc-500">
+          Must be a valid UUID if you use it. Leave empty if you don&apos;t have
+          categories yet.
+        </p>
       </div>
 
       <div className="flex items-center justify-between pt-1">
@@ -122,11 +174,7 @@ export function ProductForm({
         </label>
       </div>
 
-      {error && (
-        <p className="text-xs text-red-400">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-xs text-red-400">{error}</p>}
 
       <div className="flex justify-end gap-2 pt-2">
         <button
@@ -138,5 +186,5 @@ export function ProductForm({
         </button>
       </div>
     </form>
-  )
+  );
 }

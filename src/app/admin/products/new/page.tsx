@@ -1,72 +1,91 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabaseClient"
-import { isAdminEmail } from "@/lib/isAdmin"
-import {
-  ProductForm,
-  ProductFormValues,
-} from "@/components/admin/ProductForm"
-import { slugify } from "@/lib/slugify"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import { isAdminEmail } from "@/lib/isAdmin";
+import { ProductForm, ProductFormValues } from "@/components/admin/ProductForm";
+import { slugify } from "@/lib/slugify";
 
 export default function NewProductPage() {
-  const router = useRouter()
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data, error } = await supabase.auth.getUser()
+      const { data, error } = await supabase.auth.getUser();
       if (error || !data.user) {
-        router.push("/auth/login")
-        return
+        router.push("/auth/login");
+        return;
       }
-      const email = data.user.email ?? null
+      const email = data.user.email ?? null;
       if (!isAdminEmail(email)) {
-        router.push("/")
-        return
+        router.push("/");
+        return;
       }
-    }
-    checkAdmin()
-  }, [router])
+    };
+    checkAdmin();
+  }, [router]);
 
   const handleSubmit = async (values: ProductFormValues) => {
-    setSubmitting(true)
-    setError(null)
+    setSubmitting(true);
+    setError(null);
 
     try {
-      const priceNumber = parseFloat(values.price)
+      const priceNumber = parseFloat(values.price);
       if (isNaN(priceNumber) || priceNumber < 0) {
-        setError("Price must be a valid positive number.")
-        setSubmitting(false)
-        return
+        setError("Price must be a valid positive number.");
+        setSubmitting(false);
+        return;
       }
 
-      const priceCents = Math.round(priceNumber * 100)
+      const priceCents = Math.round(priceNumber * 100);
+
+      let categoryIdValue: string | null = null;
+      const trimmedCategoryId = values.categoryId.trim();
+
+      if (trimmedCategoryId !== "") {
+        const uuidRegex =
+          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+        if (!uuidRegex.test(trimmedCategoryId)) {
+          setError("Category ID must be a valid UUID or empty.");
+          setSubmitting(false);
+          return;
+        }
+        categoryIdValue = trimmedCategoryId;
+      }
 
       const { data, error } = await supabase
         .from("products")
         .insert({
           name: values.name,
+          slug: slugify(values.name),
           price_cents: priceCents,
-          slug: slugify(values.name), 
           currency_code: values.currencyCode,
           active: values.active,
+          short_description:
+            values.shortDescription.trim() === ""
+              ? null
+              : values.shortDescription.trim(),
+          description:
+            values.description.trim() === "" ? null : values.description.trim(),
+          category_id: categoryIdValue,
         })
         .select("id")
-        .single()
+        .single();
 
       if (error || !data) {
-        console.error(error)
-        setError("Could not create product.")
+        console.error(error);
+        setError("Could not create product.");
       } else {
-        router.push("/admin/products")
+        router.push("/admin/products");
       }
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
@@ -92,5 +111,5 @@ export default function NewProductPage() {
         error={error}
       />
     </main>
-  )
+  );
 }
