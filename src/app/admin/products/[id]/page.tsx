@@ -15,6 +15,7 @@ interface AdminProduct {
   short_description: string | null;
   description: string | null;
   category_id: string | null;
+  image_url: string | null;
 }
 
 export default function EditProductPage() {
@@ -51,7 +52,7 @@ export default function EditProductPage() {
       const { data, error } = await supabase
         .from("products")
         .select(
-          "id, name, price_cents, currency_code, active, short_description, description, category_id"
+          "id, name, price_cents, currency_code, active, short_description, description, category_id, image_url"
         )
         .eq("id", productId)
         .single();
@@ -72,7 +73,10 @@ export default function EditProductPage() {
     }
   }, [productId]);
 
-  const handleSubmit = async (values: ProductFormValues) => {
+  const handleSubmit = async (
+    values: ProductFormValues,
+    imageFile: File | null
+  ) => {
     if (!product) return;
     setSubmitting(true);
     setError(null);
@@ -93,7 +97,6 @@ export default function EditProductPage() {
       if (trimmedCategoryId !== "") {
         const uuidRegex =
           /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
-
         if (!uuidRegex.test(trimmedCategoryId)) {
           setError("Category ID must be a valid UUID or empty.");
           setSubmitting(false);
@@ -119,16 +122,47 @@ export default function EditProductPage() {
         })
         .eq("id", product.id)
         .select(
-          "id, name, price_cents, currency_code, active, short_description, description, category_id"
+          "id, name, price_cents, currency_code, active, short_description, description, category_id, image_url"
         )
         .single();
 
       if (error || !data) {
         console.error(error);
         setError("Could not update product.");
-      } else {
-        router.push("/admin/products");
+        return;
       }
+
+      let updatedProduct = data as AdminProduct;
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("productId", product.id);
+
+        try {
+          const res = await fetch("/api/admin/upload-product-image", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) {
+            console.error("Upload product image failed:", await res.text());
+          } else {
+            const json = await res.json().catch(() => null);
+            if (json?.imageUrl) {
+              updatedProduct = {
+                ...updatedProduct,
+                image_url: json.imageUrl as string,
+              };
+            }
+          }
+        } catch (err) {
+          console.error("Error calling upload-product-image:", err);
+        }
+      }
+
+      setProduct(updatedProduct);
+      router.push("/admin/products");
     } finally {
       setSubmitting(false);
     }
@@ -141,6 +175,7 @@ export default function EditProductPage() {
       </main>
     );
   }
+
   if (!product) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-10">
@@ -189,6 +224,7 @@ export default function EditProductPage() {
         onSubmit={handleSubmit}
         submitting={submitting}
         error={error}
+        currentImageUrl={product.image_url}
       />
     </main>
   );

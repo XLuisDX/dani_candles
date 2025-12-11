@@ -28,7 +28,10 @@ export default function NewProductPage() {
     checkAdmin();
   }, [router]);
 
-  const handleSubmit = async (values: ProductFormValues) => {
+  const handleSubmit = async (
+    values: ProductFormValues,
+    imageFile: File | null
+  ) => {
     setSubmitting(true);
     setError(null);
 
@@ -48,7 +51,6 @@ export default function NewProductPage() {
       if (trimmedCategoryId !== "") {
         const uuidRegex =
           /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
-
         if (!uuidRegex.test(trimmedCategoryId)) {
           setError("Category ID must be a valid UUID or empty.");
           setSubmitting(false);
@@ -79,9 +81,31 @@ export default function NewProductPage() {
       if (error || !data) {
         console.error(error);
         setError("Could not create product.");
-      } else {
-        router.push("/admin/products");
+        return;
       }
+
+      const productId = data.id as string;
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("productId", productId);
+
+        try {
+          const res = await fetch("/api/admin/upload-product-image", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) {
+            console.error("Upload product image failed:", await res.text());
+          }
+        } catch (err) {
+          console.error("Error calling upload-product-image:", err);
+        }
+      }
+
+      router.push("/admin/products");
     } finally {
       setSubmitting(false);
     }

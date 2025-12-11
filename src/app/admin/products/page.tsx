@@ -19,50 +19,51 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<AdminProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data, error } = await supabase.auth.getUser()
+      const { data, error } = await supabase.auth.getUser();
       if (error || !data.user) {
-        router.push("/auth/login")
-        return
+        router.push("/auth/login");
+        return;
       }
-      const email = data.user.email ?? null
+      const email = data.user.email ?? null;
       if (!isAdminEmail(email)) {
-        router.push("/")
-        return
+        router.push("/");
+        return;
       }
-    }
-    checkAdmin()
-  }, [router])
+    };
+    checkAdmin();
+  }, [router]);
 
   useEffect(() => {
     const loadProducts = async () => {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       const { data, error } = await supabase
         .from("products")
         .select("id, name, price_cents, currency_code, active, created_at")
-        .order("created_at", { ascending: false })
+        .order("created_at", { ascending: false });
 
       if (error) {
-        console.error(error)
-        setError("Could not load products.")
+        console.error(error);
+        setError("Could not load products.");
       } else {
-        setProducts(data as AdminProduct[])
+        setProducts(data as AdminProduct[]);
       }
 
-      setLoading(false)
-    }
+      setLoading(false);
+    };
 
-    loadProducts()
-  }, [])
+    loadProducts();
+  }, []);
 
   const toggleActive = async (productId: string, current: boolean) => {
-    setUpdatingId(productId)
-    setError(null)
+    setUpdatingId(productId);
+    setError(null);
 
     try {
       const { data, error } = await supabase
@@ -70,20 +71,46 @@ export default function AdminProductsPage() {
         .update({ active: !current })
         .eq("id", productId)
         .select("id, name, price_cents, currency_code, active, created_at")
-        .single()
+        .single();
 
       if (error || !data) {
-        console.error(error)
-        setError("Could not update product status.")
+        console.error(error);
+        setError("Could not update product status.");
       } else {
         setProducts((prev) =>
           prev.map((p) => (p.id === productId ? (data as AdminProduct) : p))
-        )
+        );
       }
     } finally {
-      setUpdatingId(null)
+      setUpdatingId(null);
     }
-  }
+  };
+
+  const handleDeleteProduct = async (productId: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to permanently delete this product?"
+    );
+    if (!confirmed) return;
+
+    setDeletingId(productId);
+    setError(null);
+
+    try {
+      const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", productId);
+
+      if (error) {
+        console.error(error);
+        setError("Could not delete product.");
+      } else {
+        setProducts((prev) => prev.filter((p) => p.id !== productId));
+      }
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
@@ -109,21 +136,13 @@ export default function AdminProductsPage() {
       </div>
 
       {loading && (
-        <p className="mt-6 text-sm text-zinc-400">
-          Loading products...
-        </p>
+        <p className="mt-6 text-sm text-zinc-400">Loading products...</p>
       )}
 
-      {error && (
-        <p className="mt-4 text-sm text-red-400">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
 
       {!loading && products.length === 0 && !error && (
-        <p className="mt-6 text-sm text-zinc-400">
-          No products found.
-        </p>
+        <p className="mt-6 text-sm text-zinc-400">No products found.</p>
       )}
 
       {!loading && products.length > 0 && (
@@ -136,10 +155,13 @@ export default function AdminProductsPage() {
           </div>
           <div>
             {products.map((product) => {
-              const price = (product.price_cents / 100).toFixed(2)
+              const price = (product.price_cents / 100).toFixed(2);
               const createdAtLabel = product.created_at
                 ? new Date(product.created_at).toLocaleDateString()
-                : "—"
+                : "—";
+
+              const isBusy =
+                updatingId === product.id || deletingId === product.id;
 
               return (
                 <div
@@ -180,10 +202,8 @@ export default function AdminProductsPage() {
                   <div className="flex items-center justify-end gap-2 text-[11px]">
                     <button
                       type="button"
-                      disabled={updatingId === product.id}
-                      onClick={() =>
-                        toggleActive(product.id, product.active)
-                      }
+                      disabled={isBusy}
+                      onClick={() => toggleActive(product.id, product.active)}
                       className="rounded-full border border-zinc-700 px-2.5 py-0.5 text-xs text-zinc-200 hover:border-amber-400 hover:text-amber-300 disabled:opacity-50"
                     >
                       {product.active ? "Hide" : "Activate"}
@@ -191,20 +211,30 @@ export default function AdminProductsPage() {
 
                     <button
                       type="button"
+                      disabled={isBusy}
                       onClick={() =>
                         router.push(`/admin/products/${product.id}`)
                       }
-                      className="rounded-full border border-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                      className="rounded-full border border-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400 hover:border-zinc-600 hover:text-zinc-200 disabled:opacity-50"
                     >
                       Edit
                     </button>
+
+                    <button
+                      type="button"
+                      disabled={isBusy}
+                      onClick={() => handleDeleteProduct(product.id)}
+                      className="rounded-full border border-red-600/70 px-2.5 py-0.5 text-xs text-red-300 hover:border-red-500 hover:text-red-200 disabled:opacity-50"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
       )}
     </main>
-  )
+  );
 }

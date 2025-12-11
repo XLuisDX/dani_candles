@@ -19,7 +19,7 @@ export default function ShopPage() {
       const { data, error } = await supabase
         .from("products")
         .select(
-          "id, name, slug, short_description, price_cents, currency_code, is_featured"
+          "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url"
         )
         .eq("active", true)
         .order("created_at", { ascending: false });
@@ -77,7 +77,14 @@ export default function ShopPage() {
               className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 shadow-sm transition hover:-translate-y-1 hover:border-zinc-600 hover:shadow-lg"
             >
               <div className="mb-4 flex aspect-square items-center justify-center rounded-xl bg-zinc-900 text-sm text-zinc-500">
-                Image coming soon
+                {product.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    className="mb-3 h-56 w-full rounded-2xl object-cover"
+                  />
+                )}
               </div>
 
               <h2 className="line-clamp-1 text-lg font-medium text-white">

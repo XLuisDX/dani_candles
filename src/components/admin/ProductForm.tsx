@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
 export interface ProductFormValues {
   name: string;
@@ -15,9 +15,13 @@ export interface ProductFormValues {
 interface ProductFormProps {
   initialValues?: ProductFormValues;
   mode: "create" | "edit";
-  onSubmit: (values: ProductFormValues) => Promise<void>;
+  onSubmit: (
+    values: ProductFormValues,
+    imageFile: File | null
+  ) => Promise<void>;
   submitting?: boolean;
   error?: string | null;
+  currentImageUrl?: string | null;
 }
 
 export function ProductForm({
@@ -26,6 +30,7 @@ export function ProductForm({
   onSubmit,
   submitting,
   error,
+  currentImageUrl,
 }: ProductFormProps) {
   const [values, setValues] = useState<ProductFormValues>(
     initialValues ?? {
@@ -38,6 +43,8 @@ export function ProductForm({
       categoryId: "",
     }
   );
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -55,9 +62,14 @@ export function ProductForm({
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setImageFile(file);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(values);
+    await onSubmit(values, imageFile);
   };
 
   return (
@@ -159,6 +171,40 @@ export function ProductForm({
           Must be a valid UUID if you use it. Leave empty if you don&apos;t have
           categories yet.
         </p>
+      </div>
+
+      <div className="space-y-2 pt-1">
+        <label className="text-xs font-medium text-zinc-300">
+          Product image
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="text-xs text-zinc-300"
+        />
+        <p className="text-[10px] text-zinc-500">
+          JPEG / PNG / WEBP. If you don&apos;t select a file, the current image
+          (if any) will be kept.
+        </p>
+
+        {currentImageUrl && !imageFile && (
+          <div className="mt-2">
+            <p className="text-[10px] text-zinc-500 mb-1">Current image:</p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={currentImageUrl}
+              alt="Current product image"
+              className="h-24 w-24 rounded-xl border border-zinc-800 object-cover"
+            />
+          </div>
+        )}
+
+        {imageFile && (
+          <p className="text-[10px] text-zinc-400">
+            Selected: {imageFile.name}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center justify-between pt-1">
