@@ -1,6 +1,15 @@
-@import "tailwindcss/theme" layer(theme);
-@import "tailwindcss/preflight" layer(base);
-@import "tailwindcss/utilities" layer(utilities);
+@import "tailwindcss";
+
+@theme {
+  --color-dc-cream: #f1f1f1;
+  --color-dc-sand: #e4c899;
+  --color-dc-caramel: #c28556;
+  --color-dc-clay: #6e3a2f;
+  --color-dc-ink: #23272a;
+
+  --font-family-display: var(--font-cormorant);
+  --font-family-sans: var(--font-inter);
+}
 
 html,
 body {
@@ -8,9 +17,9 @@ body {
 }
 
 body {
-  @apply bg-black text-zinc-100 antialiased;
+  @apply bg-dc-cream text-dc-ink font-sans antialiased;
 }
 
 ::selection {
-  @apply bg-amber-400 text-black;
+  @apply bg-dc-caramel text-dc-cream;
 }
