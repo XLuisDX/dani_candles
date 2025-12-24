@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
 
@@ -48,89 +49,145 @@ export function Header() {
   };
 
   return (
-    <header className="border-b border-zinc-900 bg-black/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-sm font-bold text-black">
-            D
-          </div>
-          <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold tracking-[0.18em] text-zinc-100 uppercase">
-              Dani Candles
+    <motion.header
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="sticky top-0 z-50 border-b border-dc-ink/5 bg-dc-cream/90 backdrop-blur-xl"
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+        <Link href="/" className="group flex items-center gap-3">
+          <motion.div
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-dc-ink/8 bg-gradient-to-br from-white to-dc-sand/30 shadow-sm"
+          >
+            <span className="font-display text-base font-medium tracking-wider text-dc-ink">
+              D
             </span>
-            <span className="text-[10px] text-zinc-400">
-              Awaken to ambiance
+          </motion.div>
+
+          <div className="flex flex-col">
+            <span className="font-display text-base font-semibold tracking-[0.25em] text-dc-ink">
+              DANI CANDLES
+            </span>
+            <span className="text-[9px] font-light tracking-[0.15em] text-dc-ink/50">
+              AWAKEN TO AMBIANCE
             </span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm text-zinc-300 md:flex">
-          <Link href="/shop" className="hover:text-amber-300">
-            Shop
-          </Link>
-          <Link href="/collections" className="hover:text-amber-300">
-            Collections
-          </Link>
-          <Link href="/fragrances" className="hover:text-amber-300">
-            Fragrances
-          </Link>
-          <Link href="/candle-care" className="hover:text-amber-300">
-            Candle Care
-          </Link>
-          <Link href="/about" className="hover:text-amber-300">
-            About
-          </Link>
-          <Link href="/contact" className="hover:text-amber-300">
-            Contact
-          </Link>
+        <nav className="hidden items-center gap-8 md:flex">
+          {[
+            "shop",
+            "collections",
+            "fragrances",
+            "candle-care",
+            "about",
+            "contact",
+          ].map((item, index) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + index * 0.05, duration: 0.5 }}
+            >
+              <Link
+                href={`/${item}`}
+                className="relative text-xs font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel"
+              >
+                <motion.span
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="inline-block"
+                >
+                  {item === "candle-care" ? "CARE" : item.toUpperCase()}
+                </motion.span>
+              </Link>
+            </motion.div>
+          ))}
         </nav>
 
-        <div className="flex items-center gap-3 text-sm">
-          <Link
-            href="/cart"
-            className="rounded-full border border-zinc-800 px-3 py-1 text-xs text-zinc-200 hover:border-amber-400 hover:text-amber-300"
-          >
-            Cart
-          </Link>
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="flex items-center gap-2.5"
+        >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/cart"
+              className="rounded-full border border-dc-ink/8 bg-white/80 px-5 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow"
+            >
+              CART
+            </Link>
+          </motion.div>
 
           {isAdmin && (
-            <Link
-              href="/admin"
-              className="text-xs text-amber-300 hover:text-amber-200"
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Admin
-            </Link>
+              <Link
+                href="/admin"
+                className="rounded-full border border-dc-caramel/20 bg-dc-sand/50 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-dc-clay shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-sand/70"
+              >
+                ADMIN
+              </Link>
+            </motion.div>
           )}
 
           {!checkingSession && (
-            <>
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               {!isLoggedIn ? (
-                <Link
-                  href="/auth/login"
-                  className="rounded-full bg-zinc-100 px-4 py-1.5 text-xs font-medium text-black hover:bg-amber-300"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Sign in
-                </Link>
+                  <Link
+                    href="/auth/login"
+                    className="rounded-full bg-dc-caramel px-5 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow"
+                  >
+                    SIGN IN
+                  </Link>
+                </motion.div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link
-                    href="/account"
-                    className="text-xs text-zinc-300 hover:text-amber-300"
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    My account
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300 hover:border-amber-400 hover:text-amber-300"
+                    <Link
+                      href="/account"
+                      className="rounded-full px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel"
+                    >
+                      ACCOUNT
+                    </Link>
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    Logout
-                  </button>
+                    <button
+                      onClick={handleLogout}
+                      className="rounded-full border border-dc-ink/8 bg-white/80 px-5 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow"
+                    >
+                      LOGOUT
+                    </button>
+                  </motion.div>
                 </div>
               )}
-            </>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
-    </header>
+    </motion.header>
   );
 }
