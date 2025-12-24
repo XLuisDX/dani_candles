@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import type { Product } from "@/types/product";
 import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
+import { toast } from "react-toastify";
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -50,6 +51,8 @@ export default function ShopPage() {
       quantity: 1,
       imageUrl: product.image_url,
     });
+
+    toast.success(`${product.name} added to cart!`);
   };
 
   const containerVariants = {
