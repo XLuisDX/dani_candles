@@ -94,18 +94,6 @@ export default function AccountOrdersPage() {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.4,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
   return (
     <main className="relative mx-auto max-w-6xl px-6 py-8 md:py-12 lg:px-8">
       <motion.div
