@@ -16,8 +16,11 @@ export function Header() {
       const { data, error } = await supabase.auth.getSession();
       if (!error && data.session) {
         setIsLoggedIn(true);
+        const email = data.session.user?.email ?? null;
+        setIsAdmin(isAdminEmail(email));
       } else {
         setIsLoggedIn(false);
+        setIsAdmin(false);
       }
       setCheckingSession(false);
     };
@@ -26,22 +29,19 @@ export function Header() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setIsLoggedIn(!!session);
+      if (session) {
+        const email = session.user?.email ?? null;
+        setIsAdmin(isAdminEmail(email));
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
-
-  useEffect(() => {
-    const loadUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const email = data.user?.email ?? null;
-      setIsAdmin(isAdminEmail(email));
-    };
-    loadUser();
   }, []);
 
   const handleLogout = async () => {
