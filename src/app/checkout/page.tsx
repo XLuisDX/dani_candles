@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/store/cartStore";
@@ -169,213 +170,356 @@ export default function CheckoutPage() {
 
   if (loadingUser) {
     return (
-      <main className="mx-auto max-w-5xl px-4 py-10">
-        <p className="text-zinc-400">Checking your session...</p>
+      <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4 rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 shadow-sm backdrop-blur-sm"
+        >
+          <motion.span
+            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="h-2.5 w-2.5 rounded-full bg-dc-caramel"
+          />
+          <p className="text-sm font-medium text-dc-ink/70">
+            Checking your session...
+          </p>
+        </motion.div>
       </main>
     );
   }
 
   if (items.length === 0) {
     return (
-      <main className="mx-auto max-w-5xl px-4 py-10">
-        <p className="text-sm text-zinc-400">
-          Your cart is empty.{" "}
-          <button
-            type="button"
-            onClick={() => router.push("/shop")}
-            className="text-amber-300 hover:text-amber-200"
-          >
-            Continue shopping
-          </button>
-          .
-        </p>
+      <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-3xl border border-dc-ink/8 bg-white/95 p-10 shadow-lg backdrop-blur-xl"
+        >
+          <p className="text-base leading-relaxed text-dc-ink/60">
+            Your cart is empty.{" "}
+            <button
+              type="button"
+              onClick={() => router.push("/shop")}
+              className="font-bold text-dc-caramel transition-colors hover:text-dc-clay"
+            >
+              Continue shopping
+            </button>
+            .
+          </p>
+        </motion.div>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="text-2xl font-semibold tracking-tight text-white">
-        Checkout
-      </h1>
-      <p className="mt-1 text-sm text-zinc-400">
-        Enter your shipping details to complete your order.
-      </p>
+    <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.35 }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none absolute -top-16 right-16 h-56 w-56 rounded-full bg-dc-sand blur-3xl"
+      />
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.2 }}
+        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none absolute -bottom-16 left-12 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+      />
 
-      <div className="mt-8 grid gap-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 rounded-2xl border border-zinc-900 bg-zinc-950/70 p-5"
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="relative rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl md:p-10"
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm"
         >
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-zinc-400">
-              Full name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              required
-              value={form.fullName}
-              onChange={handleChange}
-              className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
-            />
+          <motion.span
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
+          />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+            Checkout
+          </span>
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl"
+        >
+          Checkout
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="mt-4 text-base leading-relaxed text-dc-ink/60"
+        >
+          Enter your shipping details to complete your order.
+        </motion.p>
+      </motion.header>
+
+      <div className="mt-12 grid gap-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <motion.form
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          onSubmit={handleSubmit}
+          className="rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl md:p-10"
+        >
+          <div className="mb-8">
+            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/50">
+              Shipping details
+            </p>
+            <p className="mt-3 text-sm text-dc-ink/60">
+              Use an address where someone can receive the package.
+            </p>
           </div>
 
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-zinc-400">
-              Address line 1
-            </label>
-            <input
-              type="text"
-              name="line1"
-              required
-              value={form.line1}
-              onChange={handleChange}
-              className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-zinc-400">
-              Address line 2 (optional)
-            </label>
-            <input
-              type="text"
-              name="line2"
-              value={form.line2}
-              onChange={handleChange}
-              className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
-            />
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-5">
             <div>
-              <label className="block text-xs uppercase tracking-wide text-zinc-400">
-                City
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                Full name
               </label>
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
                 type="text"
-                name="city"
+                name="fullName"
                 required
-                value={form.city}
+                value={form.fullName}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
+                className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                placeholder="Daniela Valverde"
               />
             </div>
+
             <div>
-              <label className="block text-xs uppercase tracking-wide text-zinc-400">
-                State
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                Address line 1
               </label>
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
                 type="text"
-                name="state"
+                name="line1"
                 required
-                value={form.state}
+                value={form.line1}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
+                className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                placeholder="123 Main St"
               />
             </div>
-          </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs uppercase tracking-wide text-zinc-400">
-                Postal code
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                Address line 2 (optional)
               </label>
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
                 type="text"
-                name="postalCode"
-                required
-                value={form.postalCode}
+                name="line2"
+                value={form.line2}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
+                className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                placeholder="Apt, suite, etc."
               />
             </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                  City
+                </label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="text"
+                  name="city"
+                  required
+                  value={form.city}
+                  onChange={handleChange}
+                  className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                  placeholder="Nashville"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                  State
+                </label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="text"
+                  name="state"
+                  required
+                  value={form.state}
+                  onChange={handleChange}
+                  className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                  placeholder="TN"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                  Postal code
+                </label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="text"
+                  name="postalCode"
+                  required
+                  value={form.postalCode}
+                  onChange={handleChange}
+                  className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                  placeholder="37055"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                  Country
+                </label>
+                <motion.input
+                  whileFocus={{ scale: 1.01 }}
+                  type="text"
+                  name="country"
+                  required
+                  value={form.country}
+                  onChange={handleChange}
+                  className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                  placeholder="US"
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="block text-xs uppercase tracking-wide text-zinc-400">
-                Country
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+                Phone (optional)
               </label>
-              <input
-                type="text"
-                name="country"
-                required
-                value={form.country}
+              <motion.input
+                whileFocus={{ scale: 1.01 }}
+                type="tel"
+                name="phone"
+                value={form.phone}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
+                className="mt-2.5 h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                placeholder="(555) 123-4567"
               />
             </div>
+
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="rounded-2xl border border-red-500/20 bg-red-50/80 px-5 py-3.5 text-sm font-medium text-red-700"
+              >
+                {error}
+              </motion.div>
+            )}
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              disabled={submitting}
+              className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-full bg-dc-caramel px-6 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {submitting ? "Placing order..." : "Place order"}
+            </motion.button>
+
+            <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40">
+              You will be redirected to Stripe to complete payment.
+            </p>
           </div>
+        </motion.form>
 
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-zinc-400">
-              Phone (optional)
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              className="mt-1 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
-            />
-          </div>
+        <motion.aside
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="h-fit rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl md:sticky md:top-6"
+        >
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60">
+            Order summary
+          </h2>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={submitting}
-            className="mt-4 w-full rounded-full bg-zinc-100 px-4 py-2.5 text-sm font-medium text-black transition hover:bg-amber-300 disabled:opacity-60"
-          >
-            {submitting ? "Placing order..." : "Place order"}
-          </button>
-        </form>
-
-        <aside className="rounded-2xl border border-zinc-900 bg-zinc-950/80 p-5">
-          <h2 className="text-sm font-semibold text-zinc-100">Order summary</h2>
-
-          <div className="mt-4 space-y-3 text-sm text-zinc-300">
-            {items.map((item) => (
-              <div
+          <div className="mt-6 space-y-3">
+            {items.map((item, index) => (
+              <motion.div
                 key={item.productId}
-                className="flex items-center justify-between"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
+                className="flex items-start justify-between gap-4 rounded-2xl border border-dc-ink/8 bg-white/80 px-5 py-4"
               >
                 <div>
-                  <p className="text-xs font-medium text-zinc-100">
+                  <p className="text-sm font-semibold text-dc-ink">
                     {item.name}
                   </p>
-                  <p className="text-[11px] text-zinc-500">
+                  <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40">
                     Qty {item.quantity}
                   </p>
                 </div>
-                <div className="text-xs text-zinc-200">
-                  {((item.priceCents * item.quantity) / 100).toFixed(2)}{" "}
-                  <span className="text-[10px] text-zinc-500">
-                    {item.currencyCode}
-                  </span>
+                <div className="text-right">
+                  <p className="text-base font-bold text-dc-ink">
+                    {((item.priceCents * item.quantity) / 100).toFixed(2)}{" "}
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                      {item.currencyCode}
+                    </span>
+                  </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="mt-4 border-t border-zinc-800 pt-4 text-sm">
-            <div className="flex items-center justify-between text-zinc-400">
-              <span>Subtotal</span>
-              <span>{(subtotal / 100).toFixed(2)} USD</span>
+          <div className="mt-6 border-t border-dc-ink/8 pt-6 text-sm">
+            <div className="flex items-center justify-between text-dc-ink/60">
+              <span className="font-medium">Subtotal</span>
+              <span className="font-bold text-dc-ink">
+                {(subtotal / 100).toFixed(2)}{" "}
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                  USD
+                </span>
+              </span>
             </div>
-            <div className="mt-1 flex items-center justify-between text-zinc-500">
-              <span>Shipping</span>
-              <span>Calculated later</span>
+
+            <div className="mt-3 flex items-center justify-between text-dc-ink/50">
+              <span className="font-medium">Shipping</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">
+                Calculated later
+              </span>
             </div>
-            <div className="mt-1 flex items-center justify-between text-zinc-500">
-              <span>Taxes</span>
-              <span>—</span>
+
+            <div className="mt-3 flex items-center justify-between text-dc-ink/50">
+              <span className="font-medium">Taxes</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">
+                —
+              </span>
             </div>
-            <div className="mt-3 flex items-center justify-between text-sm font-semibold text-zinc-100">
-              <span>Total</span>
-              <span>{(total / 100).toFixed(2)} USD</span>
+
+            <div className="mt-6 flex items-center justify-between border-t border-dc-ink/8 pt-6">
+              <span className="text-sm font-semibold text-dc-ink/60">
+                Total
+              </span>
+              <span className="text-2xl font-bold text-dc-ink">
+                {(total / 100).toFixed(2)}{" "}
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                  USD
+                </span>
+              </span>
             </div>
+
+            <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40">
+              Taxes and shipping are finalized at checkout.
+            </p>
           </div>
-        </aside>
+        </motion.aside>
       </div>
     </main>
   );
