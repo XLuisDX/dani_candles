@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
 import type { Product } from "@/types/product";
 import Link from "next/link";
@@ -50,77 +51,193 @@ export default function ShopPage() {
     });
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
-    <main className="mx-auto max-w-6xl px-4 py-10">
-      <section className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-white">
+    <main className="mx-auto max-w-7xl px-6 py-16 md:py-12 lg:px-8">
+      <motion.section
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-16"
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm backdrop-blur-sm"
+        >
+          <motion.span
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
+          />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+            Handcrafted · Small Batches
+          </span>
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl lg:text-7xl"
+        >
           Shop
-        </h1>
-        <p className="mt-2 text-sm text-zinc-300">
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="mt-4 max-w-2xl text-base leading-relaxed text-dc-ink/60"
+        >
           Awaken your space with handcrafted candles by Dani.
-        </p>
-      </section>
+        </motion.p>
+      </motion.section>
 
-      {loading && <p className="text-zinc-400">Loading candles...</p>}
+      {loading && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4 rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 shadow-sm backdrop-blur-sm"
+        >
+          <motion.span
+            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="h-2.5 w-2.5 rounded-full bg-dc-caramel"
+          />
+          <p className="text-sm font-medium text-dc-ink/70">
+            Loading candles...
+          </p>
+        </motion.div>
+      )}
 
-      {error && <p className="text-red-400">{error}</p>}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-2xl border border-red-500/20 bg-red-50/50 px-6 py-5 text-sm font-medium text-red-700"
+        >
+          {error}
+        </motion.div>
+      )}
 
       {!loading && !error && products.length === 0 && (
-        <p className="text-zinc-400">No products available yet.</p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 text-sm font-medium text-dc-ink/70 backdrop-blur-sm"
+        >
+          No products available yet.
+        </motion.div>
       )}
 
       {!loading && !error && products.length > 0 && (
-        <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {products.map((product) => (
-            <article
+            <motion.article
               key={product.id}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 shadow-sm transition hover:-translate-y-1 hover:border-zinc-600 hover:shadow-lg"
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/90 p-5 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg"
             >
-              <div className="mb-4 flex aspect-square items-center justify-center rounded-xl bg-zinc-900 text-sm text-zinc-500">
-                {product.image_url && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={product.image_url}
-                    alt={product.name}
-                    className="mb-3 h-56 w-full rounded-2xl object-cover"
-                  />
+              <div className="relative mb-5 overflow-hidden rounded-2xl border border-dc-ink/5 bg-dc-sand/20">
+                <div className="aspect-square">
+                  {product.image_url ? (
+                    <motion.img
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                      src={product.image_url}
+                      alt={product.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-xs font-semibold uppercase tracking-[0.25em] text-dc-ink/30">
+                      No Image
+                    </div>
+                  )}
+                </div>
+
+                {product.is_featured && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="absolute left-4 top-4 rounded-full border border-dc-caramel/30 bg-white/95 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-clay shadow-sm backdrop-blur-sm"
+                  >
+                    Featured
+                  </motion.span>
                 )}
               </div>
 
-              <h2 className="line-clamp-1 text-lg font-medium text-white">
-                <Link href={`/product/${product.slug}`}>{product.name}</Link>
+              <h2 className="line-clamp-1 font-display text-2xl font-semibold text-dc-ink">
+                <Link
+                  href={`/product/${product.slug}`}
+                  className="outline-none transition-colors hover:text-dc-caramel focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+                >
+                  {product.name}
+                </Link>
               </h2>
 
               {product.short_description && (
-                <p className="mt-1 line-clamp-2 text-sm text-zinc-400">
+                <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-dc-ink/60">
                   {product.short_description}
                 </p>
               )}
 
-              <div className="mt-3 flex items-center justify-between">
-                <p className="text-base font-semibold text-zinc-100">
+              <div className="mt-5 flex items-end justify-between border-t border-dc-ink/5 pt-5">
+                <p className="text-lg font-bold text-dc-ink">
                   {(product.price_cents / 100).toFixed(2)}{" "}
-                  <span className="text-xs font-normal text-zinc-400">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
                     {product.currency_code}
                   </span>
                 </p>
 
-                {product.is_featured && (
-                  <span className="rounded-full border border-amber-500/40 px-2 py-0.5 text-xs text-amber-300">
-                    Featured
-                  </span>
-                )}
+                <Link
+                  href={`/product/${product.slug}`}
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel"
+                >
+                  View Details →
+                </Link>
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleAddToCart(product)}
-                className="mt-4 rounded-full bg-amber-500 px-4 py-2 text-sm font-medium text-zinc-950 transition hover:bg-amber-400"
+                className="mt-6 inline-flex items-center justify-center rounded-full bg-dc-caramel px-6 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
               >
-                Add to cart
-              </button>
-            </article>
+                Add to Cart
+              </motion.button>
+            </motion.article>
           ))}
-        </section>
+        </motion.section>
       )}
     </main>
   );
