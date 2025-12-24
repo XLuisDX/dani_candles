@@ -48,6 +48,7 @@ export default function ShopPage() {
       priceCents: product.price_cents,
       currencyCode: product.currency_code,
       quantity: 1,
+      imageUrl: product.image_url,
     });
   };
 
