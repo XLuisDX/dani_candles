@@ -73,164 +73,229 @@ export function ProductForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mt-6 space-y-4 rounded-2xl border border-zinc-900 bg-zinc-950/70 p-5"
-    >
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-zinc-300">
-          Product name
-        </label>
-        <input
-          name="name"
-          value={values.name}
-          onChange={handleChange}
-          required
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
-          placeholder="Lavender Night, Cozy Vanilla..."
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-7">
+      <section className="rounded-3xl border border-black/5 bg-white/60 p-6 shadow-sm backdrop-blur-md md:p-7">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.20em] text-dc-ink/55">
+              Product info
+            </p>
+            <p className="mt-1 text-sm text-dc-ink/65">
+              Core details shown in the shop.
+            </p>
+          </div>
+          <div className="hidden md:block rounded-full border border-black/5 bg-white/60 px-4 py-1 text-[11px] uppercase tracking-[0.18em] text-dc-ink/55">
+            {mode === "create" ? "Create" : "Edit"}
+          </div>
+        </div>
 
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-zinc-300">
-          Short description
-        </label>
-        <textarea
-          name="shortDescription"
-          value={values.shortDescription}
-          onChange={handleChange}
-          rows={2}
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
-          placeholder="One or two lines that describe this candle..."
-        />
-        <p className="text-[10px] text-zinc-500">
-          Used in product cards and highlights. Keep it short and punchy.
-        </p>
-      </div>
-
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-zinc-300">
-          Full description
-        </label>
-        <textarea
-          name="description"
-          value={values.description}
-          onChange={handleChange}
-          rows={4}
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
-          placeholder="Story, scent notes, usage and care..."
-        />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-[1.2fr_1fr]">
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-zinc-300">Price</label>
-          <div className="flex items-center gap-2">
-            <span className="rounded-lg border border-zinc-800 bg-zinc-950 px-2 py-2 text-xs text-zinc-400">
-              $
-            </span>
+        <div className="space-y-5">
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+              Product name
+            </label>
             <input
-              name="price"
-              type="number"
-              step="0.01"
-              min="0"
-              value={values.price}
+              name="name"
+              value={values.name}
               onChange={handleChange}
               required
-              className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
-              placeholder="24.00"
+              className="mt-2 w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm text-dc-ink outline-none transition placeholder:text-dc-ink/40 focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+              placeholder="Lavender Night, Cozy Vanilla..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+              Short description
+            </label>
+            <textarea
+              name="shortDescription"
+              value={values.shortDescription}
+              onChange={handleChange}
+              rows={2}
+              className="mt-2 w-full resize-none rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm text-dc-ink outline-none transition placeholder:text-dc-ink/40 focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+              placeholder="One or two lines that describe this candle..."
+            />
+            <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-dc-ink/45">
+              Used in product cards. Keep it short and punchy.
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+              Full description
+            </label>
+            <textarea
+              name="description"
+              value={values.description}
+              onChange={handleChange}
+              rows={5}
+              className="mt-2 w-full resize-none rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm leading-relaxed text-dc-ink outline-none transition placeholder:text-dc-ink/40 focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+              placeholder="Story, scent notes, usage and care..."
             />
           </div>
         </div>
+      </section>
 
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-zinc-300">Currency</label>
-          <select
-            name="currencyCode"
-            value={values.currencyCode}
-            onChange={handleChange}
-            className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-amber-400"
-          >
-            <option value="USD">USD</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-zinc-300">
-          Category ID (uuid, optional)
-        </label>
-        <input
-          name="categoryId"
-          value={values.categoryId}
-          onChange={handleChange}
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-amber-400"
-          placeholder="Leave empty or paste a valid category UUID"
-        />
-        <p className="text-[10px] text-zinc-500">
-          Must be a valid UUID if you use it. Leave empty if you don&apos;t have
-          categories yet.
-        </p>
-      </div>
-
-      <div className="space-y-2 pt-1">
-        <label className="text-xs font-medium text-zinc-300">
-          Product image
-        </label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="text-xs text-zinc-300"
-        />
-        <p className="text-[10px] text-zinc-500">
-          JPEG / PNG / WEBP. If you don&apos;t select a file, the current image
-          (if any) will be kept.
+      <section className="rounded-3xl border border-black/5 bg-white/60 p-6 shadow-sm backdrop-blur-md md:p-7">
+        <p className="text-[11px] font-medium uppercase tracking-[0.20em] text-dc-ink/55">
+          Pricing
         </p>
 
-        {currentImageUrl && !imageFile && (
-          <div className="mt-2">
-            <p className="text-[10px] text-zinc-500 mb-1">Current image:</p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={currentImageUrl}
-              alt="Current product image"
-              className="h-24 w-24 rounded-xl border border-zinc-800 object-cover"
-            />
+        <div className="mt-5 grid gap-4 md:grid-cols-[1.2fr_1fr]">
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+              Price
+            </label>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="inline-flex h-11 items-center justify-center rounded-2xl border border-black/10 bg-white/60 px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+                $
+              </span>
+              <input
+                name="price"
+                type="number"
+                step="0.01"
+                min="0"
+                value={values.price}
+                onChange={handleChange}
+                required
+                className="h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition placeholder:text-dc-ink/40 focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+                placeholder="24.00"
+              />
+            </div>
           </div>
-        )}
 
-        {imageFile && (
-          <p className="text-[10px] text-zinc-400">
-            Selected: {imageFile.name}
-          </p>
-        )}
-      </div>
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+              Currency
+            </label>
+            <select
+              name="currencyCode"
+              value={values.currencyCode}
+              onChange={handleChange}
+              className="mt-2 h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+            >
+              <option value="USD">USD</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
-      <div className="flex items-center justify-between pt-1">
-        <label className="flex items-center gap-2 text-xs text-zinc-300">
+      <section className="rounded-3xl border border-black/5 bg-white/60 p-6 shadow-sm backdrop-blur-md md:p-7">
+        <p className="text-[11px] font-medium uppercase tracking-[0.20em] text-dc-ink/55">
+          Organization
+        </p>
+
+        <div className="mt-5">
+          <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+            Category ID (uuid, optional)
+          </label>
           <input
-            type="checkbox"
-            name="active"
-            checked={values.active}
+            name="categoryId"
+            value={values.categoryId}
             onChange={handleChange}
-            className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-amber-400"
+            className="mt-2 h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition placeholder:text-dc-ink/40 focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+            placeholder="Leave empty or paste a valid category UUID"
           />
-          <span>Visible in shop</span>
-        </label>
-      </div>
+          <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-dc-ink/45">
+            Leave empty if you don&apos;t have categories yet.
+          </p>
+        </div>
+      </section>
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      <section className="rounded-3xl border border-black/5 bg-white/60 p-6 shadow-sm backdrop-blur-md md:p-7">
+        <p className="text-[11px] font-medium uppercase tracking-[0.20em] text-dc-ink/55">
+          Media
+        </p>
 
-      <div className="flex justify-end gap-2 pt-2">
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-full border border-amber-500/60 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-200 hover:border-amber-400 hover:bg-amber-500/20 disabled:opacity-50"
-        >
-          {mode === "create" ? "Create product" : "Save changes"}
-        </button>
-      </div>
+        <div className="mt-5 space-y-3">
+          <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+            Product image
+          </label>
+
+          <div className="rounded-2xl border border-dc-ink/10 bg-white/60 p-4">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full text-xs text-dc-ink/70 file:mr-4 file:rounded-full file:border-0 file:bg-dc-cream/70 file:px-4 file:py-2 file:text-[11px] file:font-medium file:uppercase file:tracking-[0.18em] file:text-dc-ink/70 hover:file:bg-white"
+            />
+
+            <p className="mt-3 text-[11px] uppercase tracking-[0.14em] text-dc-ink/45">
+              JPEG / PNG / WEBP. If you don&apos;t select a file, the current
+              image (if any) will be kept.
+            </p>
+
+            {currentImageUrl && !imageFile && (
+              <div className="mt-4">
+                <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/55">
+                  Current image
+                </p>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={currentImageUrl}
+                  alt="Current product image"
+                  className="mt-3 h-28 w-28 rounded-2xl border border-black/10 object-cover shadow-sm"
+                />
+              </div>
+            )}
+
+            {imageFile && (
+              <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-dc-ink/55">
+                Selected:{" "}
+                <span className="font-medium text-dc-ink/75">
+                  {imageFile.name}
+                </span>
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-black/5 bg-white/60 p-6 shadow-sm backdrop-blur-md md:p-7">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.20em] text-dc-ink/55">
+              Visibility
+            </p>
+            <p className="mt-1 text-sm text-dc-ink/65">
+              Control if the product appears in the shop.
+            </p>
+          </div>
+
+          <label className="inline-flex items-center gap-3">
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
+              Visible in shop
+            </span>
+            <span className="relative inline-flex h-7 w-12 items-center rounded-full border border-black/10 bg-white/60 p-1 shadow-sm">
+              <input
+                type="checkbox"
+                name="active"
+                checked={values.active}
+                onChange={handleChange}
+                className="peer sr-only"
+              />
+              <span className="h-5 w-5 rounded-full bg-dc-ink/70 transition peer-checked:translate-x-5 peer-checked:bg-dc-caramel" />
+            </span>
+          </label>
+        </div>
+
+        {error && (
+          <div className="mt-4 rounded-2xl border border-red-500/20 bg-red-500/5 px-5 py-4 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
+        <div className="mt-6 flex justify-end gap-2">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="inline-flex items-center justify-center rounded-full bg-dc-caramel px-6 py-3 text-[11px] font-medium uppercase tracking-[0.20em] text-white shadow-sm transition hover:bg-dc-clay focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/40 disabled:opacity-50"
+          >
+            {mode === "create" ? "Create product" : "Save changes"}
+          </button>
+        </div>
+      </section>
     </form>
   );
 }

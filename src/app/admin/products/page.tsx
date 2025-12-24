@@ -1,24 +1,25 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabaseClient"
-import { isAdminEmail } from "@/lib/isAdmin"
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import { isAdminEmail } from "@/lib/isAdmin";
 
 interface AdminProduct {
-  id: string
-  name: string
-  price_cents: number
-  currency_code: string
-  active: boolean
-  created_at: string | null
+  id: string;
+  name: string;
+  price_cents: number;
+  currency_code: string;
+  active: boolean;
+  created_at: string | null;
 }
 
 export default function AdminProductsPage() {
-  const router = useRouter()
-  const [products, setProducts] = useState<AdminProduct[]>([])
-  const [loading, setLoading] = useState(true)
-  const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const router = useRouter();
+  const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,48 +113,145 @@ export default function AdminProductsPage() {
     }
   };
 
-  return (
-    <main className="mx-auto max-w-6xl px-4 py-10">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
-            Admin · Products
-          </h1>
-          <p className="mt-1 text-sm text-zinc-400">
-            Manage visibility and pricing for Dani Candles products.
-          </p>
-        </div>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
 
-        <div>
-          <button
+  return (
+    <main className="relative mx-auto max-w-7xl px-6 py-8 md:py-12 lg:px-8">
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.35 }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none absolute -top-16 right-16 h-56 w-56 rounded-full bg-dc-sand blur-3xl"
+      />
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.2 }}
+        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none absolute -bottom-16 left-12 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+      />
+
+      <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm backdrop-blur-sm"
+          >
+            <motion.span
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
+            />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+              Admin
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl"
+          >
+            Products
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="mt-4 text-base leading-relaxed text-dc-ink/60"
+          >
+            Manage visibility and pricing for Dani Candles products.
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="button"
             onClick={() => router.push("/admin/products/new")}
-            className="rounded-full border border-amber-500/60 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-200 hover:border-amber-400 hover:bg-amber-500/20"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-dc-caramel px-6 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
           >
             + New product
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
 
       {loading && (
-        <p className="mt-6 text-sm text-zinc-400">Loading products...</p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative mt-12 flex items-center gap-4 rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 shadow-sm backdrop-blur-sm"
+        >
+          <motion.span
+            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="h-2.5 w-2.5 rounded-full bg-dc-caramel"
+          />
+          <p className="text-sm font-medium text-dc-ink/70">
+            Loading products...
+          </p>
+        </motion.div>
       )}
 
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="relative mt-12 rounded-2xl border border-red-500/20 bg-red-50/50 px-6 py-5 text-sm font-medium text-red-700"
+        >
+          {error}
+        </motion.div>
+      )}
 
       {!loading && products.length === 0 && !error && (
-        <p className="mt-6 text-sm text-zinc-400">No products found.</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="relative mt-12 rounded-3xl border border-dc-ink/8 bg-white/95 p-10 shadow-sm backdrop-blur-xl"
+        >
+          <p className="text-base text-dc-ink/60">No products found.</p>
+        </motion.div>
       )}
 
       {!loading && products.length > 0 && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950/60">
-          <div className="grid grid-cols-[2fr_1fr_1fr_1.2fr] gap-4 border-b border-zinc-900 px-4 py-3 text-[11px] font-medium uppercase tracking-wide text-zinc-500">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="relative mt-12 overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/95 shadow-lg backdrop-blur-xl"
+        >
+          <div className="grid grid-cols-[2fr_1fr_1fr_1.2fr] gap-4 border-b border-dc-ink/8 bg-dc-sand/10 px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/50">
             <span>Product</span>
             <span>Price</span>
             <span>Status</span>
             <span className="text-right">Actions</span>
           </div>
-          <div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             {products.map((product) => {
               const price = (product.price_cents / 100).toFixed(2);
               const createdAtLabel = product.created_at
@@ -164,76 +262,82 @@ export default function AdminProductsPage() {
                 updatingId === product.id || deletingId === product.id;
 
               return (
-                <div
+                <motion.div
                   key={product.id}
-                  className="grid grid-cols-[2fr_1fr_1fr_1.2fr] gap-4 border-t border-zinc-900 px-4 py-3 text-sm text-zinc-200"
+                  className="grid grid-cols-[2fr_1fr_1fr_1.2fr] gap-4 border-b border-dc-ink/5 px-6 py-6"
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm text-zinc-100">
+                    <span className="font-display text-xl font-semibold leading-tight text-dc-ink">
                       {product.name}
                     </span>
-                    <span className="text-[11px] text-zinc-500">
+                    <span className="mt-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40">
                       Created: {createdAtLabel}
                     </span>
-                    <span className="text-[11px] text-zinc-500">
+                    <span className="mt-1 text-[10px] font-medium text-dc-ink/40">
                       ID: <span className="font-mono">{product.id}</span>
                     </span>
                   </div>
 
-                  <div className="flex items-center text-sm text-zinc-100">
+                  <div className="flex items-center text-base font-bold text-dc-ink">
                     {price}{" "}
-                    <span className="ml-1 text-xs text-zinc-500">
+                    <span className="ml-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
                       {product.currency_code}
                     </span>
                   </div>
 
                   <div className="flex items-center">
                     <span
-                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] ${
+                      className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] ${
                         product.active
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
-                          : "border-zinc-600/60 bg-zinc-800/60 text-zinc-300"
+                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
+                          : "border-dc-ink/10 bg-dc-sand/30 text-dc-ink/60"
                       }`}
                     >
                       {product.active ? "Active" : "Hidden"}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-end gap-2 text-[11px]">
-                    <button
+                  <div className="flex items-center justify-end gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       type="button"
                       disabled={isBusy}
                       onClick={() => toggleActive(product.id, product.active)}
-                      className="rounded-full border border-zinc-700 px-2.5 py-0.5 text-xs text-zinc-200 hover:border-amber-400 hover:text-amber-300 disabled:opacity-50"
+                      className="inline-flex items-center justify-center rounded-full border border-dc-ink/10 bg-white/80 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/80 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {product.active ? "Hide" : "Activate"}
-                    </button>
+                    </motion.button>
 
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       type="button"
                       disabled={isBusy}
                       onClick={() =>
                         router.push(`/admin/products/${product.id}`)
                       }
-                      className="rounded-full border border-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400 hover:border-zinc-600 hover:text-zinc-200 disabled:opacity-50"
+                      className="inline-flex items-center justify-center rounded-full border border-dc-caramel/20 bg-dc-sand/40 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-clay shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-sand/60 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Edit
-                    </button>
+                    </motion.button>
 
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       type="button"
                       disabled={isBusy}
                       onClick={() => handleDeleteProduct(product.id)}
-                      className="rounded-full border border-red-600/70 px-2.5 py-0.5 text-xs text-red-300 hover:border-red-500 hover:text-red-200 disabled:opacity-50"
+                      className="inline-flex items-center justify-center rounded-full border border-red-500/25 bg-red-500/5 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-red-700 shadow-sm transition-all duration-200 hover:border-red-500/35 hover:bg-red-500/10 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/30 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Delete
-                    </button>
+                    </motion.button>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </main>
   );
