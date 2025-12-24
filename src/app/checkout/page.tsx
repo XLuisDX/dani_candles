@@ -19,7 +19,7 @@ interface ShippingForm {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, totalCents } = useCartStore();
+  const { items, totalCents, clearCart } = useCartStore();
   const [loadingUser, setLoadingUser] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -156,6 +156,8 @@ export default function CheckoutPage() {
       if (!url) {
         throw new Error("No checkout URL returned.");
       }
+
+      clearCart();
 
       window.location.href = url;
     } catch (err: unknown) {
