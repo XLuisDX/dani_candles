@@ -61,18 +61,6 @@ export default function ShopPage() {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
   return (
     <main className="mx-auto max-w-7xl px-6 py-16 md:py-12 lg:px-8">
       <motion.section
