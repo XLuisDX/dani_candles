@@ -5,15 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-
-interface AdminProduct {
-  id: string;
-  name: string;
-  price_cents: number;
-  currency_code: string;
-  active: boolean;
-  created_at: string | null;
-}
+import { AdminProduct } from "@/types/types";
 
 export default function AdminProductsPage() {
   const router = useRouter();

@@ -9,31 +9,7 @@ import {
   Text,
   Hr,
 } from "@react-email/components";
-
-export interface OrderShippedItemEmail {
-  name: string;
-  quantity: number;
-  lineTotalFormatted: string;
-}
-
-export interface ShippingAddressEmail {
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-}
-
-export interface OrderShippedEmailProps {
-  orderId: string;
-  trackingNote?: string;
-  totalFormatted: string;
-  currencyCode: string;
-  customerName: string;
-  items: OrderShippedItemEmail[];
-  shippingAddress: ShippingAddressEmail;
-}
+import { OrderShippedEmailProps } from "@/types/types";
 
 export const OrderShippedEmail: React.FC<OrderShippedEmailProps> = ({
   orderId,
@@ -317,12 +293,10 @@ export const OrderShippedEmail: React.FC<OrderShippedEmailProps> = ({
               {customerName}
               <br />
               {shippingAddress.line1}
-              {shippingAddress.line2
-                ? `, ${shippingAddress.line2}`
-                : ""}
+              {shippingAddress.line2 ? `, ${shippingAddress.line2}` : ""}
               <br />
               {shippingAddress.city}, {shippingAddress.state}{" "}
-              {shippingAddress.postalCode}
+              {shippingAddress.postal_code}
               <br />
               {shippingAddress.country}
             </Text>
@@ -337,9 +311,9 @@ export const OrderShippedEmail: React.FC<OrderShippedEmailProps> = ({
                 lineHeight: 1.6,
               }}
             >
-              You&apos;re receiving this email because your Dani Candles
-              order has shipped. If you didn&apos;t make this purchase,
-              please contact us immediately.
+              You&apos;re receiving this email because your Dani Candles order
+              has shipped. If you didn&apos;t make this purchase, please contact
+              us immediately.
             </Text>
             <Text
               style={{
@@ -348,8 +322,7 @@ export const OrderShippedEmail: React.FC<OrderShippedEmailProps> = ({
                 marginTop: "10px",
               }}
             >
-              © {new Date().getFullYear()} Dani Candles. All rights
-              reserved.
+              © {new Date().getFullYear()} Dani Candles. All rights reserved.
             </Text>
           </Section>
         </Container>

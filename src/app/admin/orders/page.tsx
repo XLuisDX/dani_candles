@@ -5,36 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-
-type OrderStatus =
-  | "pending"
-  | "paid"
-  | "preparing"
-  | "shipped"
-  | "delivered"
-  | "canceled"
-  | "refunded";
-
-interface ShippingAddress {
-  full_name?: string;
-  address_line1?: string;
-  address_line2?: string;
-  city?: string;
-  state?: string;
-  postal_code?: string;
-  country?: string;
-}
-
-interface AdminOrder {
-  id: string;
-  created_at: string | null;
-  status: OrderStatus;
-  payment_status: string;
-  total_cents: number;
-  currency_code: string;
-  customer_email: string | null;
-  shipping_address: ShippingAddress | null;
-}
+import { AdminOrderDetail, OrderStatus } from "@/types/types";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   pending: "Pending",
@@ -65,7 +36,7 @@ const NEXT_STEPS: Partial<Record<OrderStatus, OrderStatus[]>> = {
 
 export default function AdminOrdersPage() {
   const router = useRouter();
-  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [orders, setOrders] = useState<AdminOrderDetail[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<OrderStatus | "all">("all");
@@ -104,7 +75,7 @@ export default function AdminOrdersPage() {
         console.error(error);
         setError("Could not load orders.");
       } else {
-        setOrders(data as AdminOrder[]);
+        setOrders(data as AdminOrderDetail[]);
       }
 
       setLoading(false);
@@ -136,7 +107,7 @@ export default function AdminOrdersPage() {
         setError("Could not update order status.");
       } else {
         setOrders((prev) =>
-          prev.map((o) => (o.id === orderId ? (data as AdminOrder) : o))
+          prev.map((o) => (o.id === orderId ? (data as AdminOrderDetail) : o))
         );
 
         if (newStatus === "shipped") {

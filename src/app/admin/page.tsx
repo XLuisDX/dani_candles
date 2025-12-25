@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-
-interface CurrentUser {
-  id: string;
-  email: string | null;
-}
+import { CurrentUser } from "@/types/types";
 
 export default function AdminPage() {
   const router = useRouter();

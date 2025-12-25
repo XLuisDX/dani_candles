@@ -5,17 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/store/cartStore";
-
-interface ShippingForm {
-  fullName: string;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  phone: string;
-}
+import { ShippingForm } from "@/types/types";
 
 export default function CheckoutPage() {
   const router = useRouter();

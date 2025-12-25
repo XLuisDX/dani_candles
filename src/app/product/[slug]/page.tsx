@@ -5,17 +5,7 @@ import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/store/cartStore";
-
-interface ProductDetail {
-  id: string;
-  name: string;
-  slug: string;
-  short_description: string | null;
-  description: string | null;
-  price_cents: number;
-  currency_code: string;
-  image_url: string | null;
-}
+import { ProductDetail } from "@/types/types";
 
 export default function ProductPage() {
   const params = useParams();

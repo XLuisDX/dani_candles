@@ -9,11 +9,11 @@ export async function GET(_req: NextRequest) {
     console.log('Sending test email FROM:', from, 'TO:', to)
 
     const { data, error } = await resend.emails.send({
-      from: from!, // dominio danicandles.com
+      from: from!,
       to,
-      subject: 'Test email from Dani Candles',
-      text: 'If you see this, Resend is working 🎉',
-    })
+      subject: "Test email from Dani Candles",
+      text: "If you see this, Resend is working 🎉",
+    });
 
     console.log('Resend test data:', data)
     console.log('Resend test error:', error)

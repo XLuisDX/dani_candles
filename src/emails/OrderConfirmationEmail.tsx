@@ -10,35 +10,9 @@ import {
   Text,
   Hr,
 } from "@react-email/components";
+import { OrderConfirmationEmailProps } from "@/types/types";
 
-export interface OrderItemEmail {
-  name: string;
-  quantity: number;
-  unitPriceFormatted: string;
-  lineTotalFormatted: string;
-}
-
-export interface ShippingAddressEmail {
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-}
-
-export interface OrderConfirmationEmailProps {
-  orderId: string;
-  totalFormatted: string;
-  currencyCode: string;
-  customerName: string;
-  items: OrderItemEmail[];
-  shippingAddress: ShippingAddressEmail;
-}
-
-export const OrderConfirmationEmail: React.FC<
-  OrderConfirmationEmailProps
-> = ({
+export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
   orderId,
   totalFormatted,
   currencyCode,
@@ -309,12 +283,10 @@ export const OrderConfirmationEmail: React.FC<
               {customerName}
               <br />
               {shippingAddress.line1}
-              {shippingAddress.line2
-                ? `, ${shippingAddress.line2}`
-                : ""}
+              {shippingAddress.line2 ? `, ${shippingAddress.line2}` : ""}
               <br />
               {shippingAddress.city}, {shippingAddress.state}{" "}
-              {shippingAddress.postalCode}
+              {shippingAddress.postal_code}
               <br />
               {shippingAddress.country}
             </Text>

@@ -1,28 +1,7 @@
 "use client";
 
+import { ProductFormProps, ProductFormValues } from "@/types/types";
 import { useState } from "react";
-
-export interface ProductFormValues {
-  name: string;
-  price: string;
-  currencyCode: string;
-  active: boolean;
-  shortDescription: string;
-  description: string;
-  categoryId: string;
-}
-
-interface ProductFormProps {
-  initialValues?: ProductFormValues;
-  mode: "create" | "edit";
-  onSubmit: (
-    values: ProductFormValues,
-    imageFile: File | null
-  ) => Promise<void>;
-  submitting?: boolean;
-  error?: string | null;
-  currentImageUrl?: string | null;
-}
 
 export function ProductForm({
   initialValues,

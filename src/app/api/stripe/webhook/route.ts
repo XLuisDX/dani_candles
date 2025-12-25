@@ -1,14 +1,11 @@
-// src/app/api/stripe/webhook/route.ts
 import * as React from "react";
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { resend } from "@/lib/resend";
 import type Stripe from "stripe";
-import OrderConfirmationEmail, {
-  OrderItemEmail,
-  ShippingAddressEmail,
-} from "@/emails/OrderConfirmationEmail";
+import OrderConfirmationEmail from "@/emails/OrderConfirmationEmail";
+import { OrderItemEmail, ShippingAddress } from "@/types/types";
 
 export async function GET() {
   console.log("[Stripe webhook] GET ping");
@@ -151,12 +148,14 @@ export async function POST(req: NextRequest) {
             const shippingName =
               (shippingRaw.full_name as string | undefined) ?? "Customer";
 
-            const shippingAddress: ShippingAddressEmail = {
+            const shippingAddress: ShippingAddress = {
+              full_name: (shippingRaw.name as string) ?? "",
               line1: (shippingRaw.line1 as string | undefined) ?? "",
               line2: (shippingRaw.line2 as string | undefined) ?? "",
               city: (shippingRaw.city as string | undefined) ?? "",
               state: (shippingRaw.state as string | undefined) ?? "",
-              postalCode: (shippingRaw.postal_code as string | undefined) ?? "",
+              postal_code:
+                (shippingRaw.postal_code as string | undefined) ?? "",
               country: (shippingRaw.country as string | undefined) ?? "",
             };
 

@@ -22,18 +22,6 @@ export default function CartPage() {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
   return (
     <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
       <motion.div

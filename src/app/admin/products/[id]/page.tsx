@@ -5,19 +5,8 @@ import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-import { ProductForm, ProductFormValues } from "@/components/admin/ProductForm";
-
-interface AdminProduct {
-  id: string;
-  name: string;
-  price_cents: number;
-  currency_code: string;
-  active: boolean;
-  short_description: string | null;
-  description: string | null;
-  category_id: string | null;
-  image_url: string | null;
-}
+import { ProductForm } from "@/components/admin/ProductForm";
+import { AdminProduct, ProductFormValues } from "@/types/types";
 
 export default function EditProductPage() {
   const router = useRouter();

@@ -5,33 +5,7 @@ import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/store/cartStore";
-
-interface ShippingAddress {
-  full_name: string;
-  address_line1: string;
-  address_line2?: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  country: string;
-  phone?: string;
-}
-
-interface Order {
-  id: string;
-  total_cents: number;
-  currency_code: string;
-  placed_at: string | null;
-  status: string;
-  shipping_address: ShippingAddress;
-}
-
-interface OrderItem {
-  id: string;
-  product_name: string;
-  quantity: number;
-  total_cents: number;
-}
+import { Order, OrderItem } from "@/types/types";
 
 export default function OrderConfirmationPage() {
   const params = useParams();

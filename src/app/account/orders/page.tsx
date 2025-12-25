@@ -4,14 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-
-interface AccountOrder {
-  id: string;
-  placed_at: string | null;
-  status: string;
-  total_cents: number;
-  currency_code: string;
-}
+import { AccountOrder } from "@/types/types";
 
 export default function AccountOrdersPage() {
   const router = useRouter();

@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-import { ProductForm, ProductFormValues } from "@/components/admin/ProductForm";
+import { ProductForm } from "@/components/admin/ProductForm";
 import { slugify } from "@/lib/slugify";
+import { ProductFormValues } from "@/types/types";
 
 export default function NewProductPage() {
   const router = useRouter();

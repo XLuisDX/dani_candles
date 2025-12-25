@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
-import type { Product } from "@/types/product";
 import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "react-toastify";
+import { Product } from "@/types/types";
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);

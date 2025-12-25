@@ -5,44 +5,7 @@ import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-
-type OrderStatus =
-  | "pending"
-  | "paid"
-  | "preparing"
-  | "shipped"
-  | "delivered"
-  | "canceled"
-  | "refunded";
-
-interface ShippingAddress {
-  full_name?: string;
-  line1?: string;
-  line2?: string;
-  city?: string;
-  state?: string;
-  postal_code?: string;
-  country?: string;
-}
-
-interface AdminOrderDetail {
-  id: string;
-  created_at: string | null;
-  status: OrderStatus;
-  payment_status: string;
-  total_cents: number;
-  currency_code: string;
-  customer_email: string | null;
-  shipping_address: ShippingAddress | null;
-}
-
-interface AdminOrderItem {
-  id: string;
-  product_name: string;
-  quantity: number;
-  unit_price_cents: number;
-  total_cents: number;
-}
+import { AdminOrderDetail, AdminOrderItem, OrderStatus } from "@/types/types";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   pending: "Pending",
@@ -227,8 +190,7 @@ export default function AdminOrderDetailPage() {
     ? new Date(order.created_at).toLocaleString()
     : "—";
   const total = (order.total_cents / 100).toFixed(2);
-  const shipping = order.shipping_address ?? {};
-  const shippingName = shipping.full_name ?? "—";
+  const shippingName = order.shipping_address?.full_name ?? "—";
   const nextStatuses = NEXT_STEPS[order.status] ?? [];
 
   return (
@@ -429,12 +391,15 @@ export default function AdminOrderDetailPage() {
                 Address
               </p>
               <p className="mt-3 text-sm leading-relaxed text-dc-ink/70">
-                {shipping.line1 || "—"}
-                {shipping.line2 ? `, ${shipping.line2}` : ""}
+                {order.shipping_address?.line1 || "—"}
+                {order.shipping_address?.line2
+                  ? `, ${order.shipping_address.line2}`
+                  : ""}
                 <br />
-                {shipping.city}, {shipping.state} {shipping.postal_code}
+                {order.shipping_address?.city}, {order.shipping_address?.state}{" "}
+                {order.shipping_address?.postal_code}
                 <br />
-                {shipping.country}
+                {order.shipping_address?.country}
               </p>
             </div>
           </motion.div>

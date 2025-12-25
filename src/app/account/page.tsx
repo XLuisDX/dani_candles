@@ -4,12 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-
-interface UserInfo {
-  id: string;
-  email: string | undefined;
-  fullName: string | undefined;
-}
+import { UserInfo } from "@/types/types";
 
 export default function AccountPage() {
   const router = useRouter();
