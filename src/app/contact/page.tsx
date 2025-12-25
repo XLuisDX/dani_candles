@@ -2,11 +2,15 @@
 
 import { useState, FormEvent } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { FaInstagram, FaFacebookF, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 export default function ContactPage() {
-  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,12 +36,29 @@ export default function ContactPage() {
     setSuccess(false);
 
     try {
-      // Aquí iría la lógica para enviar el formulario
-      // Por ahora solo simulamos el envío
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      setSuccess(true);
-      setForm({ name: "", email: "", subject: "", message: "" });
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSuccess(true);
+        setForm({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } catch (err) {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -96,7 +117,8 @@ export default function ContactPage() {
           transition={{ delay: 0.4, duration: 0.5 }}
           className="mt-4 text-base leading-relaxed text-dc-ink/60"
         >
-          We would love to hear from you. Send us a message and we will respond as soon as possible.
+          We would love to hear from you. Send us a message and we will respond
+          as soon as possible.
         </motion.p>
       </motion.header>
 
@@ -108,7 +130,7 @@ export default function ContactPage() {
           onSubmit={handleSubmit}
           className="rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl md:p-10"
         >
-          <div className="space-y-5">
+          <div className="space-y-12">
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
@@ -170,7 +192,7 @@ export default function ContactPage() {
                 value={form.message}
                 onChange={handleChange}
                 rows={6}
-                className="mt-2.5 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 py-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+                className="mt-2.5 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 py-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 resize-none"
                 placeholder="Tell us more about your inquiry..."
               />
             </div>
@@ -304,7 +326,8 @@ export default function ContactPage() {
             </div>
 
             <p className="mt-6 text-sm leading-relaxed text-dc-ink/60">
-              Stay updated with new collections, special offers, and behind-the-scenes content.
+              Stay updated with new collections, special offers, and
+              behind-the-scenes content.
             </p>
           </motion.div>
 
