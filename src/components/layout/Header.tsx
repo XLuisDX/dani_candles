@@ -78,34 +78,29 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {[
-            "shop",
-            "collections",
-            "fragrances",
-            "candle-care",
-            "about",
-            "contact",
-          ].map((item, index) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05, duration: 0.5 }}
-            >
-              <Link
-                href={`/${item}`}
-                className="relative text-xs font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel"
+          {["shop", "collections", "fragrances", "candle-care", "contact"].map(
+            (item, index) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.05, duration: 0.5 }}
               >
-                <motion.span
-                  whileHover={{ y: -2 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="inline-block"
+                <Link
+                  href={`/${item}`}
+                  className="relative text-xs font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel"
                 >
-                  {item === "candle-care" ? "CARE" : item.toUpperCase()}
-                </motion.span>
-              </Link>
-            </motion.div>
-          ))}
+                  <motion.span
+                    whileHover={{ y: -2 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="inline-block"
+                  >
+                    {item === "candle-care" ? "CARE" : item.toUpperCase()}
+                  </motion.span>
+                </Link>
+              </motion.div>
+            )
+          )}
         </nav>
 
         <motion.div
