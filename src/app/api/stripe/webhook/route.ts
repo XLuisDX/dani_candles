@@ -69,17 +69,24 @@ export async function POST(req: NextRequest) {
 
       const orderId = session.metadata?.orderId as string | undefined;
       const paymentIntentId = session.payment_intent as string | undefined;
+      const customerEmail = session.customer_details?.email;
 
       console.log(
         "[Stripe webhook] checkout.session.completed for orderId:",
         orderId,
         "paymentIntentId:",
-        paymentIntentId
+        paymentIntentId,
+        "customerEmail:",
+        customerEmail
       );
 
       if (!orderId) {
         console.warn(
           "[Stripe webhook] No orderId found in session.metadata. Skipping."
+        );
+      } else if (!customerEmail) {
+        console.warn(
+          "[Stripe webhook] No customer email found in session. Skipping email."
         );
       } else {
         const { data: order, error: updateError } = await supabaseServer
@@ -89,11 +96,10 @@ export async function POST(req: NextRequest) {
             payment_status: "succeeded",
             payment_provider: "stripe",
             payment_id: paymentIntentId ?? null,
+            customer_email: customerEmail,
           })
           .eq("id", orderId)
-          .select(
-            "id, total_cents, currency_code, shipping_address, customer_email"
-          )
+          .select("id, total_cents, currency_code, shipping_address")
           .single();
 
         if (updateError || !order) {
@@ -109,81 +115,77 @@ export async function POST(req: NextRequest) {
             order.total_cents
           );
 
-          const customerEmail = order.customer_email as string | null;
+          const { data: orderItems, error: itemsError } = await supabaseServer
+            .from("order_items")
+            .select("product_name, quantity, unit_price_cents, total_cents")
+            .eq("order_id", orderId);
 
-          if (!customerEmail) {
-            console.warn(
-              `[Stripe webhook] Order ${order.id} has no customer_email; skipping confirmation email.`
+          if (itemsError) {
+            console.error(
+              "[Stripe webhook] Error loading order_items for email:",
+              itemsError
             );
-          } else {
-            const { data: orderItems, error: itemsError } = await supabaseServer
-              .from("order_items")
-              .select("product_name, quantity, unit_price_cents, total_cents")
-              .eq("order_id", orderId);
+          }
 
-            if (itemsError) {
-              console.error(
-                "[Stripe webhook] Error loading order_items for email:",
-                itemsError
-              );
-            }
+          const items: OrderItemEmail[] =
+            orderItems?.map((item) => ({
+              name: item.product_name as string,
+              quantity: item.quantity as number,
+              unitPriceFormatted: (
+                (item.unit_price_cents as number) / 100
+              ).toFixed(2),
+              lineTotalFormatted: ((item.total_cents as number) / 100).toFixed(
+                2
+              ),
+            })) ?? [];
 
-            const items: OrderItemEmail[] =
-              orderItems?.map((item) => ({
-                name: item.product_name as string,
-                quantity: item.quantity as number,
-                unitPriceFormatted: (
-                  (item.unit_price_cents as number) / 100
-                ).toFixed(2),
-                lineTotalFormatted: (
-                  (item.total_cents as number) / 100
-                ).toFixed(2),
-              })) ?? [];
+          const totalFormatted = (order.total_cents / 100).toFixed(2);
+          const shippingRaw = (order.shipping_address ?? {}) as Record<
+            string,
+            unknown
+          >;
 
-            const totalFormatted = (order.total_cents / 100).toFixed(2);
-            const shippingRaw = (order.shipping_address ?? {}) as Record<
-              string,
-              unknown
-            >;
-            const shippingName =
-              (shippingRaw.full_name as string | undefined) ?? "Customer";
+          const shippingName =
+            (shippingRaw.name as string | undefined) ??
+            (shippingRaw.full_name as string | undefined) ??
+            session.customer_details?.name ??
+            "Customer";
 
-            const shippingAddress: ShippingAddress = {
-              full_name: (shippingRaw.name as string) ?? "",
-              line1: (shippingRaw.line1 as string | undefined) ?? "",
-              line2: (shippingRaw.line2 as string | undefined) ?? "",
-              city: (shippingRaw.city as string | undefined) ?? "",
-              state: (shippingRaw.state as string | undefined) ?? "",
-              postal_code:
-                (shippingRaw.postal_code as string | undefined) ?? "",
-              country: (shippingRaw.country as string | undefined) ?? "",
-            };
+          const shippingAddress: ShippingAddress = {
+            full_name: shippingName,
+            line1: (shippingRaw.line1 as string | undefined) ?? "",
+            line2: (shippingRaw.line2 as string | undefined) ?? "",
+            city: (shippingRaw.city as string | undefined) ?? "",
+            state: (shippingRaw.state as string | undefined) ?? "",
+            postal_code: (shippingRaw.postal_code as string | undefined) ?? "",
+            country: (shippingRaw.country as string | undefined) ?? "",
+          };
 
-            const fromEmail =
-              process.env.ORDER_FROM_EMAIL ||
-              "Dani Candles <orders@danicandles.com>";
-            const ownerEmail =
-              process.env.ORDER_NOTIFICATIONS_EMAIL || customerEmail;
+          const fromEmail =
+            process.env.ORDER_FROM_EMAIL ||
+            "Dani Candles <onboarding@resend.dev>";
+          const ownerEmail = process.env.ORDER_NOTIFICATIONS_EMAIL || null;
 
-            const textBody = [
-              `Hi ${shippingName},`,
-              "",
-              `Thank you for your order with Dani Candles ✨`,
-              "",
-              `Order ID: ${order.id}`,
-              `Total: ${totalFormatted} ${order.currency_code}`,
-              "",
-              `We’ll let you know as soon as your candles ship.`,
-              "",
-              `With warmth,`,
-              `Dani Candles`,
-            ].join("\n");
+          const textBody = [
+            `Hi ${shippingName},`,
+            "",
+            `Thank you for your order with Dani Candles ✨`,
+            "",
+            `Order ID: ${order.id}`,
+            `Total: ${totalFormatted} ${order.currency_code}`,
+            "",
+            `We'll let you know as soon as your candles ship.`,
+            "",
+            `With warmth,`,
+            `Dani Candles`,
+          ].join("\n");
 
+          try {
             const { data: customerResult, error: customerError } =
               await resend.emails.send({
                 from: fromEmail,
                 to: customerEmail,
-                subject: `Your Dani Candles order ${order.id} is confirmed`,
+                subject: `Your Dani Candles order is confirmed`,
                 react: React.createElement(OrderConfirmationEmail, {
                   orderId: order.id,
                   totalFormatted,
@@ -204,9 +206,21 @@ export async function POST(req: NextRequest) {
                 "[Stripe webhook] Resend customer email error:",
                 customerError
               );
+            } else {
+              console.log(
+                "[Stripe webhook] ✅ Confirmation email sent successfully to:",
+                customerEmail
+              );
             }
+          } catch (emailError) {
+            console.error(
+              "[Stripe webhook] Failed to send confirmation email:",
+              emailError
+            );
+          }
 
-            if (ownerEmail && ownerEmail !== customerEmail) {
+          if (ownerEmail) {
+            try {
               const { data: ownerResult, error: ownerError } =
                 await resend.emails.send({
                   from: fromEmail,
@@ -225,6 +239,11 @@ export async function POST(req: NextRequest) {
                   ownerError
                 );
               }
+            } catch (ownerEmailError) {
+              console.error(
+                "[Stripe webhook] Failed to send owner notification:",
+                ownerEmailError
+              );
             }
           }
         }
