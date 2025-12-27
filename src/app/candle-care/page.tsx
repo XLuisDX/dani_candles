@@ -17,7 +17,6 @@ const CARE_SECTIONS = [
       "Consider the season—warm, spicy scents for winter, light florals for spring",
       "Layer complementary fragrances in different rooms for a cohesive home experience",
     ],
-    imageUrl: "/care1.jpg",
     icon: "✨",
   },
   {
@@ -32,7 +31,6 @@ const CARE_SECTIONS = [
       "Place on a heat-resistant surface away from drafts",
       "Keep the wick centered as the wax melts",
     ],
-    imageUrl: "/care2.jpg",
     icon: "🕯️",
   },
   {
@@ -47,7 +45,6 @@ const CARE_SECTIONS = [
       "A mushrooming wick is a sign it needs trimming",
       "Keep wick trimmers nearby as part of your candle care routine",
     ],
-    imageUrl: "/care3.jpg",
     icon: "✂️",
   },
   {
@@ -63,7 +60,6 @@ const CARE_SECTIONS = [
       "Use a candle snuffer to avoid hot wax splatter",
       "Discontinue use when 1/2 inch of wax remains",
     ],
-    imageUrl: "/care4.jpg",
     icon: "🛡️",
   },
   {
@@ -78,7 +74,6 @@ const CARE_SECTIONS = [
       "Burn candles in rooms you spend the most time in",
       "Allow the candle to burn long enough for proper scent release",
     ],
-    imageUrl: "/care5.jpg",
     icon: "🌸",
   },
   {
@@ -93,7 +88,6 @@ const CARE_SECTIONS = [
       "Dust the wax surface gently with a soft cloth if needed",
       "Use candles within one year for optimal fragrance strength",
     ],
-    imageUrl: "/care6.jpg",
     icon: "📦",
   },
 ];
@@ -132,7 +126,7 @@ export default function CarePage() {
         staggerChildren: 0.15,
       },
     },
-  };    
+  };
 
   return (
     <main className="relative mx-auto max-w-7xl px-6 py-8 md:py-12 lg:px-8">
@@ -222,107 +216,94 @@ export default function CarePage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative space-y-16"
+        className="relative space-y-8"
       >
         {CARE_SECTIONS.map((section, index) => {
-          const isEven = index % 2 === 0;
           const isExpanded = expandedId === section.id;
 
           return (
             <motion.article
               key={section.id}
-              className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-12 ${
-                !isEven ? "lg:grid-flow-dense" : ""
-              }`}
+              className="relative overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/95 shadow-lg backdrop-blur-xl"
             >
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className={`relative overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/95 p-2 shadow-lg backdrop-blur-xl ${
-                  !isEven ? "lg:col-start-2" : ""
-                }`}
-              >
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-dc-sand/20">
-                  <img
-                    src={section.imageUrl}
-                    alt={section.title}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-dc-ink/20">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/95 text-4xl shadow-xl backdrop-blur-sm">
-                      {section.icon}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <div className={!isEven ? "lg:col-start-1 lg:row-start-1" : ""}>
-                <motion.div
-                  initial={{ opacity: 0, x: isEven ? -20 : 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  <div className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-4 py-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-dc-caramel" />
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-caramel">
-                      {section.subtitle}
-                    </span>
-                  </div>
-
-                  <h2 className="mt-6 font-display text-3xl font-semibold text-dc-ink md:text-4xl">
-                    {section.title}
-                  </h2>
-
-                  <p className="mt-4 text-base leading-relaxed text-dc-ink/70">
-                    {section.description}
-                  </p>
-
+              <div className="p-8 md:p-10">
+                <div className="flex items-start gap-6">
                   <motion.div
-                    initial={false}
-                    animate={{
-                      height: isExpanded ? "auto" : "0",
-                      opacity: isExpanded ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-dc-caramel/20 to-dc-clay/10 text-3xl shadow-sm"
                   >
-                    <div className="mt-6 rounded-2xl border border-dc-ink/8 bg-dc-cream/50 p-6 backdrop-blur-sm">
-                      <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60">
-                        Pro Tips
-                      </h3>
-                      <ul className="mt-4 space-y-3">
-                        {section.tips.map((tip, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-3 text-sm text-dc-ink/70"
-                          >
-                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-dc-caramel" />
-                            <span>{tip}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {section.icon}
                   </motion.div>
 
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() =>
-                      setExpandedId(isExpanded ? null : section.id)
-                    }
-                    className="mt-6 inline-flex items-center gap-2 rounded-full border border-dc-ink/10 bg-white/90 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
-                  >
-                    {isExpanded ? "Show Less" : "Read More"}
-                    <motion.span
-                      animate={{ rotate: isExpanded ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
+                  <div className="flex-1">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-4 py-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-dc-caramel" />
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-caramel">
+                        {section.subtitle}
+                      </span>
+                    </div>
+
+                    <h2 className="mt-4 font-display text-3xl font-semibold text-dc-ink md:text-4xl">
+                      {section.title}
+                    </h2>
+
+                    <p className="mt-4 text-base leading-relaxed text-dc-ink/70">
+                      {section.description}
+                    </p>
+
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        height: isExpanded ? "auto" : "0",
+                        opacity: isExpanded ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
                     >
-                      ↓
-                    </motion.span>
-                  </motion.button>
-                </motion.div>
+                      <div className="mt-6 rounded-2xl border border-dc-ink/8 bg-dc-cream/50 p-6 backdrop-blur-sm">
+                        <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60">
+                          Pro Tips
+                        </h3>
+                        <ul className="mt-4 space-y-3">
+                          {section.tips.map((tip, idx) => (
+                            <motion.li
+                              key={idx}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: idx * 0.1 }}
+                              className="flex items-start gap-3 text-sm text-dc-ink/70"
+                            >
+                              <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-dc-caramel" />
+                              <span>{tip}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() =>
+                        setExpandedId(isExpanded ? null : section.id)
+                      }
+                      className="mt-6 inline-flex items-center gap-2 rounded-full border border-dc-ink/10 bg-white/90 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+                    >
+                      {isExpanded ? "Show Less" : "Read More"}
+                      <motion.span
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        ↓
+                      </motion.span>
+                    </motion.button>
+                  </div>
+                </div>
               </div>
+
+              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-dc-sand/20 to-dc-caramel/10 blur-2xl" />
+              <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-br from-dc-caramel/10 to-dc-clay/5 blur-2xl" />
             </motion.article>
           );
         })}
