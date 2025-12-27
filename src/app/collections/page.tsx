@@ -39,7 +39,7 @@ const COLLECTIONS = [
     slug: "season",
     description:
       "Limited edition seasonal fragrances. Cozy, warming scents that capture the spirit of winter, from spiced notes to fresh evergreen aromas.",
-    imageUrl: "/collection4.jpg",
+    imageUrl: "/collection5.webp",
     featured: false,
   },
   {
@@ -119,8 +119,8 @@ export default function CollectionsPage() {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="mt-4 max-w-2xl text-base leading-relaxed text-dc-ink/60"
         >
-          Explore our thoughtfully curated collections, each designed to evoke
-          a distinct mood and celebrate life special moments.
+          Explore our thoughtfully curated collections, each designed to evoke a
+          distinct mood and celebrate life special moments.
         </motion.p>
       </motion.section>
 
@@ -158,7 +158,7 @@ export default function CollectionsPage() {
                 />
               </motion.div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-dc-ink/80 via-dc-ink/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-dc-ink/90 via-dc-ink/50 to-transparent" />
 
               {collection.featured && (
                 <motion.span
