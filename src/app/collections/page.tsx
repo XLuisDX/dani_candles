@@ -5,15 +5,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-
-interface Collection {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  image_url: string | null;
-  is_featured: boolean;
-}
+import { Collection } from "@/types/types";
 
 export default function CollectionsPage() {
   const router = useRouter();

@@ -192,7 +192,7 @@ export default function CollectionPage() {
         >
           <Link
             href="/collections"
-            className="inline-flex items-center gap-2 text-sm text-dc-ink/60 transition-colors hover:text-dc-caramel"
+            className="inline-flex h-12 items-center justify-center rounded-full bg-dc-sand px-8 text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink shadow-lg transition-all duration-200 hover:bg-dc-caramel hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           >
             <span>←</span>
             <span>Back to all collections</span>
