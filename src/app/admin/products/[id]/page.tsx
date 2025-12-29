@@ -42,7 +42,7 @@ export default function EditProductPage() {
       const { data, error } = await supabase
         .from("products")
         .select(
-          "id, name, price_cents, currency_code, active, short_description, description, category_id, image_url"
+          "id, name, price_cents, currency_code, active, short_description, description, collection_id, image_url"
         )
         .eq("id", productId)
         .single();
@@ -82,7 +82,7 @@ export default function EditProductPage() {
       const priceCents = Math.round(priceNumber * 100);
 
       let categoryIdValue: string | null = null;
-      const trimmedCategoryId = values.categoryId.trim();
+      const trimmedCategoryId = values.collection_id.trim();
 
       if (trimmedCategoryId !== "") {
         const uuidRegex =
@@ -108,11 +108,11 @@ export default function EditProductPage() {
               : values.shortDescription.trim(),
           description:
             values.description.trim() === "" ? null : values.description.trim(),
-          category_id: categoryIdValue,
+          collection_id: categoryIdValue,
         })
         .eq("id", product.id)
         .select(
-          "id, name, price_cents, currency_code, active, short_description, description, category_id, image_url"
+          "id, name, price_cents, currency_code, active, short_description, description, collection_id, image_url"
         )
         .single();
 
@@ -210,7 +210,7 @@ export default function EditProductPage() {
     active: product.active,
     shortDescription: product.short_description ?? "",
     description: product.description ?? "",
-    categoryId: product.category_id ?? "",
+    collection_id: product.collection_id ?? "",
   };
 
   return (

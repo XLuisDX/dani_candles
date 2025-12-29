@@ -86,7 +86,7 @@ export interface AdminProduct {
   active: boolean;
   short_description: string | null;
   description: string | null;
-  category_id: string | null;
+  collection_id: string | null;
   image_url: string | null;
   created_at: string | null;
 }
@@ -118,6 +118,24 @@ export interface ProductDetail {
   image_url: string | null;
 }
 
+export interface ProductWithCollection extends ProductDetail {
+  collection_id: string | null;
+  collections?: {
+    id: string;
+    name: string;
+    slug: string;
+  } | null;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  image_url: string | null;
+  is_featured: boolean;
+}
+
 export interface ProductFormValues {
   name: string;
   price: string;
@@ -125,7 +143,7 @@ export interface ProductFormValues {
   active: boolean;
   shortDescription: string;
   description: string;
-  categoryId: string;
+  collection_id: string;
 }
 
 export interface ProductFormProps {

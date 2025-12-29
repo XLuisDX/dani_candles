@@ -47,20 +47,6 @@ export default function NewProductPage() {
 
       const priceCents = Math.round(priceNumber * 100);
 
-      let categoryIdValue: string | null = null;
-      const trimmedCategoryId = values.categoryId.trim();
-
-      if (trimmedCategoryId !== "") {
-        const uuidRegex =
-          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
-        if (!uuidRegex.test(trimmedCategoryId)) {
-          setError("Category ID must be a valid UUID or empty.");
-          setSubmitting(false);
-          return;
-        }
-        categoryIdValue = trimmedCategoryId;
-      }
-
       const { data, error } = await supabase
         .from("products")
         .insert({
@@ -75,7 +61,7 @@ export default function NewProductPage() {
               : values.shortDescription.trim(),
           description:
             values.description.trim() === "" ? null : values.description.trim(),
-          category_id: categoryIdValue,
+          collection_id: values.collection_id,
         })
         .select("id")
         .single();

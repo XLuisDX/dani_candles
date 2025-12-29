@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/store/cartStore";
-import { ProductDetail } from "@/types/types";
+import { ProductWithCollection } from "@/types/types";
+
+
 
 export default function ProductPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
-  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const [product, setProduct] = useState<ProductWithCollection | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +28,22 @@ export default function ProductPage() {
       const { data, error } = await supabase
         .from("products")
         .select(
-          "id, name, slug, short_description, description, price_cents, currency_code, image_url"
+          `
+            id, 
+            name, 
+            slug, 
+            short_description, 
+            description, 
+            price_cents, 
+            currency_code, 
+            image_url,
+            collection_id,
+            collections!products_collection_id_fkey (
+              id,
+              name,
+              slug
+            )
+          `
         )
         .eq("slug", slug)
         .eq("active", true)
@@ -35,7 +53,7 @@ export default function ProductPage() {
         console.error(error);
         setError("Unable to load this candle.");
       } else {
-        setProduct(data as ProductDetail | null);
+        setProduct(data as ProductWithCollection | null);
       }
 
       setLoading(false);
@@ -163,13 +181,32 @@ export default function ProductPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-3xl border border-dc-ink/8 bg-white/95 p-2 shadow-lg backdrop-blur-xl md:p-8"
+          className="rounded-3xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl md:p-8"
         >
+          {product.collections && (
+            <motion.button
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() =>
+                router.push(`/collections/${product.collections?.slug}`)
+              }
+              className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-4 py-2 transition-colors hover:bg-dc-caramel/20"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-dc-caramel" />
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-caramel">
+                {product.collections.name}
+              </span>
+            </motion.button>
+          )}
+
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="mt-6 font-display text-4xl font-semibold leading-tight text-dc-ink md:text-5xl"
+            className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink md:text-5xl"
           >
             {product.name}
           </motion.h1>

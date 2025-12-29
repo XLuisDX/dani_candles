@@ -1,7 +1,8 @@
 "use client";
 
-import { ProductFormProps, ProductFormValues } from "@/types/types";
-import { useState } from "react";
+import { Collection, ProductFormProps, ProductFormValues } from "@/types/types";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export function ProductForm({
   initialValues,
@@ -19,11 +20,32 @@ export function ProductForm({
       active: true,
       shortDescription: "",
       description: "",
-      categoryId: "",
+      collection_id: "",
     }
   );
 
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loadingCollections, setLoadingCollections] = useState(true);
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      setLoadingCollections(true);
+      const { data, error } = await supabase
+        .from("collections")
+        .select("id, name, slug, description, image_url, is_featured")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching collections:", error);
+      } else {
+        setCollections(data || []);
+      }
+      setLoadingCollections(false);
+    };
+
+    fetchCollections();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -167,17 +189,33 @@ export function ProductForm({
 
         <div className="mt-5">
           <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60">
-            Category ID (uuid, optional)
+            Collection
           </label>
-          <input
-            name="categoryId"
-            value={values.categoryId}
-            onChange={handleChange}
-            className="mt-2 h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition placeholder:text-dc-ink/40 focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
-            placeholder="Leave empty or paste a valid category UUID"
-          />
+
+          {loadingCollections ? (
+            <div className="mt-2 flex h-11 items-center rounded-2xl border border-black/10 bg-white/70 px-4">
+              <span className="text-sm text-dc-ink/40">
+                Loading collections...
+              </span>
+            </div>
+          ) : (
+            <select
+              name="collection_id"
+              value={values.collection_id}
+              onChange={handleChange}
+              className="mt-2 h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10"
+            >
+              <option value="">No collection</option>
+              {collections.map((collection) => (
+                <option key={collection.id} value={collection.id}>
+                  {collection.name}
+                </option>
+              ))}
+            </select>
+          )}
+
           <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-dc-ink/45">
-            Leave empty if you don&apos;t have categories yet.
+            Assign this product to a collection for better organization.
           </p>
         </div>
       </section>
