@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Logo } from "@/components/Logo";
+import { TESTIMONIALS } from "@/types/utils";
 
 const CANDLE_IMAGES = [
   "/img1.jpg",
@@ -12,37 +13,6 @@ const CANDLE_IMAGES = [
   "/img3.jpg",
   "/img4.jpg",
   "/img5.jpg",
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Sarah Mitchell",
-    role: "Interior Designer",
-    content:
-      "These candles have completely transformed my clients' spaces. The scents are sophisticated and long-lasting. I recommend Dani Candles to everyone.",
-    rating: 5,
-  },
-  {
-    name: "James Rodriguez",
-    role: "Yoga Instructor",
-    content:
-      "The perfect addition to my studio. The calming fragrances create exactly the ambiance I want for my classes. My students always ask where they can buy them.",
-    rating: 5,
-  },
-  {
-    name: "Emily Chen",
-    role: "Homeowner",
-    content:
-      "I've tried countless candle brands, but nothing compares to Dani Candles. The quality is exceptional, and they burn so cleanly. Absolutely worth every penny.",
-    rating: 5,
-  },
-  {
-    name: "Michael Thompson",
-    role: "Coffee Shop Owner",
-    content:
-      "We use these in our café daily. Customers constantly compliment the atmosphere, and the candles last much longer than any other brand we've tried.",
-    rating: 5,
-  },
 ];
 
 export default function Home() {
@@ -269,7 +239,7 @@ export default function Home() {
               <div className="overflow-hidden rounded-3xl border border-dc-ink/10 bg-gradient-to-br from-white to-dc-sand/20 p-8 shadow-xl">
                 <div className="aspect-square overflow-hidden rounded-2xl bg-white shadow-lg">
                   <Image
-                    src="/img5.jpg"
+                    src="/dani.jpeg"
                     alt="Dani Candles craftsmanship"
                     width={600}
                     height={600}

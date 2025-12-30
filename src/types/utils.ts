@@ -107,3 +107,34 @@ Questions? Email us at support@danicandles.com
     `,
   },
 };
+
+export const TESTIMONIALS = [
+  {
+    name: "Sarah Mitchell",
+    role: "Interior Designer",
+    content:
+      "These candles have completely transformed my clients' spaces. The scents are sophisticated and long-lasting. I recommend Dani Candles to everyone.",
+    rating: 5,
+  },
+  {
+    name: "James Rodriguez",
+    role: "Yoga Instructor",
+    content:
+      "The perfect addition to my studio. The calming fragrances create exactly the ambiance I want for my classes. My students always ask where they can buy them.",
+    rating: 5,
+  },
+  {
+    name: "Emily Chen",
+    role: "Homeowner",
+    content:
+      "I've tried countless candle brands, but nothing compares to Dani Candles. The quality is exceptional, and they burn so cleanly. Absolutely worth every penny.",
+    rating: 5,
+  },
+  {
+    name: "Michael Thompson",
+    role: "Coffee Shop Owner",
+    content:
+      "We use these in our café daily. Customers constantly compliment the atmosphere, and the candles last much longer than any other brand we've tried.",
+    rating: 5,
+  },
+];
