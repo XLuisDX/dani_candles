@@ -208,3 +208,12 @@ export interface CartState {
   clearCart: () => void;
   totalCents: () => number;
 }
+
+export interface LogoProps {
+  variant?: "black" | "white";
+  width?: number;
+  height?: number;
+  className?: string;
+  animated?: boolean;
+  onClick?: () => void;
+}

@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
+import { Logo } from "@/components/Logo";
+import { useRouter } from "next/navigation";
 
 export function Header() {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -57,15 +60,14 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="group flex items-center gap-3">
-          <motion.div
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-dc-ink/8 bg-gradient-to-br from-white to-dc-sand/30 shadow-sm"
-          >
-            <span className="font-display text-base font-medium tracking-wider text-dc-ink">
-              D
-            </span>
-          </motion.div>
+          <Logo
+            variant="black"
+            height={48}
+            width={200}
+            animated={true}
+            onClick={() => router.push("/")}
+            className="cursor-pointer"
+          />
 
           <div className="flex flex-col">
             <span className="font-display text-base font-semibold tracking-[0.25em] text-dc-ink">

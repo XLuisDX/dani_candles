@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Logo } from "@/components/Logo";
 
 const CANDLE_IMAGES = [
   "/img1.jpg",
@@ -86,13 +87,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-8 flex items-center justify-center"
+            className="mb-2 flex items-center justify-center "
           >
-            <div className="relative grid h-24 w-24 place-items-center overflow-hidden rounded-full border-2 border-white/30 bg-gradient-to-br from-white/20 to-dc-sand/20 shadow-2xl backdrop-blur-sm">
-              <span className="font-display text-4xl font-semibold tracking-wider text-white">
-                D
-              </span>
-            </div>
+            <Logo
+              variant="white"
+              height={120}
+              animated={true}
+              className="drop-shadow-2xl"
+            />
           </motion.div>
 
           <motion.h1
