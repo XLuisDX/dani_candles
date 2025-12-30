@@ -43,19 +43,19 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-dc-ink/70 via-dc-ink/50 to-dc-ink/70" />
         </div>
 
-        <main className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 py-20 text-center">
+        <main className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-8 flex items-center justify-center"
+            className="mb-6 flex items-center justify-center sm:mb-8"
           >
             <Logo
               variant="white"
-              height={80}
-              width={320}
+              height={60}
+              width={240}
               animated={true}
-              className="drop-shadow-2xl"
+              className="drop-shadow-2xl sm:h-20 sm:w-80"
             />
           </motion.div>
 
@@ -63,7 +63,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="font-display text-6xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
+            className="font-display text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
           >
             DANI CANDLES
           </motion.h1>
@@ -72,7 +72,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-6 font-display text-2xl italic tracking-wide text-white/90 md:text-3xl"
+            className="mt-4 font-display text-xl italic tracking-wide text-white/90 sm:mt-6 sm:text-2xl md:text-3xl"
           >
             Awaken to ambiance
           </motion.p>
@@ -81,7 +81,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-8 max-w-2xl text-lg leading-relaxed text-white/80"
+            className="mt-6 max-w-2xl px-4 text-base leading-relaxed text-white/80 sm:mt-8 sm:text-lg"
           >
             Handcrafted in small batches with premium soy wax and curated
             fragrances, each Dani Candle transforms your space into a sanctuary
@@ -92,13 +92,13 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="mt-12 flex flex-col gap-4 sm:flex-row"
+            className="mt-8 flex w-full max-w-md flex-col gap-3 px-4 sm:mt-12 sm:flex-row sm:gap-4"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => router.push("/shop")}
-              className="inline-flex h-14 items-center justify-center rounded-full bg-white px-10 text-[11px] font-bold uppercase tracking-[0.25em] text-dc-ink shadow-2xl transition-all duration-200 hover:bg-dc-cream hover:shadow-xl"
+              className="inline-flex h-12 w-full items-center justify-center rounded-full bg-white px-8 text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink shadow-2xl transition-all duration-200 hover:bg-dc-cream hover:shadow-xl sm:h-14 sm:w-auto sm:px-10 sm:text-[11px]"
             >
               Shop Now
             </motion.button>
@@ -107,7 +107,7 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => router.push("/contact")}
-              className="inline-flex h-14 items-center justify-center rounded-full border-2 border-white/30 bg-white/10 px-10 text-[11px] font-bold uppercase tracking-[0.25em] text-white shadow-2xl backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-white/20 hover:shadow-xl"
+              className="inline-flex h-12 w-full items-center justify-center rounded-full border-2 border-white/30 bg-white/10 px-8 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-2xl backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-white/20 hover:shadow-xl sm:h-14 sm:w-auto sm:px-10 sm:text-[11px]"
             >
               Contact
             </motion.button>
@@ -117,16 +117,16 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.2 }}
-            className="mt-16 flex gap-2"
+            className="mt-12 flex gap-2 sm:mt-16"
           >
             {CANDLE_IMAGES.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
+                className={`h-1.5 rounded-full transition-all duration-300 sm:h-2 ${
                   index === currentImageIndex
-                    ? "w-8 bg-white"
-                    : "w-2 bg-white/40 hover:bg-white/60"
+                    ? "w-6 bg-white sm:w-8"
+                    : "w-1.5 bg-white/40 hover:bg-white/60 sm:w-2"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -137,14 +137,14 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.4 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:bottom-8"
           >
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
               <svg
-                className="h-6 w-6 text-white/60"
+                className="h-5 w-5 text-white/60 sm:h-6 sm:w-6"
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -159,31 +159,31 @@ export default function Home() {
         </main>
       </div>
 
-      <section className="relative bg-dc-cream py-24 md:py-32">
+      <section className="relative bg-dc-cream py-16 sm:py-20 md:py-24 lg:py-32">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.2 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute -top-16 left-16 h-64 w-64 rounded-full bg-dc-sand blur-3xl"
+          className="pointer-events-none absolute -top-16 left-8 h-48 w-48 rounded-full bg-dc-sand blur-3xl sm:left-16 sm:h-64 sm:w-64"
         />
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.15 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute -bottom-16 right-16 h-72 w-72 rounded-full bg-dc-caramel blur-3xl"
+          className="pointer-events-none absolute -bottom-16 right-8 h-56 w-56 rounded-full bg-dc-caramel blur-3xl sm:right-16 sm:h-72 sm:w-72"
         />
 
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-16 md:grid-cols-2 md:items-center">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 md:grid-cols-2 md:items-center md:gap-16">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm backdrop-blur-sm sm:px-5 sm:py-2">
                 <motion.span
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{
@@ -193,23 +193,23 @@ export default function Home() {
                   }}
                   className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
                 />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
                   About Us
                 </span>
               </div>
 
-              <h2 className="mt-8 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl">
+              <h2 className="mt-6 font-display text-3xl font-semibold leading-tight text-dc-ink sm:mt-8 sm:text-4xl md:text-5xl lg:text-6xl">
                 Crafted with intention
               </h2>
 
-              <p className="mt-6 text-lg leading-relaxed text-dc-ink/70">
+              <p className="mt-4 text-base leading-relaxed text-dc-ink/70 sm:mt-6 sm:text-lg">
                 Every Dani Candle is more than just a product—it is an
                 experience. Hand-poured in small batches, each candle is crafted
                 with care using 100% natural soy wax, premium cotton wicks, and
                 carefully curated fragrance blends.
               </p>
 
-              <p className="mt-4 text-base leading-relaxed text-dc-ink/60">
+              <p className="mt-3 text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base">
                 Our commitment to quality means we never rush the process. From
                 sourcing sustainable materials to perfecting each scent profile,
                 we believe in creating candles that elevate everyday moments
@@ -228,8 +228,8 @@ export default function Home() {
               }}
               className="relative"
             >
-              <div className="overflow-hidden rounded-3xl border border-dc-ink/10 bg-gradient-to-br from-white to-dc-sand/20 p-8 shadow-xl">
-                <div className="aspect-square overflow-hidden rounded-2xl bg-white shadow-lg">
+              <div className="overflow-hidden rounded-2xl border border-dc-ink/10 bg-gradient-to-br from-white to-dc-sand/20 p-6 shadow-xl sm:rounded-3xl sm:p-8">
+                <div className="aspect-square overflow-hidden rounded-xl bg-white shadow-lg sm:rounded-2xl">
                   <Image
                     src="/dani.jpeg"
                     alt="Dani Candles craftsmanship"
@@ -240,7 +240,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="absolute -bottom-6 -right-6 -z-10 h-full w-full rounded-3xl bg-gradient-to-br from-dc-sand/30 to-dc-caramel/20 blur-2xl" />
+              <div className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-2xl bg-gradient-to-br from-dc-sand/30 to-dc-caramel/20 blur-2xl sm:-bottom-6 sm:-right-6 sm:rounded-3xl" />
             </motion.div>
           </div>
 
@@ -249,7 +249,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-24 grid gap-8 sm:grid-cols-3"
+            className="mt-16 grid gap-4 sm:grid-cols-3 sm:gap-6 md:mt-20 lg:mt-24 lg:gap-8"
           >
             {[
               { label: "100% Natural", value: "Soy Wax" },
@@ -263,12 +263,12 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
                 whileHover={{ y: -4 }}
-                className="rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-8 text-center shadow-sm backdrop-blur-sm"
+                className="rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-6 text-center shadow-sm backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-8"
               >
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/50">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/50 sm:text-[10px]">
                   {item.label}
                 </p>
-                <p className="mt-3 font-display text-2xl font-semibold text-dc-ink">
+                <p className="mt-2 font-display text-xl font-semibold text-dc-ink sm:mt-3 sm:text-2xl">
                   {item.value}
                 </p>
               </motion.div>
@@ -277,23 +277,23 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative bg-white py-24 md:py-32">
+      <section className="relative bg-white py-16 sm:py-20 md:py-24 lg:py-32">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.15 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute -top-16 right-16 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+          className="pointer-events-none absolute -top-16 right-8 h-48 w-48 rounded-full bg-dc-caramel blur-3xl sm:right-16 sm:h-64 sm:w-64"
         />
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.2 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute -bottom-16 left-16 h-72 w-72 rounded-full bg-dc-sand blur-3xl"
+          className="pointer-events-none absolute -bottom-16 left-8 h-56 w-56 rounded-full bg-dc-sand blur-3xl sm:left-16 sm:h-72 sm:w-72"
         />
 
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -301,7 +301,7 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-dc-cream/90 px-5 py-2 shadow-sm backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-dc-cream/90 px-4 py-1.5 shadow-sm backdrop-blur-sm sm:px-5 sm:py-2">
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{
@@ -311,16 +311,16 @@ export default function Home() {
                 }}
                 className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
               />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+              <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
                 Testimonials
               </span>
             </div>
 
-            <h2 className="mt-8 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl">
+            <h2 className="mt-6 font-display text-3xl font-semibold leading-tight text-dc-ink sm:mt-8 sm:text-4xl md:text-5xl lg:text-6xl">
               Loved by many
             </h2>
 
-            <p className="mt-4 text-lg text-dc-ink/60">
+            <p className="mt-3 text-base text-dc-ink/60 sm:mt-4 sm:text-lg">
               See what our customers have to say about their experience
             </p>
           </motion.div>
@@ -330,7 +330,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-12 grid gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4"
           >
             {TESTIMONIALS.map((testimonial, index) => (
               <motion.div
@@ -340,13 +340,13 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="flex flex-col rounded-3xl border border-dc-ink/8 bg-dc-cream/50 p-8 shadow-lg backdrop-blur-xl"
+                className="flex flex-col rounded-2xl border border-dc-ink/8 bg-dc-cream/50 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8"
               >
                 <div className="flex gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <svg
                       key={i}
-                      className="h-5 w-5 text-dc-caramel"
+                      className="h-4 w-4 text-dc-caramel sm:h-5 sm:w-5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -355,15 +355,15 @@ export default function Home() {
                   ))}
                 </div>
 
-                <p className="mt-6 flex-1 text-sm leading-relaxed text-dc-ink/70">
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-dc-ink/70 sm:mt-6">
                   &quot;{testimonial.content}&quot;
                 </p>
 
-                <div className="mt-6 border-t border-dc-ink/8 pt-6">
-                  <p className="font-display text-base font-semibold text-dc-ink">
+                <div className="mt-4 border-t border-dc-ink/8 pt-4 sm:mt-6 sm:pt-6">
+                  <p className="font-display text-sm font-semibold text-dc-ink sm:text-base">
                     {testimonial.name}
                   </p>
-                  <p className="mt-1 text-xs font-semibold uppercase tracking-[0.15em] text-dc-ink/40">
+                  <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 sm:text-xs">
                     {testimonial.role}
                   </p>
                 </div>

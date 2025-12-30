@@ -1,119 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { CARE_SECTIONS, QUICK_TIPS } from "@/types/utils";
 import { motion } from "framer-motion";
 import { useState } from "react";
-
-const CARE_SECTIONS = [
-  {
-    id: 1,
-    title: "Choosing Your Perfect Candle",
-    subtitle: "Finding the right scent for every moment",
-    description:
-      "Selecting the perfect candle goes beyond fragrance—it's about creating an experience. Consider the size of your space, the mood you want to create, and the time of day. Larger rooms benefit from candles with stronger scent throws, while intimate spaces shine with subtle, delicate fragrances.",
-    tips: [
-      "Morning rituals pair beautifully with fresh, energizing scents like peppermint or coffee",
-      "Evening relaxation calls for calming notes such as lavender or vanilla",
-      "Consider the season—warm, spicy scents for winter, light florals for spring",
-      "Layer complementary fragrances in different rooms for a cohesive home experience",
-    ],
-    icon: "✨",
-  },
-  {
-    id: 2,
-    title: "The First Burn Ritual",
-    subtitle: "Setting the foundation for a perfect burn",
-    description:
-      "The first burn is the most important. Allow your candle to burn until the entire top surface melts into a complete pool of wax—typically 2-4 hours. This prevents tunneling and ensures an even burn for the life of your candle. This initial burn creates a memory ring that the candle will follow for all future burns.",
-    tips: [
-      "Never burn a candle for less than one hour on the first light",
-      "Ensure the wax pool reaches the edges of the container",
-      "Place on a heat-resistant surface away from drafts",
-      "Keep the wick centered as the wax melts",
-    ],
-    icon: "🕯️",
-  },
-  {
-    id: 3,
-    title: "Wick Maintenance",
-    subtitle: "The secret to a clean, even burn",
-    description:
-      "A properly trimmed wick is essential for optimal candle performance. Before each burn, trim the wick to 1/4 inch using wick trimmers or scissors. This simple practice prevents smoking, reduces soot buildup, and ensures a steady, beautiful flame that maximizes your candle's fragrance throw.",
-    tips: [
-      "Trim the wick before every burn when the wax is cool and solid",
-      "Remove any wick debris or char buildup from the wax pool",
-      "A mushrooming wick is a sign it needs trimming",
-      "Keep wick trimmers nearby as part of your candle care routine",
-    ],
-    icon: "✂️",
-  },
-  {
-    id: 4,
-    title: "Safe Burning Practices",
-    subtitle: "Enjoying candles with peace of mind",
-    description:
-      "Safety is paramount when enjoying candles. Never leave a burning candle unattended, and always keep them away from children, pets, and flammable materials. Place candles on stable, heat-resistant surfaces, away from drafts, vents, and ceiling fans that can cause uneven burning or smoking.",
-    tips: [
-      "Never burn a candle for more than 4 hours at a time",
-      "Keep candles at least 3 inches apart from each other",
-      "Extinguish candles when leaving a room or before sleep",
-      "Use a candle snuffer to avoid hot wax splatter",
-      "Discontinue use when 1/2 inch of wax remains",
-    ],
-    icon: "🛡️",
-  },
-  {
-    id: 5,
-    title: "Maximizing Scent Throw",
-    subtitle: "Getting the most from your fragrance",
-    description:
-      "To fully experience your candle's fragrance, consider your environment. Smaller, enclosed spaces will naturally have a stronger scent throw. For larger rooms, try burning multiple candles or placing them in central locations. Avoid competing scents from air fresheners or strong cooking odors during your first burn.",
-    tips: [
-      "Close doors and windows for the first 30 minutes of burning",
-      "Place candles at nose level for optimal scent diffusion",
-      "Burn candles in rooms you spend the most time in",
-      "Allow the candle to burn long enough for proper scent release",
-    ],
-    icon: "🌸",
-  },
-  {
-    id: 6,
-    title: "Storage & Longevity",
-    subtitle: "Preserving your candles between burns",
-    description:
-      "Proper storage extends the life and quality of your candles. Keep them in a cool, dry place away from direct sunlight, which can fade colors and alter fragrances. Always replace the lid between burns to preserve the scent and protect from dust. With proper care, your candles will maintain their integrity and fragrance.",
-    tips: [
-      "Store candles upright to prevent wax from settling unevenly",
-      "Keep away from heat sources and direct sunlight",
-      "Dust the wax surface gently with a soft cloth if needed",
-      "Use candles within one year for optimal fragrance strength",
-    ],
-    icon: "📦",
-  },
-];
-
-const QUICK_TIPS = [
-  {
-    title: "Burn Time",
-    description: "2-4 hours per session",
-    icon: "⏱️",
-  },
-  {
-    title: "Wick Length",
-    description: "Trim to 1/4 inch",
-    icon: "📏",
-  },
-  {
-    title: "Wax Remaining",
-    description: "Stop at 1/2 inch",
-    icon: "🔥",
-  },
-  {
-    title: "First Burn",
-    description: "Full melt pool essential",
-    icon: "💫",
-  },
-];
 
 export default function CarePage() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -129,38 +18,38 @@ export default function CarePage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-7xl px-6 py-8 md:py-12 lg:px-8">
+    <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8 mt-16">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-16 right-16 h-56 w-56 rounded-full bg-dc-sand blur-3xl"
+        className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full bg-dc-sand blur-3xl sm:right-12 sm:h-48 sm:w-48 md:right-16 md:h-56 md:w-56"
       />
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.2 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-16 left-12 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+        className="pointer-events-none absolute -bottom-16 left-8 h-48 w-48 rounded-full bg-dc-caramel blur-3xl sm:left-12 sm:h-56 sm:w-56 md:h-64 md:w-64"
       />
 
       <motion.section
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mb-20"
+        className="relative mb-16 md:mb-20"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm backdrop-blur-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
             Expert Guidance
           </span>
         </motion.div>
@@ -169,7 +58,7 @@ export default function CarePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl lg:text-7xl"
+          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl lg:text-7xl"
         >
           Candle Care Guide
         </motion.h1>
@@ -178,7 +67,7 @@ export default function CarePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-4 max-w-2xl text-base leading-relaxed text-dc-ink/60"
+          className="mt-3 max-w-2xl text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
         >
           Master the art of candle care with our comprehensive guide. From
           selecting the perfect scent to ensuring a clean, safe burn, discover
@@ -190,7 +79,7 @@ export default function CarePage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}
-        className="relative mb-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        className="relative mb-16 grid gap-4 sm:grid-cols-2 sm:gap-5 md:mb-20 lg:grid-cols-4 lg:gap-6"
       >
         {QUICK_TIPS.map((tip, index) => (
           <motion.div
@@ -199,15 +88,17 @@ export default function CarePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
             whileHover={{ y: -4 }}
-            className="rounded-2xl border border-dc-ink/8 bg-white/95 p-6 text-center shadow-sm backdrop-blur-xl"
+            className="rounded-xl border border-dc-ink/8 bg-white/95 p-5 text-center shadow-sm backdrop-blur-xl sm:rounded-2xl sm:p-6"
           >
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-dc-cream/80 text-2xl">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-dc-cream/80 text-xl sm:h-14 sm:w-14 sm:text-2xl">
               {tip.icon}
             </div>
-            <h3 className="mt-4 font-display text-lg font-semibold text-dc-ink">
+            <h3 className="mt-3 font-display text-base font-semibold text-dc-ink sm:mt-4 sm:text-lg">
               {tip.title}
             </h3>
-            <p className="mt-2 text-sm text-dc-ink/60">{tip.description}</p>
+            <p className="mt-1.5 text-xs text-dc-ink/60 sm:mt-2 sm:text-sm">
+              {tip.description}
+            </p>
           </motion.div>
         ))}
       </motion.section>
@@ -216,39 +107,39 @@ export default function CarePage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative space-y-8"
+        className="relative space-y-6 md:space-y-8"
       >
-        {CARE_SECTIONS.map((section, index) => {
+        {CARE_SECTIONS.map((section) => {
           const isExpanded = expandedId === section.id;
 
           return (
             <motion.article
               key={section.id}
-              className="relative overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/95 shadow-lg backdrop-blur-xl"
+              className="relative overflow-hidden rounded-2xl border border-dc-ink/8 bg-white/95 shadow-lg backdrop-blur-xl sm:rounded-3xl"
             >
-              <div className="p-8 md:p-10">
-                <div className="flex items-start gap-6">
+              <div className="p-5 sm:p-6 md:p-8 lg:p-10">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5 md:gap-6">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.3 }}
-                    className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-dc-caramel/20 to-dc-clay/10 text-3xl shadow-sm"
+                    className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-dc-caramel/20 to-dc-clay/10 text-2xl shadow-sm sm:h-14 sm:w-14 sm:rounded-2xl sm:text-3xl md:h-16 md:w-16"
                   >
                     {section.icon}
                   </motion.div>
 
                   <div className="flex-1">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-4 py-1.5">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-3 py-1 sm:px-4 sm:py-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-dc-caramel" />
-                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-caramel">
+                      <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-dc-caramel sm:text-[9px]">
                         {section.subtitle}
                       </span>
                     </div>
 
-                    <h2 className="mt-4 font-display text-3xl font-semibold text-dc-ink md:text-4xl">
+                    <h2 className="mt-3 font-display text-2xl font-semibold text-dc-ink sm:mt-4 sm:text-3xl md:text-4xl">
                       {section.title}
                     </h2>
 
-                    <p className="mt-4 text-base leading-relaxed text-dc-ink/70">
+                    <p className="mt-3 text-sm leading-relaxed text-dc-ink/70 sm:mt-4 sm:text-base">
                       {section.description}
                     </p>
 
@@ -261,18 +152,18 @@ export default function CarePage() {
                       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-6 rounded-2xl border border-dc-ink/8 bg-dc-cream/50 p-6 backdrop-blur-sm">
-                        <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60">
+                      <div className="mt-5 rounded-xl border border-dc-ink/8 bg-dc-cream/50 p-5 backdrop-blur-sm sm:mt-6 sm:rounded-2xl sm:p-6">
+                        <h3 className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
                           Pro Tips
                         </h3>
-                        <ul className="mt-4 space-y-3">
+                        <ul className="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
                           {section.tips.map((tip, idx) => (
                             <motion.li
                               key={idx}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: idx * 0.1 }}
-                              className="flex items-start gap-3 text-sm text-dc-ink/70"
+                              className="flex items-start gap-2.5 text-xs text-dc-ink/70 sm:gap-3 sm:text-sm"
                             >
                               <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-dc-caramel" />
                               <span>{tip}</span>
@@ -288,7 +179,7 @@ export default function CarePage() {
                       onClick={() =>
                         setExpandedId(isExpanded ? null : section.id)
                       }
-                      className="mt-6 inline-flex items-center gap-2 rounded-full border border-dc-ink/10 bg-white/90 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+                      className="mt-5 inline-flex items-center gap-2 rounded-full border border-dc-ink/10 bg-white/90 px-5 py-2.5 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:mt-6 sm:px-6 sm:py-3 sm:text-[10px]"
                     >
                       {isExpanded ? "Show Less" : "Read More"}
                       <motion.span
@@ -314,25 +205,25 @@ export default function CarePage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mt-32 rounded-3xl border border-dc-ink/8 bg-gradient-to-br from-dc-caramel to-dc-clay p-12 shadow-xl md:p-16"
+        className="relative mt-24 rounded-2xl border border-dc-ink/8 bg-gradient-to-br from-dc-caramel to-dc-clay p-8 shadow-xl sm:mt-28 sm:rounded-3xl sm:p-10 md:mt-32 md:p-12 lg:p-16"
       >
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/30 bg-white/20 px-5 py-2 shadow-lg backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-4 py-1.5 shadow-lg backdrop-blur-sm sm:gap-2.5 sm:px-5 sm:py-2">
             <motion.span
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="h-1.5 w-1.5 rounded-full bg-white"
             />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/90">
+            <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-white/90 sm:text-[10px]">
               Commitment to Excellence
             </span>
           </div>
 
-          <h2 className="mt-8 font-display text-4xl font-semibold leading-tight text-white md:text-5xl">
+          <h2 className="mt-6 font-display text-3xl font-semibold leading-tight text-white sm:mt-8 sm:text-4xl md:text-5xl">
             Crafted with care, meant to be cherished
           </h2>
 
-          <p className="mt-6 text-base leading-relaxed text-white/90 md:text-lg">
+          <p className="mt-4 text-sm leading-relaxed text-white/90 sm:mt-6 sm:text-base md:text-lg">
             Every Dani Candle is created with meticulous attention to detail,
             from the first pour to the final burn. By following these care
             guidelines, you honor the craftsmanship behind each candle and
@@ -340,28 +231,28 @@ export default function CarePage() {
             intended.
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <div className="rounded-2xl border border-white/30 bg-white/20 px-6 py-4 backdrop-blur-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
+          <div className="mt-8 flex flex-wrap justify-center gap-3 sm:mt-10 sm:gap-4">
+            <div className="rounded-xl border border-white/30 bg-white/20 px-5 py-3.5 backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-4">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 sm:text-[10px]">
                 Burn Time
               </p>
-              <p className="mt-1 font-display text-2xl font-semibold text-white">
+              <p className="mt-1 font-display text-xl font-semibold text-white sm:text-2xl">
                 40+ Hours
               </p>
             </div>
-            <div className="rounded-2xl border border-white/30 bg-white/20 px-6 py-4 backdrop-blur-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
+            <div className="rounded-xl border border-white/30 bg-white/20 px-5 py-3.5 backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-4">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 sm:text-[10px]">
                 Soy Wax
               </p>
-              <p className="mt-1 font-display text-2xl font-semibold text-white">
+              <p className="mt-1 font-display text-xl font-semibold text-white sm:text-2xl">
                 100% Natural
               </p>
             </div>
-            <div className="rounded-2xl border border-white/30 bg-white/20 px-6 py-4 backdrop-blur-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
+            <div className="rounded-xl border border-white/30 bg-white/20 px-5 py-3.5 backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-4">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 sm:text-[10px]">
                 Hand-Poured
               </p>
-              <p className="mt-1 font-display text-2xl font-semibold text-white">
+              <p className="mt-1 font-display text-xl font-semibold text-white sm:text-2xl">
                 Small Batch
               </p>
             </div>
@@ -374,13 +265,13 @@ export default function CarePage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mt-16 rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl md:p-12"
+        className="relative mt-12 rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:mt-14 sm:rounded-3xl sm:p-8 md:mt-16 md:p-12"
       >
         <div className="text-center">
-          <h2 className="font-display text-3xl font-semibold text-dc-ink md:text-4xl">
+          <h2 className="font-display text-2xl font-semibold text-dc-ink sm:text-3xl md:text-4xl">
             Still have questions?
           </h2>
-          <p className="mt-4 text-base text-dc-ink/60">
+          <p className="mt-3 text-sm text-dc-ink/60 sm:mt-4 sm:text-base">
             We are here to help you get the most out of your Dani Candles
             experience.
           </p>
@@ -388,7 +279,7 @@ export default function CarePage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             href="/contact"
-            className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-dc-caramel px-8 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-lg transition-all duration-200 hover:bg-dc-clay hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+            className="mt-6 inline-flex h-10 items-center justify-center rounded-full bg-dc-caramel px-6 text-[9px] font-bold uppercase tracking-[0.25em] text-white shadow-lg transition-all duration-200 hover:bg-dc-clay hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:mt-8 sm:h-12 sm:px-8 sm:text-[10px]"
           >
             Contact Us
           </motion.a>

@@ -41,38 +41,38 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-6 py-16 md:py-20">
+    <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16 md:py-20 mt-16">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.4 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-20 right-10 h-64 w-64 rounded-full bg-dc-sand blur-3xl"
+        className="pointer-events-none absolute -top-20 right-6 h-48 w-48 rounded-full bg-dc-sand blur-3xl sm:right-10 sm:h-56 sm:w-56 md:h-64 md:w-64"
       />
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.2 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-20 left-10 h-72 w-72 rounded-full bg-dc-caramel blur-3xl"
+        className="pointer-events-none absolute -bottom-20 left-6 h-56 w-56 rounded-full bg-dc-caramel blur-3xl sm:left-10 sm:h-64 sm:w-64 md:h-72 md:w-72"
       />
 
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl"
+        className="relative w-full rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
             Dani Candles
           </span>
         </motion.div>
@@ -81,7 +81,7 @@ export default function RegisterPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="mt-6 font-display text-4xl font-semibold leading-tight text-dc-ink"
+          className="mt-4 font-display text-3xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-4xl md:mt-6"
         >
           Create account
         </motion.h1>
@@ -89,7 +89,7 @@ export default function RegisterPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="mt-3 text-sm leading-relaxed text-dc-ink/60"
+          className="mt-2 text-xs leading-relaxed text-dc-ink/60 sm:mt-3 sm:text-sm"
         >
           Join Dani Candles and keep track of your orders.
         </motion.p>
@@ -100,10 +100,10 @@ export default function RegisterPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
         onSubmit={handleSubmit}
-        className="relative mt-6 w-full space-y-5 rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl"
+        className="relative mt-5 w-full space-y-4 rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:mt-6 sm:space-y-5 sm:rounded-3xl sm:p-8"
       >
-        <div className="space-y-2.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+        <div className="space-y-2 sm:space-y-2.5">
+          <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
             Full name
           </label>
           <motion.input
@@ -112,13 +112,13 @@ export default function RegisterPage() {
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+            className="h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:h-12 sm:rounded-2xl sm:px-5"
             placeholder="Daniela Valverde"
           />
         </div>
 
-        <div className="space-y-2.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+        <div className="space-y-2 sm:space-y-2.5">
+          <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
             Email
           </label>
           <motion.input
@@ -127,13 +127,13 @@ export default function RegisterPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+            className="h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:h-12 sm:rounded-2xl sm:px-5"
             placeholder="you@example.com"
           />
         </div>
 
-        <div className="space-y-2.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+        <div className="space-y-2 sm:space-y-2.5">
+          <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
             Password
           </label>
           <motion.input
@@ -143,7 +143,7 @@ export default function RegisterPage() {
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-12 w-full rounded-2xl border border-dc-ink/10 bg-white/80 px-5 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10"
+            className="h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:h-12 sm:rounded-2xl sm:px-5"
             placeholder="Minimum 6 characters"
           />
         </div>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-2xl border border-red-500/20 bg-red-50/80 px-5 py-3.5 text-sm font-medium text-red-700"
+            className="rounded-xl border border-red-500/20 bg-red-50/80 px-4 py-3 text-xs font-medium text-red-700 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
           >
             {error}
           </motion.div>
@@ -162,7 +162,7 @@ export default function RegisterPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-2xl border border-emerald-500/20 bg-emerald-50/80 px-5 py-3.5 text-sm font-medium text-emerald-800"
+            className="rounded-xl border border-emerald-500/20 bg-emerald-50/80 px-4 py-3 text-xs font-medium text-emerald-800 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
           >
             {message}
           </motion.div>
@@ -173,7 +173,7 @@ export default function RegisterPage() {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={loading}
-          className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-full bg-dc-caramel px-6 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-5 inline-flex h-11 w-full items-center justify-center rounded-full bg-dc-caramel px-6 text-[9px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-6 sm:h-12 sm:text-[10px]"
         >
           {loading ? "Creating account..." : "Create account"}
         </motion.button>
@@ -183,7 +183,7 @@ export default function RegisterPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7, duration: 0.5 }}
-        className="relative mt-6 text-center text-xs text-dc-ink/60"
+        className="relative mt-5 text-center text-[10px] text-dc-ink/60 sm:mt-6 sm:text-xs"
       >
         Already have an account?{" "}
         <a

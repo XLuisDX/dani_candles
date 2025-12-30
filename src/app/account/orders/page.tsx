@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { AccountOrder } from "@/types/types";
+import { formatStatus, statusColorClasses } from "@/types/utils";
 
 export default function AccountOrdersPage() {
   const router = useRouter();
@@ -45,38 +46,6 @@ export default function AccountOrdersPage() {
     loadOrders();
   }, [router]);
 
-  const formatStatus = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "Pending";
-      case "paid":
-        return "Paid";
-      case "shipped":
-        return "Shipped";
-      case "canceled":
-        return "Canceled";
-      case "refunded":
-        return "Refunded";
-      default:
-        return status;
-    }
-  };
-
-  const statusColorClasses = (status: string) => {
-    switch (status) {
-      case "paid":
-        return "border-emerald-500/30 text-emerald-700 bg-emerald-500/10";
-      case "shipped":
-        return "border-sky-500/30 text-sky-700 bg-sky-500/10";
-      case "canceled":
-        return "border-red-500/30 text-red-700 bg-red-500/10";
-      case "refunded":
-        return "border-purple-500/30 text-purple-700 bg-purple-500/10";
-      default:
-        return "border-amber-500/30 text-amber-800 bg-amber-500/10";
-    }
-  };
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -88,18 +57,18 @@ export default function AccountOrdersPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-6xl px-6 py-8 md:py-12 lg:px-8">
+    <main className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-16 right-16 h-56 w-56 rounded-full bg-dc-sand blur-3xl"
+        className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full bg-dc-sand blur-3xl sm:right-12 sm:h-48 sm:w-48 md:right-16 md:h-56 md:w-56"
       />
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.2 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-16 left-12 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+        className="pointer-events-none absolute -bottom-16 left-8 h-48 w-48 rounded-full bg-dc-caramel blur-3xl sm:left-12 sm:h-56 sm:w-56 md:h-64 md:w-64"
       />
 
       <motion.section
@@ -112,14 +81,14 @@ export default function AccountOrdersPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm backdrop-blur-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
             Orders
           </span>
         </motion.div>
@@ -128,7 +97,7 @@ export default function AccountOrdersPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl"
+          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl"
         >
           Order history
         </motion.h1>
@@ -136,7 +105,7 @@ export default function AccountOrdersPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-4 text-base leading-relaxed text-dc-ink/60"
+          className="mt-3 text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
         >
           Review your past Dani Candles orders.
         </motion.p>
@@ -146,14 +115,14 @@ export default function AccountOrdersPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative mt-12 flex items-center gap-4 rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 shadow-sm backdrop-blur-sm"
+          className="relative mt-10 flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm sm:mt-12 sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
         >
           <motion.span
             animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="h-2.5 w-2.5 rounded-full bg-dc-caramel"
+            className="h-2 w-2 rounded-full bg-dc-caramel sm:h-2.5 sm:w-2.5"
           />
-          <p className="text-sm font-medium text-dc-ink/70">
+          <p className="text-xs font-medium text-dc-ink/70 sm:text-sm">
             Loading your orders...
           </p>
         </motion.div>
@@ -163,7 +132,7 @@ export default function AccountOrdersPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative mt-12 rounded-2xl border border-red-500/20 bg-red-50/50 px-6 py-5 text-sm font-medium text-red-700"
+          className="relative mt-10 rounded-xl border border-red-500/20 bg-red-50/50 px-4 py-4 text-xs font-medium text-red-700 sm:mt-12 sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
         >
           {error}
         </motion.div>
@@ -174,9 +143,9 @@ export default function AccountOrdersPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="relative mt-12 rounded-3xl border border-dc-ink/8 bg-white/95 p-10 shadow-sm backdrop-blur-xl"
+          className="relative mt-10 rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-sm backdrop-blur-xl sm:mt-12 sm:rounded-3xl sm:p-8 md:p-10"
         >
-          <p className="text-base text-dc-ink/60">
+          <p className="text-sm text-dc-ink/60 sm:text-base">
             You haven&apos;t placed any orders yet.
           </p>
           <motion.button
@@ -184,7 +153,7 @@ export default function AccountOrdersPage() {
             whileTap={{ scale: 0.98 }}
             type="button"
             onClick={() => router.push("/shop")}
-            className="mt-6 inline-flex items-center justify-center rounded-full bg-dc-caramel px-6 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+            className="mt-5 inline-flex items-center justify-center rounded-full bg-dc-caramel px-5 py-2.5 text-[9px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:mt-6 sm:px-6 sm:py-3 sm:text-[10px]"
           >
             Start shopping
           </motion.button>
@@ -192,23 +161,80 @@ export default function AccountOrdersPage() {
       )}
 
       {!loading && !error && orders.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="relative mt-12 overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/95 shadow-lg backdrop-blur-xl"
-        >
-          <div className="grid grid-cols-[1.7fr_1fr_1fr_1fr] gap-4 border-b border-dc-ink/8 bg-dc-sand/10 px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/50">
-            <span>Order</span>
-            <span>Date</span>
-            <span>Status</span>
-            <span className="text-right">Total</span>
-          </div>
+        <>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="relative mt-10 hidden overflow-hidden rounded-2xl border border-dc-ink/8 bg-white/95 shadow-lg backdrop-blur-xl sm:mt-12 md:block md:rounded-3xl"
+          >
+            <div className="grid grid-cols-[1.7fr_1fr_1fr_1fr] gap-4 border-b border-dc-ink/8 bg-dc-sand/10 px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/50">
+              <span>Order</span>
+              <span>Date</span>
+              <span>Status</span>
+              <span className="text-right">Total</span>
+            </div>
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {orders.map((order) => {
+                const dateLabel = order.placed_at
+                  ? new Date(order.placed_at).toLocaleDateString()
+                  : "—";
+                const total = (order.total_cents / 100).toFixed(2);
+
+                return (
+                  <motion.button
+                    key={order.id}
+                    whileHover={{
+                      x: 4,
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    type="button"
+                    onClick={() =>
+                      router.push(`/order/confirmation/${order.id}`)
+                    }
+                    className="grid w-full grid-cols-[1.7fr_1fr_1fr_1fr] gap-4 border-b border-dc-ink/5 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-dc-caramel/50"
+                  >
+                    <span className="font-mono text-xs font-medium text-dc-ink/70">
+                      {order.id}
+                    </span>
+
+                    <span className="text-xs font-medium text-dc-ink/55">
+                      {dateLabel}
+                    </span>
+
+                    <span>
+                      <span
+                        className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] ${statusColorClasses(
+                          order.status
+                        )}`}
+                      >
+                        {formatStatus(order.status)}
+                      </span>
+                    </span>
+
+                    <span className="text-right text-base font-bold text-dc-ink">
+                      {total}{" "}
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                        {order.currency_code}
+                      </span>
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </motion.div>
+          </motion.div>
 
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
+            className="relative mt-8 space-y-4 md:hidden"
           >
             {orders.map((order) => {
               const dateLabel = order.placed_at
@@ -219,44 +245,57 @@ export default function AccountOrdersPage() {
               return (
                 <motion.button
                   key={order.id}
-                  whileHover={{
-                    x: 4,
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                   type="button"
                   onClick={() => router.push(`/order/confirmation/${order.id}`)}
-                  className="grid w-full grid-cols-[1.7fr_1fr_1fr_1fr] gap-4 border-b border-dc-ink/5 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-dc-caramel/50"
+                  className="w-full rounded-2xl border border-dc-ink/8 bg-white/95 p-5 text-left shadow-sm backdrop-blur-xl transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
                 >
-                  <span className="font-mono text-xs font-medium text-dc-ink/70">
-                    {order.id}
-                  </span>
-
-                  <span className="text-xs font-medium text-dc-ink/55">
-                    {dateLabel}
-                  </span>
-
-                  <span>
+                  <div className="mb-4 flex items-start justify-between">
+                    <div>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/40">
+                        Order ID
+                      </p>
+                      <p className="mt-1 font-mono text-xs font-medium text-dc-ink/70">
+                        {order.id}
+                      </p>
+                    </div>
                     <span
-                      className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] ${statusColorClasses(
+                      className={`inline-flex items-center rounded-full border px-3 py-1 text-[8px] font-bold uppercase tracking-[0.2em] ${statusColorClasses(
                         order.status
                       )}`}
                     >
                       {formatStatus(order.status)}
                     </span>
-                  </span>
+                  </div>
 
-                  <span className="text-right text-base font-bold text-dc-ink">
-                    {total}{" "}
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
-                      {order.currency_code}
-                    </span>
-                  </span>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/40">
+                        Date
+                      </p>
+                      <p className="text-xs font-medium text-dc-ink/70">
+                        {dateLabel}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-dc-ink/5 pt-3">
+                      <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/40">
+                        Total
+                      </p>
+                      <p className="text-base font-bold text-dc-ink">
+                        {total}{" "}
+                        <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                          {order.currency_code}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
                 </motion.button>
               );
             })}
           </motion.div>
-        </motion.div>
+        </>
       )}
     </main>
   );

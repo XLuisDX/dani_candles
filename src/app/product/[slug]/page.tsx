@@ -6,8 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/store/cartStore";
 import { ProductWithCollection } from "@/types/types";
-
-
+import { IoArrowBack } from "react-icons/io5";
 
 export default function ProductPage() {
   const params = useParams();
@@ -79,18 +78,18 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+      <main className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4 rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 shadow-sm backdrop-blur-sm"
+          className="flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
         >
           <motion.span
             animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="h-2.5 w-2.5 rounded-full bg-dc-caramel"
+            className="h-2 w-2 rounded-full bg-dc-caramel sm:h-2.5 sm:w-2.5"
           />
-          <p className="text-sm font-medium text-dc-ink/70">
+          <p className="text-xs font-medium text-dc-ink/70 sm:text-sm">
             Loading candle...
           </p>
         </motion.div>
@@ -100,11 +99,11 @@ export default function ProductPage() {
 
   if (error || !product) {
     return (
-      <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+      <main className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-3xl border border-red-500/20 bg-red-50/50 px-6 py-5 text-sm font-medium text-red-700"
+          className="rounded-2xl border border-red-500/20 bg-red-50/50 px-4 py-4 text-xs font-medium text-red-700 sm:rounded-3xl sm:px-6 sm:py-5 sm:text-sm"
         >
           {error ?? "Candle not found."}
         </motion.div>
@@ -113,21 +112,34 @@ export default function ProductPage() {
   }
 
   return (
-    <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+    <main className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20 mt-12">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-16 right-16 h-56 w-56 rounded-full bg-dc-sand blur-3xl"
+        className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full bg-dc-sand blur-3xl sm:right-12 sm:h-48 sm:w-48 md:right-16 md:h-56 md:w-56"
       />
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.2 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-16 left-12 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+        className="pointer-events-none absolute -bottom-16 left-8 h-48 w-48 rounded-full bg-dc-caramel blur-3xl sm:left-12 sm:h-56 sm:w-56 md:h-64 md:w-64"
       />
 
-      <div className="grid gap-12 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+      <motion.button
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        whileHover={{ scale: 1.02, x: -4 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => router.push("/shop")}
+        className="mb-6 inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-dc-sand/30 px-4 py-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 shadow-sm backdrop-blur-sm transition-all hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink sm:mb-8 sm:gap-2.5 sm:px-5 sm:py-2.5 sm:text-[10px]"
+      >
+        <IoArrowBack className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+        Back to Shop
+      </motion.button>
+
+      <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -136,9 +148,9 @@ export default function ProductPage() {
           <motion.div
             whileHover={{ y: -4 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="group relative overflow-hidden rounded-3xl border border-dc-ink/10 bg-gradient-to-br from-white to-dc-cream/20 p-8 shadow-lg backdrop-blur-xl"
+            className="group relative overflow-hidden rounded-2xl border border-dc-ink/10 bg-gradient-to-br from-white to-dc-cream/20 p-4 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-6 md:p-8"
           >
-            <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+            <div className="overflow-hidden rounded-xl bg-white shadow-sm sm:rounded-2xl">
               <div className="aspect-square">
                 {product.image_url ? (
                   <motion.img
@@ -151,12 +163,12 @@ export default function ProductPage() {
                     className="h-full w-full object-cover transition-transform duration-700"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-dc-cream/50 to-dc-sand/30 p-12">
+                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-dc-cream/50 to-dc-sand/30 p-8 sm:p-12">
                     <div className="text-center">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/50">
+                      <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/50 sm:text-[10px]">
                         Product image
                       </p>
-                      <p className="mt-3 text-sm font-medium text-dc-ink/60">
+                      <p className="mt-2 text-xs font-medium text-dc-ink/60 sm:mt-3 sm:text-sm">
                         Product image coming soon
                       </p>
                     </div>
@@ -181,7 +193,7 @@ export default function ProductPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-3xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl md:p-8"
+          className="rounded-2xl border border-dc-ink/8 bg-white/95 p-5 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-6 md:p-8"
         >
           {product.collections && (
             <motion.button
@@ -193,10 +205,10 @@ export default function ProductPage() {
               onClick={() =>
                 router.push(`/collections/${product.collections?.slug}`)
               }
-              className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-4 py-2 transition-colors hover:bg-dc-caramel/20"
+              className="inline-flex items-center gap-2 rounded-full border border-dc-caramel/20 bg-dc-caramel/10 px-3 py-1.5 transition-colors hover:bg-dc-caramel/20 sm:px-4 sm:py-2"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-dc-caramel" />
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-caramel">
+              <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-dc-caramel sm:text-[9px]">
                 {product.collections.name}
               </span>
             </motion.button>
@@ -206,7 +218,7 @@ export default function ProductPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink md:text-5xl"
+            className="mt-3 font-display text-2xl font-semibold leading-tight text-dc-ink sm:mt-4 sm:text-3xl md:text-4xl lg:text-5xl"
           >
             {product.name}
           </motion.h1>
@@ -216,7 +228,7 @@ export default function ProductPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="mt-4 text-base leading-relaxed text-dc-ink/60"
+              className="mt-3 text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
             >
               {product.short_description}
             </motion.p>
@@ -226,16 +238,16 @@ export default function ProductPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-8 flex items-end justify-between gap-4"
+            className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-end sm:justify-between sm:gap-4"
           >
-            <p className="text-3xl font-bold text-dc-ink">
+            <p className="text-2xl font-bold text-dc-ink sm:text-3xl">
               {(product.price_cents / 100).toFixed(2)}{" "}
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+              <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
                 {product.currency_code}
               </span>
             </p>
 
-            <span className="rounded-full border border-dc-ink/8 bg-dc-sand/30 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60">
+            <span className="inline-flex w-fit items-center rounded-full border border-dc-ink/8 bg-dc-sand/30 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:px-4 sm:py-2 sm:text-[10px]">
               Handcrafted
             </span>
           </motion.div>
@@ -244,13 +256,13 @@ export default function ProductPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
+            className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:gap-3"
           >
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleAddToCart}
-              className="inline-flex w-full items-center justify-center rounded-full bg-dc-caramel px-7 py-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-full bg-dc-caramel px-6 py-3 text-[9px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:w-auto sm:px-7 sm:py-4 sm:text-[10px]"
             >
               Add to cart
             </motion.button>
@@ -259,7 +271,7 @@ export default function ProductPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button"
-              className="inline-flex w-full items-center justify-center rounded-full border border-dc-ink/10 bg-white/80 px-7 py-4 text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/30 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-full border border-dc-ink/10 bg-white/80 px-6 py-3 text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/30 sm:w-auto sm:px-7 sm:py-4 sm:text-[10px]"
             >
               Save for later
             </motion.button>
@@ -270,13 +282,13 @@ export default function ProductPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="mt-10"
+              className="mt-8 sm:mt-10"
             >
-              <h2 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/50">
+              <h2 className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/50 sm:text-[10px]">
                 Description
               </h2>
-              <div className="mt-4 rounded-2xl border border-dc-ink/8 bg-white/80 px-6 py-5">
-                <p className="text-sm leading-relaxed text-dc-ink/70">
+              <div className="mt-3 rounded-xl border border-dc-ink/8 bg-white/80 px-4 py-4 sm:mt-4 sm:rounded-2xl sm:px-6 sm:py-5">
+                <p className="text-xs leading-relaxed text-dc-ink/70 sm:text-sm">
                   {product.description}
                 </p>
               </div>
@@ -287,7 +299,7 @@ export default function ProductPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.5 }}
-            className="mt-10 grid gap-4 sm:grid-cols-3"
+            className="mt-8 grid grid-cols-3 gap-3 sm:mt-10 sm:gap-4"
           >
             {[
               { label: "Wax", value: "Soy blend" },
@@ -300,12 +312,12 @@ export default function ProductPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 + index * 0.1, duration: 0.4 }}
                 whileHover={{ y: -2 }}
-                className="rounded-2xl border border-dc-ink/8 bg-dc-sand/20 px-5 py-4"
+                className="rounded-xl border border-dc-ink/8 bg-dc-sand/20 px-3 py-3 sm:rounded-2xl sm:px-5 sm:py-4"
               >
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/50">
+                <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-dc-ink/50 sm:text-[10px]">
                   {item.label}
                 </p>
-                <p className="mt-2 text-sm font-semibold text-dc-ink/70">
+                <p className="mt-1.5 text-xs font-semibold text-dc-ink/70 sm:mt-2 sm:text-sm">
                   {item.value}
                 </p>
               </motion.div>

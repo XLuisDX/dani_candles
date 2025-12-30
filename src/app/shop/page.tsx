@@ -66,25 +66,25 @@ export default function ShopPage() {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16 md:py-12 lg:px-8">
+    <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 mt-16">
       <motion.section
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-16"
+        className="mb-12 sm:mb-14 md:mb-16"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm backdrop-blur-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
             Handcrafted · Small Batches
           </span>
         </motion.div>
@@ -93,7 +93,7 @@ export default function ShopPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl lg:text-7xl"
+          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl lg:text-7xl"
         >
           Shop
         </motion.h1>
@@ -102,7 +102,7 @@ export default function ShopPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-4 max-w-2xl text-base leading-relaxed text-dc-ink/60"
+          className="mt-3 max-w-2xl text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
         >
           Awaken your space with handcrafted candles by Dani.
         </motion.p>
@@ -112,14 +112,14 @@ export default function ShopPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4 rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 shadow-sm backdrop-blur-sm"
+          className="flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
         >
           <motion.span
             animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="h-2.5 w-2.5 rounded-full bg-dc-caramel"
+            className="h-2 w-2 rounded-full bg-dc-caramel sm:h-2.5 sm:w-2.5"
           />
-          <p className="text-sm font-medium text-dc-ink/70">
+          <p className="text-xs font-medium text-dc-ink/70 sm:text-sm">
             Loading candles...
           </p>
         </motion.div>
@@ -129,7 +129,7 @@ export default function ShopPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl border border-red-500/20 bg-red-50/50 px-6 py-5 text-sm font-medium text-red-700"
+          className="rounded-xl border border-red-500/20 bg-red-50/50 px-4 py-4 text-xs font-medium text-red-700 sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
         >
           {error}
         </motion.div>
@@ -139,7 +139,7 @@ export default function ShopPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl border border-dc-ink/8 bg-white/90 px-6 py-5 text-sm font-medium text-dc-ink/70 backdrop-blur-sm"
+          className="rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 text-xs font-medium text-dc-ink/70 backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
         >
           No products available yet.
         </motion.div>
@@ -150,45 +150,47 @@ export default function ShopPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-3 lg:gap-8"
         >
           {products.map((product) => (
             <motion.article
               key={product.id}
               whileHover={{ y: -8 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-dc-ink/8 bg-white/90 p-5 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg"
+              className="group relative flex flex-col overflow-hidden rounded-xl border border-dc-ink/8 bg-white/90 p-3 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg sm:rounded-2xl sm:p-4 md:rounded-3xl md:p-5"
             >
-              <div className="relative mb-5 overflow-hidden rounded-2xl border border-dc-ink/5 bg-dc-sand/20">
-                <div className="aspect-square">
-                  {product.image_url ? (
-                    <motion.img
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                      src={product.image_url}
-                      alt={product.name}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs font-semibold uppercase tracking-[0.25em] text-dc-ink/30">
-                      No Image
-                    </div>
-                  )}
-                </div>
+              <div className="relative mb-3 overflow-hidden rounded-lg border border-dc-ink/5 bg-dc-sand/20 sm:mb-4 sm:rounded-xl md:mb-5 md:rounded-2xl">
+                <Link href={`/product/${product.slug}`}>
+                  <div className="aspect-square">
+                    {product.image_url ? (
+                      <motion.img
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        src={product.image_url}
+                        alt={product.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-[8px] font-semibold uppercase tracking-[0.25em] text-dc-ink/30 sm:text-[10px] md:text-xs">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                </Link>
 
                 {product.is_featured && (
                   <motion.span
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="absolute left-4 top-4 rounded-full border border-dc-caramel/30 bg-white/95 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-clay shadow-sm backdrop-blur-sm"
+                    className="absolute left-2 top-2 rounded-full border border-dc-caramel/30 bg-white/95 px-2 py-0.5 text-[7px] font-bold uppercase tracking-[0.2em] text-dc-clay shadow-sm backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1 sm:text-[8px] md:left-4 md:top-4 md:px-4 md:py-1.5 md:text-[9px]"
                   >
                     Featured
                   </motion.span>
                 )}
               </div>
 
-              <h2 className="line-clamp-1 font-display text-2xl font-semibold text-dc-ink">
+              <h2 className="line-clamp-1 font-display text-sm font-semibold text-dc-ink sm:text-base md:text-xl lg:text-2xl">
                 <Link
                   href={`/product/${product.slug}`}
                   className="outline-none transition-colors hover:text-dc-caramel focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
@@ -198,22 +200,22 @@ export default function ShopPage() {
               </h2>
 
               {product.short_description && (
-                <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-dc-ink/60">
+                <p className="mt-1.5 hidden text-xs leading-relaxed text-dc-ink/60 sm:line-clamp-2 sm:mt-2 md:mt-3 md:text-sm">
                   {product.short_description}
                 </p>
               )}
 
-              <div className="mt-5 flex items-end justify-between border-t border-dc-ink/5 pt-5">
-                <p className="text-lg font-bold text-dc-ink">
+              <div className="mt-2.5 flex flex-col gap-2 border-t border-dc-ink/5 pt-2.5 sm:mt-3 sm:flex-row sm:items-end sm:justify-between sm:pt-3 md:mt-4 md:pt-4 lg:mt-5 lg:pt-5">
+                <p className="text-sm font-bold text-dc-ink sm:text-base md:text-lg">
                   {(product.price_cents / 100).toFixed(2)}{" "}
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[9px] md:text-[10px]">
                     {product.currency_code}
                   </span>
                 </p>
 
                 <Link
                   href={`/product/${product.slug}`}
-                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel"
+                  className="hidden text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel sm:inline-block sm:text-[10px]"
                 >
                   View Details →
                 </Link>
@@ -223,7 +225,7 @@ export default function ShopPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleAddToCart(product)}
-                className="mt-6 inline-flex items-center justify-center rounded-full bg-dc-caramel px-6 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+                className="mt-3 inline-flex items-center justify-center rounded-full bg-dc-caramel px-4 py-2 text-[8px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:mt-4 sm:px-5 sm:py-2.5 sm:text-[9px] md:mt-6 md:px-6 md:py-3 md:text-[10px]"
               >
                 Add to Cart
               </motion.button>

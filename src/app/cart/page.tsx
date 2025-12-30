@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
@@ -23,38 +24,38 @@ export default function CartPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-20 lg:px-8">
+    <main className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20 mt-16">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-16 right-16 h-56 w-56 rounded-full bg-dc-sand blur-3xl"
+        className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full bg-dc-sand blur-3xl sm:right-12 sm:h-48 sm:w-48 md:right-16 md:h-56 md:w-56"
       />
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.2 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-16 left-12 h-64 w-64 rounded-full bg-dc-caramel blur-3xl"
+        className="pointer-events-none absolute -bottom-16 left-8 h-48 w-48 rounded-full bg-dc-caramel blur-3xl sm:left-12 sm:h-56 sm:w-56 md:h-64 md:w-64"
       />
 
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl md:p-10"
+        className="relative rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8 md:p-10"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 rounded-full border border-dc-ink/8 bg-white/90 px-5 py-2 shadow-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
             Cart
           </span>
         </motion.div>
@@ -63,7 +64,7 @@ export default function CartPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="mt-6 font-display text-5xl font-semibold leading-tight text-dc-ink md:text-6xl"
+          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl"
         >
           Your Cart
         </motion.h1>
@@ -71,7 +72,7 @@ export default function CartPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="mt-4 text-base leading-relaxed text-dc-ink/60"
+          className="mt-3 text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
         >
           Review your candles before you check out.
         </motion.p>
@@ -82,9 +83,9 @@ export default function CartPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="relative mt-12 rounded-3xl border border-dc-ink/8 bg-white/95 p-10 shadow-lg backdrop-blur-xl"
+          className="relative mt-8 rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:mt-10 sm:rounded-3xl sm:p-8 md:mt-12 md:p-10"
         >
-          <p className="text-base leading-relaxed text-dc-ink/60">
+          <p className="text-sm leading-relaxed text-dc-ink/60 sm:text-base">
             Your cart is empty. Start by exploring our{" "}
             <Link
               href="/shop"
@@ -96,30 +97,29 @@ export default function CartPage() {
           </p>
         </motion.div>
       ) : (
-        <div className="relative mt-12 grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="relative mt-8 grid gap-6 sm:mt-10 md:mt-12 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-8">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="space-y-5"
+            className="space-y-4 sm:space-y-5"
           >
             {items.map((item) => (
               <motion.div
                 key={item.productId}
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="flex items-start gap-5 rounded-3xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl"
+                className="flex flex-col gap-4 rounded-2xl border border-dc-ink/8 bg-white/95 p-5 shadow-lg backdrop-blur-xl sm:flex-row sm:items-start sm:gap-5 sm:rounded-3xl sm:p-6"
               >
-                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-dc-ink/8 bg-gradient-to-br from-dc-cream/50 to-dc-sand/30">
+                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl border border-dc-ink/8 bg-gradient-to-br from-dc-cream/50 to-dc-sand/30 sm:rounded-2xl">
                   {item.imageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.imageUrl}
                       alt={item.name}
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/50">
+                    <div className="flex h-full w-full items-center justify-center text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/50 sm:text-[10px]">
                       Candle
                     </div>
                   )}
@@ -128,16 +128,16 @@ export default function CartPage() {
                 <div className="flex-1">
                   <Link
                     href={`/product/${item.slug}`}
-                    className="font-display text-xl font-semibold leading-tight text-dc-ink transition-colors hover:text-dc-caramel"
+                    className="font-display text-lg font-semibold leading-tight text-dc-ink transition-colors hover:text-dc-caramel sm:text-xl"
                   >
                     {item.name}
                   </Link>
 
-                  <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-dc-ink/40">
+                  <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-dc-ink/40 sm:mt-2 sm:text-[10px]">
                     {(item.priceCents / 100).toFixed(2)} {item.currencyCode}
                   </p>
 
-                  <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-5 sm:gap-3">
                     <div className="inline-flex items-center rounded-full border border-dc-ink/10 bg-white/80 shadow-sm">
                       <motion.button
                         whileHover={{ scale: 1.1 }}
@@ -146,11 +146,11 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.productId, item.quantity - 1)
                         }
-                        className="px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel"
+                        className="px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel sm:px-5 sm:py-2.5 sm:text-[10px]"
                       >
                         −
                       </motion.button>
-                      <span className="px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink">
+                      <span className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink sm:px-4 sm:py-2.5 sm:text-[10px]">
                         {item.quantity}
                       </span>
                       <motion.button
@@ -160,7 +160,7 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.productId, item.quantity + 1)
                         }
-                        className="px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel"
+                        className="px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel sm:px-5 sm:py-2.5 sm:text-[10px]"
                       >
                         +
                       </motion.button>
@@ -171,17 +171,17 @@ export default function CartPage() {
                       whileTap={{ scale: 0.95 }}
                       type="button"
                       onClick={() => removeItem(item.productId)}
-                      className="text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/40 transition-colors hover:text-red-600"
+                      className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/40 transition-colors hover:text-red-600 sm:text-[10px]"
                     >
                       Remove
                     </motion.button>
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <p className="text-xl font-bold text-dc-ink">
+                <div className="text-left sm:text-right">
+                  <p className="text-lg font-bold text-dc-ink sm:text-xl">
                     {((item.priceCents * item.quantity) / 100).toFixed(2)}{" "}
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                    <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
                       {item.currencyCode}
                     </span>
                   </p>
@@ -194,7 +194,7 @@ export default function CartPage() {
               whileTap={{ scale: 0.98 }}
               type="button"
               onClick={clearCart}
-              className="inline-flex text-[10px] font-bold uppercase tracking-[0.2em] text-dc-ink/40 transition-colors hover:text-red-600"
+              className="inline-flex text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/40 transition-colors hover:text-red-600 sm:text-[10px]"
             >
               Clear cart
             </motion.button>
@@ -204,18 +204,18 @@ export default function CartPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="h-fit rounded-3xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl"
+            className="h-fit rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8"
           >
-            <h2 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60">
+            <h2 className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
               Order summary
             </h2>
 
-            <div className="mt-6 space-y-4 text-sm">
+            <div className="mt-5 space-y-3.5 text-sm sm:mt-6 sm:space-y-4">
               <div className="flex items-center justify-between text-dc-ink/60">
                 <span className="font-medium">Subtotal</span>
                 <span className="font-bold text-dc-ink">
                   {(total / 100).toFixed(2)}{" "}
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
                     USD
                   </span>
                 </span>
@@ -223,20 +223,20 @@ export default function CartPage() {
 
               <div className="flex items-center justify-between text-dc-ink/50">
                 <span className="font-medium">Shipping</span>
-                <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.15em] sm:text-[10px]">
                   At checkout
                 </span>
               </div>
             </div>
 
-            <div className="mt-6 border-t border-dc-ink/8 pt-6">
+            <div className="mt-5 border-t border-dc-ink/8 pt-5 sm:mt-6 sm:pt-6">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-dc-ink/60">
                   Total
                 </span>
-                <span className="text-2xl font-bold text-dc-ink">
+                <span className="text-xl font-bold text-dc-ink sm:text-2xl">
                   {(total / 100).toFixed(2)}{" "}
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
                     USD
                   </span>
                 </span>
@@ -248,12 +248,12 @@ export default function CartPage() {
               whileTap={{ scale: 0.98 }}
               type="button"
               onClick={() => router.push("/checkout")}
-              className="mt-8 inline-flex h-12 w-full items-center justify-center rounded-full bg-dc-caramel px-6 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
+              className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-dc-caramel px-6 text-[9px] font-bold uppercase tracking-[0.25em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 sm:mt-8 sm:h-12 sm:text-[10px]"
             >
               Checkout
             </motion.button>
 
-            <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40">
+            <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 sm:mt-4 sm:text-[10px]">
               Taxes and shipping are calculated at checkout.
             </p>
           </motion.aside>
