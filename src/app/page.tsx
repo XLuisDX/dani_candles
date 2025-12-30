@@ -5,15 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Logo } from "@/components/Logo";
-import { TESTIMONIALS } from "@/types/utils";
-
-const CANDLE_IMAGES = [
-  "/img1.jpg",
-  "/img2.jpg",
-  "/img3.jpg",
-  "/img4.jpg",
-  "/img5.jpg",
-];
+import { CANDLE_IMAGES, TESTIMONIALS } from "@/types/utils";
 
 export default function Home() {
   const router = useRouter();
@@ -45,7 +37,6 @@ export default function Home() {
                 fill
                 className="object-cover"
                 priority={index === 0}
-                quality={90}
               />
             </div>
           ))}
@@ -57,11 +48,12 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-2 flex items-center justify-center "
+            className="mb-8 flex items-center justify-center"
           >
             <Logo
               variant="white"
-              height={120}
+              height={80}
+              width={320}
               animated={true}
               className="drop-shadow-2xl"
             />
