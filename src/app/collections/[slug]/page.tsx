@@ -231,21 +231,23 @@ export default function CollectionPage() {
               className="group relative flex flex-col overflow-hidden rounded-xl border border-dc-ink/8 bg-white/90 p-3 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg sm:rounded-2xl sm:p-4 md:rounded-3xl md:p-5"
             >
               <div className="relative mb-3 overflow-hidden rounded-lg border border-dc-ink/5 bg-dc-sand/20 sm:mb-4 sm:rounded-xl md:mb-5 md:rounded-2xl">
-                <div className="aspect-square">
-                  {product.image_url ? (
-                    <motion.img
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                      src={product.image_url}
-                      alt={product.name}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-[8px] font-semibold uppercase tracking-[0.25em] text-dc-ink/30 sm:text-[10px] md:text-xs">
-                      No Image
-                    </div>
-                  )}
-                </div>
+                <Link href={`/product/${product.slug}`}>
+                  <div className="aspect-square">
+                    {product.image_url ? (
+                      <motion.img
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        src={product.image_url}
+                        alt={product.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-[8px] font-semibold uppercase tracking-[0.25em] text-dc-ink/30 sm:text-[10px] md:text-xs">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                </Link>
 
                 {product.is_featured && (
                   <motion.span
