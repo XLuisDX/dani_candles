@@ -49,7 +49,7 @@ export default function CollectionsPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8 mt-16">
+    <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8 mt-0">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}
@@ -162,7 +162,7 @@ export default function CollectionsPage() {
                 <div
                   className={`relative overflow-hidden ${
                     index === 0
-                      ? "aspect-[16/9] sm:aspect-[21/9]"
+                      ? "aspect-[4/3] md:aspect-[16/9] lg:aspect-[21/9]"
                       : "aspect-[4/3]"
                   }`}
                 >
@@ -195,7 +195,7 @@ export default function CollectionsPage() {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.5 }}
-                      className="absolute left-4 top-4 rounded-full border border-white/30 bg-white/95 px-3 py-1 text-[8px] font-bold uppercase tracking-[0.2em] text-dc-clay shadow-lg backdrop-blur-sm sm:left-6 sm:top-6 sm:px-4 sm:py-1.5 sm:text-[9px]"
+                      className="absolute right-4 top-4 rounded-full border border-white/30 bg-white/95 px-3 py-1 text-[8px] font-bold uppercase tracking-[0.2em] text-dc-clay shadow-lg backdrop-blur-sm sm:right-6 sm:top-6 sm:px-4 sm:py-1.5 sm:text-[9px]"
                     >
                       Signature
                     </motion.span>

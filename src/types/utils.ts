@@ -118,7 +118,7 @@ export const TESTIMONIALS = [
   },
   {
     name: "James Rodriguez",
-    role: "Yoga Instructor",
+    role: "Homeowner",
     content:
       "The perfect addition to my studio. The calming fragrances create exactly the ambiance I want for my classes. My students always ask where they can buy them.",
     rating: 5,

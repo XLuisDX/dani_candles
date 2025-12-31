@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-4 py-8 sm:px-6 md:py-12 mt-16">
+    <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-4 py-8 sm:px-6 md:py-12 mt-0">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.4 }}

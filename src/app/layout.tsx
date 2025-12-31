@@ -29,11 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
-      <body className="flex min-h-screen flex-col">
+    <html
+      lang="en"
+      className={`${inter.variable} ${cormorant.variable} overflow-x-hidden`}
+    >
+      <body className="flex min-h-screen flex-col overflow-x-hidden overflow-y-hidden">
         <Header />
         <ToastContainer />
-        <div className="flex-1">{children}</div>
+        <main className="flex-1 overflow-x-hidden pt-[73px] sm:pt-[81px] overflow-y-hidden">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

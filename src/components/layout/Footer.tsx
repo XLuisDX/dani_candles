@@ -43,7 +43,7 @@ export function Footer() {
 
   return (
     <>
-      <footer className="relative border-t border-dc-ink/8 bg-white/95 backdrop-blur-xl">
+      <footer className="relative w-full border-t border-dc-ink/8 bg-white/95 backdrop-blur-xl">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.25 }}
@@ -172,7 +172,7 @@ export function Footer() {
 
       <AnimatePresence>
         {activeModal && modalContent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4">
             <motion.div
               variants={overlayVariants}
               initial="hidden"

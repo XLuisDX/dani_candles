@@ -121,13 +121,19 @@ export function Header() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/cart"
-                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px] mx-2"
+                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px]"
               >
                 CART
               </Link>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="sm:hidden"
+            >
               <Link
                 href="/shop"
-                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px] mx-2"
+                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px]"
               >
                 SHOP
               </Link>
