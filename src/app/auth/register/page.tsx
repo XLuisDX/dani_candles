@@ -12,13 +12,11 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setMessage(null);
 
     const { error: signUpError } = await supabase.auth.signUp({
       email,
@@ -34,10 +32,7 @@ export default function RegisterPage() {
     if (signUpError) {
       setError(signUpError.message);
     } else {
-      setMessage(
-        "Account created! Check your email to confirm and get started."
-      );
-      setTimeout(() => router.push("/shop"), 2000);
+      router.push(`/auth/confirm-email?email=${encodeURIComponent(email)}`);
     }
 
     setLoading(false);
@@ -158,16 +153,6 @@ export default function RegisterPage() {
             className="rounded-xl border border-red-500/20 bg-red-50/80 px-4 py-3 text-xs font-medium text-red-700 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
           >
             {error}
-          </motion.div>
-        )}
-
-        {message && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="rounded-xl border border-emerald-500/20 bg-emerald-50/80 px-4 py-3 text-xs font-medium text-emerald-800 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
-          >
-            {message}
           </motion.div>
         )}
 
