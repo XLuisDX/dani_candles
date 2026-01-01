@@ -23,7 +23,7 @@ export function Logo({
         alt="Dani Candles"
         width={width}
         height={height}
-        className={`cursor-pointer ${className}`}
+        className={className}
         onClick={onClick}
         style={{ width: "auto", height: `${height}px` }}
       />
