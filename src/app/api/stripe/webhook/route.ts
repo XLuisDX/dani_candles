@@ -174,7 +174,7 @@ export async function POST(req: NextRequest) {
             `Order ID: ${order.id}`,
             `Total: ${totalFormatted} ${order.currency_code}`,
             "",
-            `We'll let you know as soon as your candles ship.`,
+            `We will let you know as soon as your candles ship.`,
             "",
             `With warmth,`,
             `Dani Candles`,

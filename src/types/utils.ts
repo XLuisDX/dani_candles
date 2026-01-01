@@ -92,7 +92,7 @@ How to Return:
 4. Refund processed within 5-7 business days
 
 Damaged or Defective Products:
-If you receive a damaged or defective product, contact us within 48 hours of delivery. We'll provide a replacement or full refund at no cost to you.
+If you receive a damaged or defective product, contact us within 48 hours of delivery. We will provide a replacement or full refund at no cost to you.
 
 Non-Returnable Items:
 - Opened or used candles
@@ -113,7 +113,7 @@ export const TESTIMONIALS = [
     name: "Sarah Mitchell",
     role: "Interior Designer",
     content:
-      "These candles have completely transformed my clients' spaces. The scents are sophisticated and long-lasting. I recommend Dani Candles to everyone.",
+      "These candles have completely transformed my clients spaces. The scents are sophisticated and long-lasting. I recommend Dani Candles to everyone.",
     rating: 5,
   },
   {
@@ -127,14 +127,14 @@ export const TESTIMONIALS = [
     name: "Emily Chen",
     role: "Homeowner",
     content:
-      "I've tried countless candle brands, but nothing compares to Dani Candles. The quality is exceptional, and they burn so cleanly. Absolutely worth every penny.",
+      "I have tried countless candle brands, but nothing compares to Dani Candles. The quality is exceptional, and they burn so cleanly. Absolutely worth every penny.",
     rating: 5,
   },
   {
     name: "Michael Thompson",
     role: "Coffee Shop Owner",
     content:
-      "We use these in our café daily. Customers constantly compliment the atmosphere, and the candles last much longer than any other brand we've tried.",
+      "We use these in our café daily. Customers constantly compliment the atmosphere, and the candles last much longer than any other brand we have tried.",
     rating: 5,
   },
 ];
@@ -208,7 +208,7 @@ export const FRAGRANCES = [
     id: 5,
     name: "Lavender",
     description:
-      "Tranquil and serene, our lavender fragrance is nature's gift for relaxation. Harvested from French lavender fields, this timeless scent promotes deep calm and peaceful rest.",
+      "Tranquil and serene, our lavender fragrance is nature gift for relaxation. Harvested from French lavender fields, this timeless scent promotes deep calm and peaceful rest.",
     benefits: [
       "Promotes restful sleep",
       "Reduces stress and anxiety",
@@ -240,7 +240,7 @@ export const CARE_SECTIONS = [
     title: "Choosing Your Perfect Candle",
     subtitle: "Finding the right scent for every moment",
     description:
-      "Selecting the perfect candle goes beyond fragrance—it's about creating an experience. Consider the size of your space, the mood you want to create, and the time of day. Larger rooms benefit from candles with stronger scent throws, while intimate spaces shine with subtle, delicate fragrances.",
+      "Selecting the perfect candle goes beyond fragrance—it is about creating an experience. Consider the size of your space, the mood you want to create, and the time of day. Larger rooms benefit from candles with stronger scent throws, while intimate spaces shine with subtle, delicate fragrances.",
     tips: [
       "Morning rituals pair beautifully with fresh, energizing scents like peppermint or coffee",
       "Evening relaxation calls for calming notes such as lavender or vanilla",
@@ -268,7 +268,7 @@ export const CARE_SECTIONS = [
     title: "Wick Maintenance",
     subtitle: "The secret to a clean, even burn",
     description:
-      "A properly trimmed wick is essential for optimal candle performance. Before each burn, trim the wick to 1/4 inch using wick trimmers or scissors. This simple practice prevents smoking, reduces soot buildup, and ensures a steady, beautiful flame that maximizes your candle's fragrance throw.",
+      "A properly trimmed wick is essential for optimal candle performance. Before each burn, trim the wick to 1/4 inch using wick trimmers or scissors. This simple practice prevents smoking, reduces soot buildup, and ensures a steady, beautiful flame that maximizes your candles fragrance throw.",
     tips: [
       "Trim the wick before every burn when the wax is cool and solid",
       "Remove any wick debris or char buildup from the wax pool",
@@ -297,7 +297,7 @@ export const CARE_SECTIONS = [
     title: "Maximizing Scent Throw",
     subtitle: "Getting the most from your fragrance",
     description:
-      "To fully experience your candle's fragrance, consider your environment. Smaller, enclosed spaces will naturally have a stronger scent throw. For larger rooms, try burning multiple candles or placing them in central locations. Avoid competing scents from air fresheners or strong cooking odors during your first burn.",
+      "To fully experience your candles fragrance, consider your environment. Smaller, enclosed spaces will naturally have a stronger scent throw. For larger rooms, try burning multiple candles or placing them in central locations. Avoid competing scents from air fresheners or strong cooking odors during your first burn.",
     tips: [
       "Close doors and windows for the first 30 minutes of burning",
       "Place candles at nose level for optimal scent diffusion",

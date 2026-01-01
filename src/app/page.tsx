@@ -277,7 +277,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* <section className="relative overflow-hidden bg-gradient-to-br from-dc-ink to-dc-clay py-20 sm:py-24 md:py-32 lg:py-40">
+      <section className="relative overflow-hidden bg-gradient-to-br from-dc-ink to-dc-clay py-20 sm:py-24 md:py-32 lg:py-40">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.1 }}
@@ -329,7 +329,7 @@ export default function Home() {
             <div className="mx-auto mt-8 h-px w-16 bg-gradient-to-r from-transparent via-white/40 to-transparent sm:mt-10" />
           </motion.div>
         </div>
-      </section> */}
+      </section>
 
       <section className="relative overflow-hidden bg-white py-16 sm:py-20 md:py-24 lg:py-32">
         <motion.div
