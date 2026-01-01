@@ -52,7 +52,7 @@ export default function Home() {
           >
             <Logo
               variant="white"
-              height={60}
+              height={120}
               width={240}
               animated={true}
               className="drop-shadow-2xl sm:h-20 sm:w-80"
