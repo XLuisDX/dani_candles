@@ -18,9 +18,19 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://danicandles.com';
+
 export const metadata: Metadata = {
-  title: "Dani Candles | Awaken to ambiance",
-  description: "Handcrafted candles by Dani to transform your space.",
+  metadataBase: new URL(siteUrl),
+
+  title: {
+    default: "Dani Candles | Premium Handcrafted Soy Candles",
+    template: "%s | Dani Candles",
+  },
+
+  description:
+    "Discover premium handcrafted soy candles by Dani Candles. Natural, phthalate-free fragrances designed to transform your space. Shop our curated collections for every occasion.",
+
   keywords: [
     "soy candles",
     "handcrafted candles",
@@ -49,19 +59,30 @@ export const metadata: Metadata = {
     telephone: false,
   },
 
+  icons: {
+    icon: [
+      { url: "/icon.png" },
+      { url: "/icon.png", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: [{ url: "/icon.png" }],
+  },
+
   manifest: "/manifest.json",
 
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://danicandles.com",
+    url: siteUrl,
     siteName: "Dani Candles",
     title: "Dani Candles | Premium Handcrafted Soy Candles",
     description:
       "Discover premium handcrafted soy candles with natural, phthalate-free fragrances. Transform your space with our curated collections.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: "Dani Candles - Premium Handcrafted Soy Candles",
@@ -74,7 +95,7 @@ export const metadata: Metadata = {
     title: "Dani Candles | Premium Handcrafted Soy Candles",
     description:
       "Discover premium handcrafted soy candles with natural, phthalate-free fragrances.",
-    images: ["/og-image.jpg"],
+    images: [`${siteUrl}/og-image.jpg`],
     creator: "@danicandles",
   },
 
@@ -91,27 +112,14 @@ export const metadata: Metadata = {
   },
 
   verification: {
-    google:
-      "google-site-verification=cKmA6CLPDy-fiB3-z1HvYHFoS-CfLgja1H83aW8snAw",
+    google: "cKmA6CLPDy-fiB3-z1HvYHFoS-CfLgja1H83aW8snAw",
   },
 
   alternates: {
-    canonical: "https://danicandles.com",
+    canonical: siteUrl,
   },
 
   category: "E-commerce",
-
-  icons: {
-    icon: [
-      { url: "./icon.png" },
-      { url: "./icon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "./icon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [
-      { url: "./apple-icon-180x180.png" },
-      { url: "./apple-icon-180x180.png", sizes: "180x180", type: "image/png" },
-    ],
-  },
 };
 
 export default function RootLayout({
@@ -134,10 +142,10 @@ export default function RootLayout({
               name: "Dani Candles",
               description:
                 "Premium handcrafted soy candles with natural fragrances",
-              url: "https://danicandles.com",
-              logo: "https://danicandles.com/logo.png",
-              image: "https://danicandles.com/og-image.jpg",
-              telephone: "+1-615-428-9475",
+              url: siteUrl,
+              logo: `${siteUrl}/logo.png`,
+              image: `${siteUrl}/og-image.jpg`,
+              telephone: "+1-555-123-4567",
               email: "hello@danicandles.com",
               address: {
                 "@type": "PostalAddress",

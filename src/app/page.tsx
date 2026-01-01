@@ -20,7 +20,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="overflow-x-hidden">
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden">
         <div className="absolute inset-0 -z-10">
           {CANDLE_IMAGES.map((image, index) => (
@@ -159,7 +159,7 @@ export default function Home() {
         </main>
       </div>
 
-      <section className="relative bg-dc-cream py-16 sm:py-20 md:py-24 lg:py-32">
+      <section className="relative overflow-hidden bg-dc-cream py-16 sm:py-20 md:py-24 lg:py-32">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.2 }}
@@ -277,7 +277,61 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative bg-white py-16 sm:py-20 md:py-24 lg:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-dc-ink to-dc-clay py-20 sm:py-24 md:py-32 lg:py-40">
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 0.1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="pointer-events-none absolute -top-32 right-0 h-96 w-96 rounded-full bg-dc-sand blur-3xl"
+        />
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 0.1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="pointer-events-none absolute -bottom-32 left-0 h-96 w-96 rounded-full bg-dc-caramel blur-3xl"
+        />
+
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="mx-auto mb-8 h-px w-16 bg-gradient-to-r from-transparent via-dc-sand to-transparent sm:mb-10" />
+
+            <h2 className="font-display text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+              Explore our collections
+            </h2>
+
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:mt-8 sm:text-lg">
+              Each collection tells a story, curated for life special moments
+              and everyday rituals
+            </p>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push("/collections")}
+              className="group relative mt-10 inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-white px-10 text-[11px] font-bold uppercase tracking-[0.25em] text-dc-ink shadow-2xl transition-all duration-200 hover:shadow-xl sm:mt-12 sm:h-16 sm:px-12"
+            >
+              <span className="relative z-10">Discover Collections</span>
+              <motion.div
+                className="absolute inset-0 -z-0 bg-gradient-to-r from-dc-sand to-dc-cream"
+                initial={{ x: "-100%" }}
+                whileHover={{ x: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.button>
+
+            <div className="mx-auto mt-8 h-px w-16 bg-gradient-to-r from-transparent via-white/40 to-transparent sm:mt-10" />
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-white py-16 sm:py-20 md:py-24 lg:py-32">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.15 }}
@@ -372,6 +426,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
