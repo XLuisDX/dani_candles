@@ -8,6 +8,7 @@ import {
   Heading,
   Text,
   Hr,
+  Img,
 } from "@react-email/components";
 import { OrderConfirmationEmailProps } from "@/types/types";
 
@@ -19,6 +20,9 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
   items,
   shippingAddress,
 }) => {
+  const logoUrl =
+    "https://ljopaeulxrbucfejzcll.supabase.co/storage/v1/object/public/logo/logo_white.png";
+
   return (
     <Html>
       <Head />
@@ -48,33 +52,16 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
               textAlign: "center",
             }}
           >
-            <div
+            <Img
+              src={logoUrl}
+              alt="Dani Candles"
+              width="80"
+              height="80"
               style={{
-                width: "64px",
-                height: "64px",
                 margin: "0 auto 20px",
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "2px solid rgba(255, 255, 255, 0.3)",
-                backdropFilter: "blur(10px)",
+                display: "block",
               }}
-            >
-              <Heading
-                as="h1"
-                style={{
-                  margin: 0,
-                  fontSize: "32px",
-                  fontWeight: 600,
-                  color: "#ffffff",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                D
-              </Heading>
-            </div>
+            />
 
             <Heading
               as="h1"

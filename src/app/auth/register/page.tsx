@@ -20,20 +20,23 @@ export default function RegisterPage() {
     setError(null);
     setMessage(null);
 
-    const { error } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: fullName,
         },
+        emailRedirectTo: `${window.location.origin}/shop`,
       },
     });
 
-    if (error) {
-      setError(error.message);
+    if (signUpError) {
+      setError(signUpError.message);
     } else {
-      setMessage("Account created. Please check your email to confirm.");
+      setMessage(
+        "Account created! Check your email to confirm and get started."
+      );
       setTimeout(() => router.push("/shop"), 2000);
     }
 
