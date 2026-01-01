@@ -92,7 +92,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="mt-8 flex w-full max-w-md flex-col gap-3 px-4 sm:mt-12 sm:flex-row sm:gap-4"
+            className="mt-8 flex w-full max-w-md flex-col gap-3 px-4 sm:mt-12 sm:flex-row sm:gap-4 justify-center"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
