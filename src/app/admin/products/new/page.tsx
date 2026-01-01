@@ -100,7 +100,7 @@ export default function NewProductPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-5xl px-6 py-16 md:py-20 lg:px-8">
+    <main className="relative mx-auto max-w-5xl px-6 py-16 md:py-20 lg:px-8 overflow-y-hidden">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}

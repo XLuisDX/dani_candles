@@ -160,7 +160,7 @@ export default function EditProductPage() {
 
   if (loading) {
     return (
-      <main className="relative mx-auto max-w-5xl px-6 py-16 md:py-20 lg:px-8">
+      <main className="relative mx-auto max-w-5xl px-6 py-16 md:py-20 lg:px-8 overflow-y-hidden">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -181,7 +181,7 @@ export default function EditProductPage() {
 
   if (!product) {
     return (
-      <main className="relative mx-auto max-w-5xl px-6 py-16 md:py-20 lg:px-8">
+      <main className="relative mx-auto max-w-5xl px-6 py-16 md:py-20 lg:px-8 overflow-y-hidden">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -214,7 +214,7 @@ export default function EditProductPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-5xl px-6 py-8 md:py-12 lg:px-8">
+    <main className="relative mx-auto max-w-5xl px-6 py-8 md:py-12 lg:px-8 overflow-y-hidden">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}

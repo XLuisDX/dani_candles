@@ -41,7 +41,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16 md:py-20 mt-0">
+    <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16 md:py-20 overflow-y-hidden">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.4 }}

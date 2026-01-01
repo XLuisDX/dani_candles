@@ -18,7 +18,7 @@ export default function CarePage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8 mt-0">
+    <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8 overflow-y-hidden">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}

@@ -217,3 +217,30 @@ export interface LogoProps {
   animated?: boolean;
   onClick?: () => void;
 }
+
+export const STATUS_LABELS: Record<OrderStatus, string> = {
+  pending: "Pending",
+  paid: "Paid",
+  preparing: "Preparing",
+  shipped: "Shipped",
+  delivered: "Delivered",
+  canceled: "Canceled",
+  refunded: "Refunded",
+};
+
+export const STATUS_COLORS: Record<OrderStatus, string> = {
+  pending: "border-amber-500/30 text-amber-800 bg-amber-500/10",
+  paid: "border-emerald-500/30 text-emerald-700 bg-emerald-500/10",
+  preparing: "border-sky-500/30 text-sky-700 bg-sky-500/10",
+  shipped: "border-sky-500/30 text-sky-700 bg-sky-500/10",
+  delivered: "border-emerald-500/30 text-emerald-700 bg-emerald-500/10",
+  canceled: "border-red-500/30 text-red-700 bg-red-500/10",
+  refunded: "border-purple-500/30 text-purple-700 bg-purple-500/10",
+};
+
+export const NEXT_STEPS: Partial<Record<OrderStatus, OrderStatus[]>> = {
+  pending: ["paid", "canceled"],
+  paid: ["preparing", "shipped", "canceled"],
+  preparing: ["shipped", "canceled"],
+  shipped: ["delivered"],
+};

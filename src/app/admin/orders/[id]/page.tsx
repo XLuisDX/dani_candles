@@ -5,34 +5,14 @@ import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { isAdminEmail } from "@/lib/isAdmin";
-import { AdminOrderDetail, AdminOrderItem, OrderStatus } from "@/types/types";
-
-const STATUS_LABELS: Record<OrderStatus, string> = {
-  pending: "Pending",
-  paid: "Paid",
-  preparing: "Preparing",
-  shipped: "Shipped",
-  delivered: "Delivered",
-  canceled: "Canceled",
-  refunded: "Refunded",
-};
-
-const STATUS_COLORS: Record<OrderStatus, string> = {
-  pending: "border-amber-500/30 text-amber-800 bg-amber-500/10",
-  paid: "border-emerald-500/30 text-emerald-700 bg-emerald-500/10",
-  preparing: "border-sky-500/30 text-sky-700 bg-sky-500/10",
-  shipped: "border-sky-500/30 text-sky-700 bg-sky-500/10",
-  delivered: "border-emerald-500/30 text-emerald-700 bg-emerald-500/10",
-  canceled: "border-red-500/30 text-red-700 bg-red-500/10",
-  refunded: "border-purple-500/30 text-purple-700 bg-purple-500/10",
-};
-
-const NEXT_STEPS: Partial<Record<OrderStatus, OrderStatus[]>> = {
-  pending: ["paid", "canceled"],
-  paid: ["preparing", "shipped", "canceled"],
-  preparing: ["shipped", "canceled"],
-  shipped: ["delivered"],
-};
+import {
+  AdminOrderDetail,
+  AdminOrderItem,
+  NEXT_STEPS,
+  OrderStatus,
+  STATUS_COLORS,
+  STATUS_LABELS,
+} from "@/types/types";
 
 export default function AdminOrderDetailPage() {
   const router = useRouter();
@@ -146,7 +126,7 @@ export default function AdminOrderDetailPage() {
 
   if (loading) {
     return (
-      <main className="relative mx-auto max-w-6xl px-6 py-8 md:py-12 lg:px-8">
+      <main className="relative mx-auto max-w-6xl px-6 py-8 md:py-12 lg:px-8 overflow-y-hidden">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -165,7 +145,7 @@ export default function AdminOrderDetailPage() {
 
   if (!order) {
     return (
-      <main className="relative mx-auto max-w-6xl px-6 py-8 md:py-12 lg:px-8">
+      <main className="relative mx-auto max-w-6xl px-6 py-8 md:py-12 lg:px-8 overflow-y-hidden">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -194,7 +174,7 @@ export default function AdminOrderDetailPage() {
   const nextStatuses = NEXT_STEPS[order.status] ?? [];
 
   return (
-    <main className="relative mx-auto max-w-6xl space-y-8 px-6 py-16 md:py-20 lg:px-8">
+    <main className="relative mx-auto max-w-6xl space-y-8 px-6 py-16 md:py-20 lg:px-8 overflow-y-hidden">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}

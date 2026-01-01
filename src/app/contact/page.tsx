@@ -61,13 +61,14 @@ export default function ContactPage() {
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
+      console.log(err);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <main className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20 mt-0">
+    <main className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20 overflow-y-hidden">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}

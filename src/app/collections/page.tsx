@@ -49,7 +49,7 @@ export default function CollectionsPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8 mt-0">
+    <main className="relative mx-auto max-w-7xl overflow-y-hidden px-4 py-8 sm:px-6 md:py-12 lg:px-8">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.35 }}
@@ -101,7 +101,7 @@ export default function CollectionsPage() {
           className="mt-3 max-w-2xl text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
         >
           Explore our thoughtfully curated collections, each designed to evoke a
-          distinct mood and celebrate life special moments.
+          distinct mood and celebrate life&apos;s special moments.
         </motion.p>
       </motion.section>
 
