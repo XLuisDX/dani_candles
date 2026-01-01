@@ -3,10 +3,13 @@
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resetSuccess = searchParams.get("reset") === "success";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -99,6 +102,17 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
           className="space-y-4 sm:space-y-5"
         >
+          {resetSuccess && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="rounded-xl border border-emerald-500/20 bg-emerald-50/80 px-4 py-3 text-xs font-medium text-emerald-800 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
+            >
+              Password reset successful! You can now sign in with your new
+              password.
+            </motion.div>
+          )}
+
           <div>
             <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
               Email
@@ -115,16 +129,24 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
-              Password
-            </label>
+            <div className="mb-2 flex items-center justify-between sm:mb-2.5">
+              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+                Password
+              </label>
+              <a
+                href="/auth/forgot-password"
+                className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-caramel transition-colors hover:text-dc-clay sm:text-[10px]"
+              >
+                Forgot?
+              </a>
+            </div>
             <motion.input
               whileFocus={{ scale: 1.01 }}
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 py-3 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:rounded-2xl sm:px-5 sm:py-3.5"
+              className="w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 py-3 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:rounded-2xl sm:px-5 sm:py-3.5"
               placeholder="••••••••"
             />
           </div>
