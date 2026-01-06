@@ -52,16 +52,18 @@ function ConfirmEmailContent() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm sm:gap-2.5 sm:px-5 sm:py-2"
+          className="mb-6 text-center"
       >
-        <motion.span
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
-        />
-        <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
-          Dani Candles
-        </span>
+        <div className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm sm:gap-2.5 sm:px-5 sm:py-2">
+          <motion.span
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
+          />
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
+            Dani Candles
+          </span>
+        </div>
       </motion.div>
 
       <motion.h1
