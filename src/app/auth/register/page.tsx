@@ -25,7 +25,7 @@ export default function RegisterPage() {
         data: {
           full_name: fullName,
         },
-        emailRedirectTo: `${window.location.origin}/shop`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/shop`,
       },
     });
 
