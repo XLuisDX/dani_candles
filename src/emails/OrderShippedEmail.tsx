@@ -482,7 +482,7 @@ export const OrderShippedEmail: React.FC<OrderShippedEmailProps> = ({
                 color: "#9ca3af",
               }}
             >
-              © {new Date().getFullYear()} Dani Candles · Nashville, TN
+              © {new Date().getFullYear()} Dani Candles · Dickson, TN
               <br />
               All rights reserved
             </Text>

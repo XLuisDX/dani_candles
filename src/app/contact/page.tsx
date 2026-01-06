@@ -285,7 +285,7 @@ export default function ContactPage() {
                     Location
                   </p>
                   <p className="mt-1 text-xs font-medium text-dc-ink sm:text-sm">
-                    Nashville, TN
+                    Dickson, TN
                   </p>
                 </div>
               </div>

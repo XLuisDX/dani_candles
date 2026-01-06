@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "home fragrance",
     "artisan candles",
     "Dani Candles",
-    "Nashville candles",
+    "Dickson candles",
     "small batch candles",
     "eco-friendly candles",
     "clean burning candles",
@@ -149,7 +149,7 @@ export default function RootLayout({
               email: "hello@danicandles.com",
               address: {
                 "@type": "PostalAddress",
-                addressLocality: "Nashville",
+                addressLocality: "Dickson",
                 addressRegion: "TN",
                 addressCountry: "US",
               },

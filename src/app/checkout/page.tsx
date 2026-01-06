@@ -337,7 +337,7 @@ export default function CheckoutPage() {
                   value={form.city}
                   onChange={handleChange}
                   className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
-                  placeholder="Nashville"
+                  placeholder="Dickson"
                 />
               </div>
               <div>
