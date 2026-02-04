@@ -180,6 +180,7 @@ export default function AccountPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button"
+              disabled
               onClick={() => router.push("/account/addresses")}
               className="inline-flex w-full items-center justify-center rounded-full border border-dc-ink/10 bg-white/80 px-5 py-2.5 text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/30 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white sm:w-auto sm:px-6 sm:py-3 sm:text-[10px]"
             >
