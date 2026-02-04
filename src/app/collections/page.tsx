@@ -6,6 +6,37 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Collection } from "@/types/types";
 
+function DecorativeBackground() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="absolute left-1/2 top-32 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-gradient-to-br from-dc-sand/40 to-dc-cream/20 blur-3xl dark:from-dc-caramel/10 dark:to-transparent sm:h-[400px] sm:w-[400px] md:top-40"
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 0.3 }}
+        className="absolute left-1/4 top-[60%] h-[200px] w-[200px] -translate-x-1/2 rounded-full border border-dc-caramel/10 dark:border-dc-caramel/5 sm:h-[280px] sm:w-[280px]"
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        className="absolute right-1/3 top-[45%] h-2 w-2 rounded-full bg-dc-caramel/20 dark:bg-dc-caramel/10 sm:h-3 sm:w-3"
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.8, delay: 0.2 }}
+        className="absolute right-1/4 top-[70%] h-[250px] w-[250px] translate-x-1/2 rounded-full bg-gradient-to-tl from-dc-cream/30 to-transparent blur-3xl dark:from-dc-caramel/5 sm:h-[350px] sm:w-[350px]"
+      />
+    </div>
+  );
+}
+
 export default function CollectionsPage() {
   const router = useRouter();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -49,7 +80,8 @@ export default function CollectionsPage() {
   };
 
   return (
-    <main className="relative mx-auto max-w-7xl overflow-y-hidden px-4 py-8 sm:px-6 md:py-12 lg:px-8">
+    <main className="relative mx-auto max-w-7xl overflow-hidden px-4 py-8 sm:px-6 md:py-12 lg:px-8">
+      <DecorativeBackground />
       <motion.section
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

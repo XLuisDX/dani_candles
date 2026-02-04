@@ -6,6 +6,31 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/Toast";
 
+function DecorativeBackground() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="absolute left-1/2 top-20 h-[250px] w-[250px] -translate-x-1/2 rounded-full bg-gradient-to-br from-dc-sand/40 to-dc-cream/20 blur-3xl dark:from-dc-caramel/10 dark:to-transparent sm:h-[300px] sm:w-[300px]"
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 0.3 }}
+        className="absolute left-1/4 top-[70%] h-[150px] w-[150px] -translate-x-1/2 rounded-full border border-dc-caramel/10 dark:border-dc-caramel/5 sm:h-[200px] sm:w-[200px]"
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.8, delay: 0.2 }}
+        className="absolute right-1/4 top-[50%] h-[200px] w-[200px] translate-x-1/2 rounded-full bg-gradient-to-tl from-dc-cream/30 to-transparent blur-3xl dark:from-dc-caramel/5 sm:h-[250px] sm:w-[250px]"
+      />
+    </div>
+  );
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
