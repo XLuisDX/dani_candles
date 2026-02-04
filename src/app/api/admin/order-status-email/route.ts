@@ -1,11 +1,57 @@
 import * as React from "react";
 import { NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { resend } from "@/lib/resend";
 import OrderShippedEmail from "@/emails/OrderShippedEmail";
 import { OrderShippedItemEmail, ShippingAddress } from "@/types/types";
+import { isAdminEmail } from "@/lib/isAdmin";
+
+async function getAuthenticatedAdmin() {
+  const cookieStore = await cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options);
+          });
+        },
+      },
+    }
+  );
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return null;
+  }
+
+  const email = user.email ?? null;
+  if (!isAdminEmail(email)) {
+    return null;
+  }
+
+  return user;
+}
 
 export async function POST(req: NextRequest) {
+  // Verify admin authentication
+  const admin = await getAuthenticatedAdmin();
+  if (!admin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const { orderId } = body as { orderId?: string };
@@ -20,10 +66,15 @@ export async function POST(req: NextRequest) {
         "id, status, total_cents, currency_code, customer_email, shipping_address"
       )
       .eq("id", orderId)
-      .single();
+      .maybeSingle();
 
-    if (orderError || !order) {
-      console.error("[Order status email] Order not found:", orderError);
+    if (orderError) {
+      console.error("[Order status email] Error loading order:", orderError);
+      return NextResponse.json({ error: "Could not load order" }, { status: 500 });
+    }
+
+    if (!order) {
+      console.error("[Order status email] Order not found:", orderId);
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 

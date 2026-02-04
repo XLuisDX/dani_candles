@@ -2,12 +2,12 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
-import { toast } from "react-toastify";
+import { toast } from "@/components/Toast";
 import { Product } from "@/types/types";
 import ProductSort, { SortOption } from "@/components/ProductSort";
+import ProductFilter, { FilterState } from "@/components/ProductFilter";
 import Pagination from "@/components/Pagination";
 
 const ITEMS_PER_PAGE = 9;
@@ -18,25 +18,28 @@ export default function ShopPage() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
+  const [filters, setFilters] = useState<FilterState>({
+    collection: "",
+    priceRange: null,
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase
-        .from("products")
-        .select(
-          "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, created_at"
-        )
-        .eq("active", true)
-        .order("created_at", { ascending: false });
+      try {
+        const response = await fetch("/api/products");
+        const data = await response.json();
 
-      if (error) {
-        console.error(error);
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch products");
+        }
+
+        setProducts(data.products as Product[]);
+      } catch (err) {
+        console.error(err);
         setError("Something went wrong loading the products.");
-      } else {
-        setProducts(data as Product[]);
       }
 
       setLoading(false);
@@ -45,8 +48,45 @@ export default function ShopPage() {
     fetchProducts();
   }, []);
 
+  // Apply filters
+  const filteredProducts = useMemo(() => {
+    let filtered = [...products];
+
+    // Filter by collection
+    if (filters.collection) {
+      filtered = filtered.filter(
+        (product) => (product as Product & { collection_id?: string }).collection_id === filters.collection
+      );
+    }
+
+    // Filter by price range
+    if (filters.priceRange) {
+      const [min, max] = filters.priceRange;
+      filtered = filtered.filter(
+        (product) => product.price_cents >= min && product.price_cents <= max
+      );
+    }
+
+    return filtered;
+  }, [products, filters]);
+
+  // Calculate price range for filter
+  const priceRange = useMemo(() => {
+    if (products.length === 0) return { min: 0, max: 10000 };
+    const prices = products.map((p) => p.price_cents);
+    return {
+      min: Math.min(...prices),
+      max: Math.max(...prices),
+    };
+  }, [products]);
+
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
   const sortedProducts = useMemo(() => {
-    const sorted = [...products];
+    const sorted = [...filteredProducts];
 
     switch (sortBy) {
       case "featured":
@@ -55,12 +95,6 @@ export default function ShopPage() {
           if (!a.is_featured && b.is_featured) return 1;
           return 0;
         });
-      // case "newest":
-      //   return sorted.sort(
-      //     (a, b) =>
-      //       new Date(b.created_at || 0).getTime() -
-      //       new Date(a.created_at || 0).getTime()
-      //   );
       case "price-low":
         return sorted.sort((a, b) => a.price_cents - b.price_cents);
       case "price-high":
@@ -72,7 +106,7 @@ export default function ShopPage() {
       default:
         return sorted;
     }
-  }, [products, sortBy]);
+  }, [filteredProducts, sortBy]);
 
   const totalPages = Math.ceil(sortedProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = useMemo(() => {
@@ -99,7 +133,7 @@ export default function ShopPage() {
       imageUrl: product.image_url,
     });
 
-    toast.success(`${product.name} added to cart!`);
+    toast.cart(`${product.name} added to cart`);
   };
 
   const handlePageChange = (page: number) => {
@@ -129,14 +163,14 @@ export default function ShopPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2.5 sm:px-5 sm:py-2"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5 sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
             Handcrafted · Small Batches
           </span>
         </motion.div>
@@ -145,7 +179,7 @@ export default function ShopPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl lg:text-7xl"
+          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink dark:text-white sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl lg:text-7xl"
         >
           Shop
         </motion.h1>
@@ -154,25 +188,36 @@ export default function ShopPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-3 max-w-2xl text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
+          className="mt-3 max-w-2xl text-sm leading-relaxed text-dc-ink/60 dark:text-white/60 sm:mt-4 sm:text-base"
         >
           Awaken your space with handcrafted candles by Dani.
         </motion.p>
       </motion.section>
 
       {!loading && !error && products.length > 0 && (
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <ProductSort currentSort={sortBy} onSortChange={handleSortChange} />
+        <div className="mb-8 space-y-4">
+          {/* Filters */}
+          <ProductFilter
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            priceRange={priceRange}
+          />
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-xs text-dc-ink/60 sm:text-sm"
-          >
-            Showing {paginatedProducts.length} of {sortedProducts.length}{" "}
-            {sortedProducts.length === 1 ? "product" : "products"}
-          </motion.div>
+          {/* Sort and Count */}
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <ProductSort currentSort={sortBy} onSortChange={handleSortChange} />
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-xs text-dc-ink/60 dark:text-white/60 sm:text-sm"
+            >
+              Showing {paginatedProducts.length} of {sortedProducts.length}{" "}
+              {sortedProducts.length === 1 ? "product" : "products"}
+              {filters.collection || filters.priceRange ? " (filtered)" : ""}
+            </motion.div>
+          </div>
         </div>
       )}
 
@@ -180,14 +225,14 @@ export default function ShopPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
+          className="flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5 sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
         >
           <motion.span
             animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
             className="h-2 w-2 rounded-full bg-dc-caramel sm:h-2.5 sm:w-2.5"
           />
-          <p className="text-xs font-medium text-dc-ink/70 sm:text-sm">
+          <p className="text-xs font-medium text-dc-ink/70 dark:text-white/70 sm:text-sm">
             Loading candles...
           </p>
         </motion.div>
@@ -197,7 +242,7 @@ export default function ShopPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-xl border border-red-500/20 bg-red-50/50 px-4 py-4 text-xs font-medium text-red-700 sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
+          className="rounded-xl border border-red-500/20 bg-red-50/50 px-4 py-4 text-xs font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400 sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
         >
           {error}
         </motion.div>
@@ -207,7 +252,7 @@ export default function ShopPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 text-xs font-medium text-dc-ink/70 backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
+          className="rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 text-xs font-medium text-dc-ink/70 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-white/70 sm:rounded-2xl sm:px-6 sm:py-5 sm:text-sm"
         >
           No products available yet.
         </motion.div>
@@ -226,9 +271,9 @@ export default function ShopPage() {
                 key={product.id}
                 whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="group relative flex flex-col overflow-hidden rounded-xl border border-dc-ink/8 bg-white/90 p-3 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg sm:rounded-2xl sm:p-4 md:rounded-3xl md:p-5"
+                className="group relative flex flex-col overflow-hidden rounded-xl border border-dc-ink/8 bg-white/90 p-3 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg dark:border-white/10 dark:bg-[#1a1a1a]/90 sm:rounded-2xl sm:p-4 md:rounded-3xl md:p-5"
               >
-                <div className="relative mb-3 overflow-hidden rounded-lg border border-dc-ink/5 bg-dc-sand/20 sm:mb-4 sm:rounded-xl md:mb-5 md:rounded-2xl">
+                <div className="relative mb-3 overflow-hidden rounded-lg border border-dc-ink/5 bg-dc-sand/20 dark:border-white/5 dark:bg-white/5 sm:mb-4 sm:rounded-xl md:mb-5 md:rounded-2xl">
                   <Link href={`/product/${product.slug}`}>
                     <div className="aspect-square">
                       {product.image_url ? (
@@ -243,7 +288,7 @@ export default function ShopPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[8px] font-semibold uppercase tracking-[0.25em] text-dc-ink/30 sm:text-[10px] md:text-xs">
+                        <div className="flex h-full w-full items-center justify-center text-[8px] font-semibold uppercase tracking-[0.25em] text-dc-ink/30 dark:text-white/30 sm:text-[10px] md:text-xs">
                           No Image
                         </div>
                       )}
@@ -262,7 +307,7 @@ export default function ShopPage() {
                   )}
                 </div>
 
-                <h2 className="line-clamp-1 font-display text-sm font-semibold text-dc-ink sm:text-base md:text-xl lg:text-2xl">
+                <h2 className="line-clamp-1 font-display text-sm font-semibold text-dc-ink dark:text-white sm:text-base md:text-xl lg:text-2xl">
                   <Link
                     href={`/product/${product.slug}`}
                     className="outline-none transition-colors hover:text-dc-caramel focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-dc-caramel/50"
@@ -272,22 +317,22 @@ export default function ShopPage() {
                 </h2>
 
                 {product.short_description && (
-                  <p className="mt-1.5 hidden text-xs leading-relaxed text-dc-ink/60 sm:line-clamp-2 sm:mt-2 md:mt-3 md:text-sm">
+                  <p className="mt-1.5 hidden text-xs leading-relaxed text-dc-ink/60 dark:text-white/60 sm:line-clamp-2 sm:mt-2 md:mt-3 md:text-sm">
                     {product.short_description}
                   </p>
                 )}
 
-                <div className="mt-2.5 flex flex-col gap-2 border-t border-dc-ink/5 pt-2.5 sm:mt-3 sm:flex-row sm:items-end sm:justify-between sm:pt-3 md:mt-4 md:pt-4 lg:mt-5 lg:pt-5">
-                  <p className="text-sm font-bold text-dc-ink sm:text-base md:text-lg">
+                <div className="mt-2.5 flex flex-col gap-2 border-t border-dc-ink/5 pt-2.5 dark:border-white/5 sm:mt-3 sm:flex-row sm:items-end sm:justify-between sm:pt-3 md:mt-4 md:pt-4 lg:mt-5 lg:pt-5">
+                  <p className="text-sm font-bold text-dc-ink dark:text-white sm:text-base md:text-lg">
                     {(product.price_cents / 100).toFixed(2)}{" "}
-                    <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[9px] md:text-[10px]">
+                    <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 dark:text-white/40 sm:text-[9px] md:text-[10px]">
                       {product.currency_code}
                     </span>
                   </p>
 
                   <Link
                     href={`/product/${product.slug}`}
-                    className="hidden text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel sm:inline-block sm:text-[10px]"
+                    className="hidden text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel dark:text-white/60 dark:hover:text-dc-sand sm:inline-block sm:text-[10px]"
                   >
                     View Details →
                   </Link>

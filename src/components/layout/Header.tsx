@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 import { isAdminEmail } from "@/lib/isAdmin";
 import { Logo } from "@/components/Logo";
+import { CartBadge } from "@/components/CartBadge";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useRouter } from "next/navigation";
 
 export function Header() {
@@ -16,6 +18,8 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    const supabase = createClient();
+
     const checkSession = async () => {
       const { data, error } = await supabase.auth.getSession();
       if (!error && data.session) {
@@ -49,8 +53,10 @@ export function Header() {
   }, []);
 
   const handleLogout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     setMobileMenuOpen(false);
+    router.refresh();
   };
 
   return (
@@ -59,24 +65,34 @@ export function Header() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed left-0 right-0 top-0 z-50 border-b border-dc-ink/5 bg-dc-cream/90 backdrop-blur-xl"
+        className="fixed left-0 right-0 top-0 z-50 border-b border-dc-ink/5 bg-dc-cream/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/90"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
           <Link href="/" className="group flex items-center gap-2 sm:gap-3">
+            {/* Light mode logo */}
             <Logo
               variant="black"
               height={40}
               width={160}
               animated={true}
               onClick={() => router.push("/")}
-              className="cursor-pointer sm:h-12 sm:w-[200px]"
+              className="cursor-pointer dark:hidden sm:h-12 sm:w-[200px]"
+            />
+            {/* Dark mode logo */}
+            <Logo
+              variant="white"
+              height={40}
+              width={160}
+              animated={true}
+              onClick={() => router.push("/")}
+              className="hidden cursor-pointer dark:block sm:h-12 sm:w-[200px]"
             />
 
             <div className="hidden flex-col sm:flex">
-              <span className="font-display text-sm font-semibold tracking-[0.25em] text-dc-ink sm:text-base">
+              <span className="font-display text-sm font-semibold tracking-[0.25em] text-dc-ink dark:text-white sm:text-base">
                 DANI CANDLES
               </span>
-              <span className="text-[8px] font-light tracking-[0.15em] text-dc-ink/50 sm:text-[9px]">
+              <span className="text-[8px] font-light tracking-[0.15em] text-dc-ink/50 dark:text-white/50 sm:text-[9px]">
                 AWAKEN TO AMBIANCE
               </span>
             </div>
@@ -98,7 +114,7 @@ export function Header() {
               >
                 <Link
                   href={`/${item}`}
-                  className="relative text-[10px] font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel xl:text-xs"
+                  className="relative text-[10px] font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel dark:text-white/60 dark:hover:text-dc-caramel-dark xl:text-xs"
                 >
                   <motion.span
                     whileHover={{ y: -2 }}
@@ -118,14 +134,8 @@ export function Header() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="flex items-center gap-1.5 sm:gap-2.5"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                href="/cart"
-                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px]"
-              >
-                CART
-              </Link>
-            </motion.div>
+            <ThemeToggle />
+            <CartBadge />
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -133,7 +143,7 @@ export function Header() {
             >
               <Link
                 href="/shop"
-                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px]"
+                className="rounded-full border border-dc-ink/8 bg-white/80 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow dark:border-white/10 dark:bg-white/10 dark:text-white/70 dark:hover:border-white/20 dark:hover:bg-white/15 dark:hover:text-white sm:px-5 sm:py-2.5 sm:text-[10px]"
               >
                 SHOP
               </Link>
@@ -150,7 +160,7 @@ export function Header() {
               >
                 <Link
                   href="/admin"
-                  className="rounded-full border border-dc-caramel/20 bg-dc-sand/50 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-clay shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-sand/70 sm:px-4 sm:py-2.5 sm:text-[10px]"
+                  className="rounded-full border border-dc-caramel/20 bg-dc-sand/50 px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-clay shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-sand/70 dark:border-dc-caramel-dark/30 dark:bg-dc-sand-dark/50 dark:text-dc-caramel-dark dark:hover:border-dc-caramel-dark/50 dark:hover:bg-dc-sand-dark/70 sm:px-4 sm:py-2.5 sm:text-[10px]"
                 >
                   ADMIN
                 </Link>
@@ -171,7 +181,7 @@ export function Header() {
                   >
                     <Link
                       href="/auth/login"
-                      className="rounded-full bg-dc-caramel px-4 py-2 text-[9px] font-semibold tracking-[0.2em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px]"
+                      className="rounded-full bg-dc-caramel px-4 py-2 text-[9px] font-semibold tracking-[0.2em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay hover:shadow dark:bg-dc-caramel-dark dark:hover:bg-dc-clay-dark sm:px-5 sm:py-2.5 sm:text-[10px]"
                     >
                       SIGN IN
                     </Link>
@@ -184,7 +194,7 @@ export function Header() {
                     >
                       <Link
                         href="/account"
-                        className="rounded-full px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel sm:px-4 sm:py-2.5 sm:text-[10px]"
+                        className="rounded-full px-3 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel dark:text-white/60 dark:hover:text-dc-caramel-dark sm:px-4 sm:py-2.5 sm:text-[10px]"
                       >
                         ACCOUNT
                       </Link>
@@ -195,7 +205,7 @@ export function Header() {
                     >
                       <button
                         onClick={handleLogout}
-                        className="rounded-full border border-dc-ink/8 bg-white/80 px-4 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow sm:px-5 sm:py-2.5 sm:text-[10px]"
+                        className="rounded-full border border-dc-ink/8 bg-white/80 px-4 py-2 text-[9px] font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:border-dc-ink/15 hover:bg-white hover:text-dc-ink hover:shadow dark:border-white/10 dark:bg-white/10 dark:text-white/70 dark:hover:border-white/20 dark:hover:bg-white/15 dark:hover:text-white sm:px-5 sm:py-2.5 sm:text-[10px]"
                       >
                         LOGOUT
                       </button>
@@ -207,24 +217,24 @@ export function Header() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-lg p-2 transition-colors hover:bg-dc-ink/5 lg:hidden"
+              className="flex flex-col items-center justify-center gap-1.5 rounded-lg p-2 transition-colors hover:bg-dc-ink/5 dark:hover:bg-white/5 lg:hidden"
               aria-label="Toggle menu"
             >
               <motion.span
                 animate={
                   mobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }
                 }
-                className="h-0.5 w-5 bg-dc-ink transition-all"
+                className="h-0.5 w-5 bg-dc-ink transition-all dark:bg-white"
               />
               <motion.span
                 animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                className="h-0.5 w-5 bg-dc-ink transition-all"
+                className="h-0.5 w-5 bg-dc-ink transition-all dark:bg-white"
               />
               <motion.span
                 animate={
                   mobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }
                 }
-                className="h-0.5 w-5 bg-dc-ink transition-all"
+                className="h-0.5 w-5 bg-dc-ink transition-all dark:bg-white"
               />
             </button>
           </motion.div>
@@ -238,7 +248,7 @@ export function Header() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed left-0 right-0 top-[73px] z-40 overflow-hidden border-b border-dc-ink/5 bg-dc-cream/95 backdrop-blur-xl sm:top-[81px] lg:hidden"
+            className="fixed left-0 right-0 top-[73px] z-40 overflow-hidden border-b border-dc-ink/5 bg-dc-cream/95 backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:top-[81px] lg:hidden"
           >
             <nav className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
               {/* Navigation Links */}
@@ -259,7 +269,7 @@ export function Header() {
                     <Link
                       href={`/${item}`}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block py-2 text-sm font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel"
+                      className="block py-2 text-sm font-medium tracking-[0.2em] text-dc-ink/60 transition-colors duration-200 hover:text-dc-caramel dark:text-white/60 dark:hover:text-dc-caramel-dark"
                     >
                       {item === "candle-care" ? "CARE" : item.toUpperCase()}
                     </Link>
@@ -272,13 +282,13 @@ export function Header() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25, duration: 0.3 }}
-                  className="flex flex-col gap-3 border-t border-dc-ink/5 pt-6"
+                  className="flex flex-col gap-3 border-t border-dc-ink/5 pt-6 dark:border-white/10"
                 >
                   {!isLoggedIn ? (
                     <Link
                       href="/auth/login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-full bg-dc-caramel px-6 py-3 text-center text-xs font-semibold tracking-[0.2em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay"
+                      className="rounded-full bg-dc-caramel px-6 py-3 text-center text-xs font-semibold tracking-[0.2em] text-white shadow-sm transition-all duration-200 hover:bg-dc-clay dark:bg-dc-caramel-dark dark:hover:bg-dc-clay-dark"
                     >
                       SIGN IN
                     </Link>
@@ -287,7 +297,7 @@ export function Header() {
                       <Link
                         href="/account"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="rounded-full border border-dc-ink/8 bg-white/80 px-6 py-3 text-center text-xs font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:bg-white hover:text-dc-ink"
+                        className="rounded-full border border-dc-ink/8 bg-white/80 px-6 py-3 text-center text-xs font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:bg-white hover:text-dc-ink dark:border-white/10 dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/15 dark:hover:text-white"
                       >
                         ACCOUNT
                       </Link>
@@ -295,14 +305,14 @@ export function Header() {
                         <Link
                           href="/admin"
                           onClick={() => setMobileMenuOpen(false)}
-                          className="rounded-full border border-dc-caramel/20 bg-dc-sand/50 px-6 py-3 text-center text-xs font-semibold tracking-[0.2em] text-dc-clay shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-sand/70 sm:hidden"
+                          className="rounded-full border border-dc-caramel/20 bg-dc-sand/50 px-6 py-3 text-center text-xs font-semibold tracking-[0.2em] text-dc-clay shadow-sm transition-all duration-200 hover:border-dc-caramel/30 hover:bg-dc-sand/70 dark:border-dc-caramel-dark/30 dark:bg-dc-sand-dark/50 dark:text-dc-caramel-dark dark:hover:border-dc-caramel-dark/50 dark:hover:bg-dc-sand-dark/70 sm:hidden"
                         >
                           ADMIN
                         </Link>
                       )}
                       <button
                         onClick={handleLogout}
-                        className="rounded-full border border-dc-ink/8 bg-white/80 px-6 py-3 text-xs font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:bg-white hover:text-dc-ink"
+                        className="rounded-full border border-dc-ink/8 bg-white/80 px-6 py-3 text-xs font-semibold tracking-[0.2em] text-dc-ink/70 shadow-sm transition-all duration-200 hover:bg-white hover:text-dc-ink dark:border-white/10 dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/15 dark:hover:text-white"
                       >
                         LOGOUT
                       </button>

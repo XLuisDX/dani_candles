@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabaseClient"
+import { createClient } from "@/lib/supabase/client"
 
 export async function uploadProductImage(
   file: File,
@@ -7,6 +7,7 @@ export async function uploadProductImage(
   const ext = file.name.split(".").pop() || "jpg"
   const filePath = `products/${productId}-${Date.now()}.${ext}`
 
+  const supabase = createClient();
   const { error: uploadError } = await supabase.storage
     .from("product-images")
     .upload(filePath, file, {

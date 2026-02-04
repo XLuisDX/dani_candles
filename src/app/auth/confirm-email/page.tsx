@@ -3,7 +3,7 @@
 import { useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 
 // Componente interno que usa useSearchParams
 function ConfirmEmailContent() {
@@ -13,6 +13,7 @@ function ConfirmEmailContent() {
 
   useEffect(() => {
     const checkSession = async () => {
+      const supabase = createClient();
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -54,13 +55,13 @@ function ConfirmEmailContent() {
         transition={{ delay: 0.3, duration: 0.5 }}
           className="mb-6 text-center"
       >
-        <div className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm sm:gap-2.5 sm:px-5 sm:py-2">
+        <div className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:gap-2.5 sm:px-5 sm:py-2">
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
             Dani Candles
           </span>
         </div>
@@ -70,7 +71,7 @@ function ConfirmEmailContent() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="mb-4 text-center font-display text-3xl font-semibold leading-tight text-dc-ink sm:text-4xl"
+        className="mb-4 text-center font-display text-3xl font-semibold leading-tight text-dc-ink dark:text-white sm:text-4xl"
       >
         Check your email
       </motion.h1>
@@ -81,7 +82,7 @@ function ConfirmEmailContent() {
         transition={{ delay: 0.5, duration: 0.5 }}
         className="mb-8 text-center"
       >
-        <p className="mb-4 text-sm leading-relaxed text-dc-ink/70 sm:text-base">
+        <p className="mb-4 text-sm leading-relaxed text-dc-ink/70 dark:text-white/70 sm:text-base">
           We&apos;ve sent a confirmation email to:
         </p>
         {email && (
@@ -89,9 +90,9 @@ function ConfirmEmailContent() {
             {email}
           </p>
         )}
-        <p className="text-sm leading-relaxed text-dc-ink/70 sm:text-base">
+        <p className="text-sm leading-relaxed text-dc-ink/70 dark:text-white/70 sm:text-base">
           Click the{" "}
-          <strong className="font-semibold text-dc-ink">
+          <strong className="font-semibold text-dc-ink dark:text-white">
             Confirm Email Address
           </strong>{" "}
           button in the email to activate your account and start exploring our
@@ -103,12 +104,12 @@ function ConfirmEmailContent() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.5 }}
-        className="mb-8 rounded-xl border border-dc-ink/10 bg-dc-sand/20 p-4 sm:p-6"
+        className="mb-8 rounded-xl border border-dc-ink/10 bg-dc-sand/20 p-4 dark:border-white/10 dark:bg-white/5 sm:p-6"
       >
-        <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-dc-ink/80 sm:text-sm">
+        <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-dc-ink/80 dark:text-white/80 sm:text-sm">
           What to do next
         </h3>
-        <ul className="space-y-2 text-sm text-dc-ink/70">
+        <ul className="space-y-2 text-sm text-dc-ink/70 dark:text-white/70">
           <li className="flex items-start gap-2">
             <span className="mt-1 text-dc-caramel">✓</span>
             <span>Check your inbox and spam folder</span>
@@ -128,14 +129,14 @@ function ConfirmEmailContent() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="my-8 border-t border-dc-ink/10"
+        className="my-8 border-t border-dc-ink/10 dark:border-white/10"
       />
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9, duration: 0.5 }}
-        className="text-center text-xs text-dc-ink/60 sm:text-sm"
+        className="text-center text-xs text-dc-ink/60 dark:text-white/60 sm:text-sm"
       >
         <a
           href="https://www.danicandles.com/"
@@ -152,23 +153,10 @@ export default function ConfirmEmailPage() {
   return (
     <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-2xl flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16 md:py-20">
       <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.4 }}
-        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-20 right-6 h-48 w-48 rounded-full bg-dc-sand blur-3xl sm:right-10 sm:h-56 sm:w-56 md:h-64 md:w-64"
-      />
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.2 }}
-        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-20 left-6 h-56 w-56 rounded-full bg-dc-caramel blur-3xl sm:left-10 sm:h-64 sm:w-64 md:h-72 md:w-72"
-      />
-
-      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full rounded-2xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-12 md:p-16"
+        className="relative w-full rounded-2xl border border-dc-ink/8 bg-white/95 p-8 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:rounded-3xl sm:p-12 md:p-16"
       >
         <Suspense
           fallback={

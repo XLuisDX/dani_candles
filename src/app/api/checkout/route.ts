@@ -1,29 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseServer } from "@/lib/supabaseServer";
+import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rateLimit";
+import { z } from "zod";
+
+const checkoutSchema = z.object({
+  orderId: z.string().uuid(),
+  items: z.array(
+    z.object({
+      name: z.string().min(1).max(200),
+      quantity: z.number().int().min(1).max(100),
+      unit_amount_cents: z.number().int().min(0),
+    })
+  ).min(1),
+  currency: z.string().length(3),
+});
 
 export async function POST(req: NextRequest) {
+  // Rate limiting
+  const clientIp = getClientIp(req.headers);
+  const rateLimitResult = rateLimit(`checkout:${clientIp}`, RATE_LIMITS.checkout);
+  if (!rateLimitResult.success) {
+    return rateLimitResult.error;
+  }
+
   try {
     const body = await req.json();
 
-    const { orderId, items, currency } = body as {
-      orderId: string;
-      items: {
-        name: string;
-        quantity: number;
-        unit_amount_cents: number;
-      }[];
-      currency: string;
-    };
-
-    if (!orderId || !items || items.length === 0) {
+    // Validate request body
+    const validation = checkoutSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "Missing order data" },
+        { error: "Invalid request data", details: validation.error.flatten() },
         { status: 400 }
       );
     }
 
-    const { data: order, error: orderError } = await supabase
+    const { orderId, items, currency } = validation.data;
+
+    const { data: order, error: orderError } = await supabaseServer
       .from("orders")
       .select("id, total_cents, currency_code")
       .eq("id", orderId)

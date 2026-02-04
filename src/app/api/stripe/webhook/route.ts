@@ -33,24 +33,18 @@ export async function POST(req: NextRequest) {
   let event: Stripe.Event;
 
   try {
-    if (process.env.NODE_ENV === "production") {
-      if (!sig) {
-        console.error("[Stripe webhook] Missing stripe-signature header");
-        return NextResponse.json(
-          { error: "Missing stripe-signature header" },
-          { status: 400 }
-        );
-      }
-
-      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
-      console.log("[Stripe webhook] Event verified (production):", event.type);
-    } else {
-      event = JSON.parse(rawBody) as Stripe.Event;
-      console.log(
-        "[Stripe webhook] DEV mode - signature skipped. Event type:",
-        event.type
+    // Always verify webhook signature for security
+    // Use Stripe CLI for local testing: stripe listen --forward-to localhost:3000/api/stripe/webhook
+    if (!sig) {
+      console.error("[Stripe webhook] Missing stripe-signature header");
+      return NextResponse.json(
+        { error: "Missing stripe-signature header" },
+        { status: 400 }
       );
     }
+
+    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    console.log("[Stripe webhook] Event verified:", event.type);
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : "Unknown error verifying signature";
@@ -100,12 +94,17 @@ export async function POST(req: NextRequest) {
           })
           .eq("id", orderId)
           .select("id, total_cents, currency_code, shipping_address")
-          .single();
+          .maybeSingle();
 
-        if (updateError || !order) {
+        if (updateError) {
           console.error(
             "[Stripe webhook] Error updating order status:",
             updateError
+          );
+        } else if (!order) {
+          console.error(
+            "[Stripe webhook] Order not found for update:",
+            orderId
           );
         } else {
           console.log(

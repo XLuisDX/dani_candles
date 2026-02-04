@@ -207,6 +207,7 @@ export interface CartState {
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   totalCents: () => number;
+  totalItems: () => number;
 }
 
 export interface LogoProps {

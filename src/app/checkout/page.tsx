@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 import { useCartStore } from "@/store/cartStore";
 import { ShippingForm } from "@/types/types";
 
@@ -34,6 +34,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     const checkSession = async () => {
+      const supabase = createClient();
       const { data, error } = await supabase.auth.getSession();
       if (error || !data.session) {
         router.push("/auth/login");
@@ -76,49 +77,36 @@ export default function CheckoutPage() {
         phone: form.phone || null,
       };
 
-      const { data: orderInsert, error: orderError } = await supabase
-        .from("orders")
-        .insert({
-          user_id: userId,
-          customer_email: userEmail,
-          status: "pending",
-          payment_status: "pending",
-          payment_provider: "stripe",
-          subtotal_cents: subtotal,
-          shipping_cents: shippingCents,
-          tax_cents: taxCents,
-          total_cents: total,
-          currency_code: "USD",
-          shipping_address: shippingAddress,
-        })
-        .select("id")
-        .single();
+      // Create order via API (uses service role key to bypass RLS)
+      const orderResponse = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          shippingAddress,
+          items: items.map((item) => ({
+            productId: item.productId,
+            name: item.name,
+            priceCents: item.priceCents,
+            quantity: item.quantity,
+          })),
+          subtotalCents: subtotal,
+          shippingCents: shippingCents,
+          taxCents: taxCents,
+          totalCents: total,
+          currencyCode: "USD",
+        }),
+      });
 
-      if (orderError || !orderInsert) {
-        console.error(orderError);
-        throw new Error("Could not create order.");
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        console.error("Order creation error:", errorData);
+        throw new Error(errorData.error || "Could not create order.");
       }
 
-      const orderId = orderInsert.id;
-
-      const orderItemsPayload = items.map((item) => ({
-        order_id: orderId,
-        product_id: item.productId,
-        product_name: item.name,
-        unit_price_cents: item.priceCents,
-        quantity: item.quantity,
-        total_cents: item.priceCents * item.quantity,
-        variant_data: null,
-      }));
-
-      const { error: itemsError } = await supabase
-        .from("order_items")
-        .insert(orderItemsPayload);
-
-      if (itemsError) {
-        console.error(itemsError);
-        throw new Error("Could not create order items.");
-      }
+      const { orderId } = await orderResponse.json();
 
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -166,14 +154,14 @@ export default function CheckoutPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
+          className="flex items-center gap-3 rounded-xl border border-dc-ink/8 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-[#1a1a1a]/90 sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-5"
         >
           <motion.span
             animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
             className="h-2 w-2 rounded-full bg-dc-caramel sm:h-2.5 sm:w-2.5"
           />
-          <p className="text-xs font-medium text-dc-ink/70 sm:text-sm">
+          <p className="text-xs font-medium text-dc-ink/70 dark:text-white/70 sm:text-sm">
             Checking your session...
           </p>
         </motion.div>
@@ -187,9 +175,9 @@ export default function CheckoutPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8 md:p-10"
+          className="rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:rounded-3xl sm:p-8 md:p-10"
         >
-          <p className="text-sm leading-relaxed text-dc-ink/60 sm:text-base">
+          <p className="text-sm leading-relaxed text-dc-ink/60 dark:text-white/60 sm:text-base">
             Your cart is empty.{" "}
             <button
               type="button"
@@ -207,37 +195,24 @@ export default function CheckoutPage() {
 
   return (
     <main className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:px-8 lg:py-20 mt-0">
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.35 }}
-        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full bg-dc-sand blur-3xl sm:right-12 sm:h-48 sm:w-48 md:right-16 md:h-56 md:w-56"
-      />
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.2 }}
-        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-16 left-8 h-48 w-48 rounded-full bg-dc-caramel blur-3xl sm:left-12 sm:h-56 sm:w-56 md:h-64 md:w-64"
-      />
-
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8 md:p-10"
+        className="relative rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:rounded-3xl sm:p-8 md:p-10"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm sm:gap-2.5 sm:px-5 sm:py-2"
+          className="inline-flex items-center gap-2 rounded-full border border-dc-ink/8 bg-white/90 px-4 py-1.5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:gap-2.5 sm:px-5 sm:py-2"
         >
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="h-1.5 w-1.5 rounded-full bg-dc-caramel"
           />
-          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
             Checkout
           </span>
         </motion.div>
@@ -245,7 +220,7 @@ export default function CheckoutPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl"
+          className="mt-4 font-display text-4xl font-semibold leading-tight text-dc-ink dark:text-white sm:mt-5 sm:text-5xl md:mt-6 md:text-6xl"
         >
           Checkout
         </motion.h1>
@@ -253,7 +228,7 @@ export default function CheckoutPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="mt-3 text-sm leading-relaxed text-dc-ink/60 sm:mt-4 sm:text-base"
+          className="mt-3 text-sm leading-relaxed text-dc-ink/60 dark:text-white/60 sm:mt-4 sm:text-base"
         >
           Enter your shipping details to complete your order.
         </motion.p>
@@ -265,20 +240,20 @@ export default function CheckoutPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8 md:p-10"
+          className="rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:rounded-3xl sm:p-8 md:p-10"
         >
           <div className="mb-6 sm:mb-8">
-            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/50 sm:text-[10px]">
+            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/50 dark:text-white/50 sm:text-[10px]">
               Shipping details
             </p>
-            <p className="mt-2 text-xs text-dc-ink/60 sm:mt-3 sm:text-sm">
+            <p className="mt-2 text-xs text-dc-ink/60 dark:text-white/60 sm:mt-3 sm:text-sm">
               Use an address where someone can receive the package.
             </p>
           </div>
 
           <div className="space-y-4 sm:space-y-5">
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                 Full name
               </label>
               <motion.input
@@ -288,13 +263,13 @@ export default function CheckoutPage() {
                 required
                 value={form.fullName}
                 onChange={handleChange}
-                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                 placeholder="Daniela Valverde"
               />
             </div>
 
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                 Address line 1
               </label>
               <motion.input
@@ -304,13 +279,13 @@ export default function CheckoutPage() {
                 required
                 value={form.line1}
                 onChange={handleChange}
-                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                 placeholder="123 Main St"
               />
             </div>
 
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                 Address line 2 (optional)
               </label>
               <motion.input
@@ -319,14 +294,14 @@ export default function CheckoutPage() {
                 name="line2"
                 value={form.line2}
                 onChange={handleChange}
-                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                 placeholder="Apt, suite, etc."
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                   City
                 </label>
                 <motion.input
@@ -336,12 +311,12 @@ export default function CheckoutPage() {
                   required
                   value={form.city}
                   onChange={handleChange}
-                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                   placeholder="Dickson"
                 />
               </div>
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                   State
                 </label>
                 <motion.input
@@ -351,7 +326,7 @@ export default function CheckoutPage() {
                   required
                   value={form.state}
                   onChange={handleChange}
-                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                   placeholder="TN"
                 />
               </div>
@@ -359,7 +334,7 @@ export default function CheckoutPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                   Postal code
                 </label>
                 <motion.input
@@ -369,12 +344,12 @@ export default function CheckoutPage() {
                   required
                   value={form.postalCode}
                   onChange={handleChange}
-                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                   placeholder="37055"
                 />
               </div>
               <div>
-                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                   Country
                 </label>
                 <motion.input
@@ -384,14 +359,14 @@ export default function CheckoutPage() {
                   required
                   value={form.country}
                   onChange={handleChange}
-                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                  className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                   placeholder="US"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 sm:text-[10px]">
+              <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
                 Phone (optional)
               </label>
               <motion.input
@@ -400,7 +375,7 @@ export default function CheckoutPage() {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
+                className="mt-2 h-11 w-full rounded-xl border border-dc-ink/10 bg-white/80 px-4 text-sm text-dc-ink shadow-sm outline-none transition-all placeholder:text-dc-ink/40 focus:border-dc-caramel/50 focus:bg-white focus:shadow focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40 dark:focus:bg-white/10 sm:mt-2.5 sm:h-12 sm:rounded-2xl sm:px-5"
                 placeholder="(555) 123-4567"
               />
             </div>
@@ -409,7 +384,7 @@ export default function CheckoutPage() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="rounded-xl border border-red-500/20 bg-red-50/80 px-4 py-3 text-xs font-medium text-red-700 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
+                className="rounded-xl border border-red-500/20 bg-red-50/80 px-4 py-3 text-xs font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400 sm:rounded-2xl sm:px-5 sm:py-3.5 sm:text-sm"
               >
                 {error}
               </motion.div>
@@ -425,7 +400,7 @@ export default function CheckoutPage() {
               {submitting ? "Placing order..." : "Place order"}
             </motion.button>
 
-            <p className="text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 sm:text-[10px]">
+            <p className="text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 dark:text-white/40 sm:text-[10px]">
               You will be redirected to Stripe to complete payment.
             </p>
           </div>
@@ -435,9 +410,9 @@ export default function CheckoutPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="h-fit rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl sm:rounded-3xl sm:p-8 md:sticky md:top-6"
+          className="h-fit rounded-2xl border border-dc-ink/8 bg-white/95 p-6 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:rounded-3xl sm:p-8 md:sticky md:top-6"
         >
-          <h2 className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/60 sm:text-[10px]">
+          <h2 className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/60 dark:text-white/60 sm:text-[10px]">
             Order summary
           </h2>
 
@@ -448,20 +423,20 @@ export default function CheckoutPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
-                className="flex items-start justify-between gap-3 rounded-xl border border-dc-ink/8 bg-white/80 px-4 py-3.5 sm:gap-4 sm:rounded-2xl sm:px-5 sm:py-4"
+                className="flex items-start justify-between gap-3 rounded-xl border border-dc-ink/8 bg-white/80 px-4 py-3.5 dark:border-white/10 dark:bg-white/5 sm:gap-4 sm:rounded-2xl sm:px-5 sm:py-4"
               >
                 <div>
-                  <p className="text-xs font-semibold text-dc-ink sm:text-sm">
+                  <p className="text-xs font-semibold text-dc-ink dark:text-white sm:text-sm">
                     {item.name}
                   </p>
-                  <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 sm:mt-1.5 sm:text-[10px]">
+                  <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 dark:text-white/40 sm:mt-1.5 sm:text-[10px]">
                     Qty {item.quantity}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-bold text-dc-ink sm:text-base">
+                  <p className="text-sm font-bold text-dc-ink dark:text-white sm:text-base">
                     {((item.priceCents * item.quantity) / 100).toFixed(2)}{" "}
-                    <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
+                    <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 dark:text-white/40 sm:text-[10px]">
                       {item.currencyCode}
                     </span>
                   </p>
@@ -470,44 +445,44 @@ export default function CheckoutPage() {
             ))}
           </div>
 
-          <div className="mt-5 border-t border-dc-ink/8 pt-5 text-sm sm:mt-6 sm:pt-6">
-            <div className="flex items-center justify-between text-dc-ink/60">
+          <div className="mt-5 border-t border-dc-ink/8 pt-5 text-sm dark:border-white/10 sm:mt-6 sm:pt-6">
+            <div className="flex items-center justify-between text-dc-ink/60 dark:text-white/60">
               <span className="font-medium">Subtotal</span>
-              <span className="font-bold text-dc-ink">
+              <span className="font-bold text-dc-ink dark:text-white">
                 {(subtotal / 100).toFixed(2)}{" "}
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 dark:text-white/40 sm:text-[10px]">
                   USD
                 </span>
               </span>
             </div>
 
-            <div className="mt-2.5 flex items-center justify-between text-dc-ink/50 sm:mt-3">
+            <div className="mt-2.5 flex items-center justify-between text-dc-ink/50 dark:text-white/50 sm:mt-3">
               <span className="font-medium">Shipping</span>
               <span className="text-[9px] font-semibold uppercase tracking-[0.15em] sm:text-[10px]">
                 Calculated later
               </span>
             </div>
 
-            <div className="mt-2.5 flex items-center justify-between text-dc-ink/50 sm:mt-3">
+            <div className="mt-2.5 flex items-center justify-between text-dc-ink/50 dark:text-white/50 sm:mt-3">
               <span className="font-medium">Taxes</span>
               <span className="text-[9px] font-semibold uppercase tracking-[0.15em] sm:text-[10px]">
                 —
               </span>
             </div>
 
-            <div className="mt-5 flex items-center justify-between border-t border-dc-ink/8 pt-5 sm:mt-6 sm:pt-6">
-              <span className="text-sm font-semibold text-dc-ink/60">
+            <div className="mt-5 flex items-center justify-between border-t border-dc-ink/8 pt-5 dark:border-white/10 sm:mt-6 sm:pt-6">
+              <span className="text-sm font-semibold text-dc-ink/60 dark:text-white/60">
                 Total
               </span>
-              <span className="text-xl font-bold text-dc-ink sm:text-2xl">
+              <span className="text-xl font-bold text-dc-ink dark:text-white sm:text-2xl">
                 {(total / 100).toFixed(2)}{" "}
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 sm:text-[10px]">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-dc-ink/40 dark:text-white/40 sm:text-[10px]">
                   USD
                 </span>
               </span>
             </div>
 
-            <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 sm:mt-4 sm:text-[10px]">
+            <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 dark:text-white/40 sm:mt-4 sm:text-[10px]">
               Taxes and shipping are finalized at checkout.
             </p>
           </div>

@@ -46,6 +46,9 @@ export const useCartStore = create<CartState>()(
           (acc, item) => acc + item.priceCents * item.quantity,
           0
         ),
+
+      totalItems: () =>
+        get().items.reduce((acc, item) => acc + item.quantity, 0),
     }),
     {
       name: "dani-candles-cart",

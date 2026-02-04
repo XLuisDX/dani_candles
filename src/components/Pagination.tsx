@@ -68,7 +68,7 @@ export default function Pagination({
         whileTap={{ scale: currentPage > 1 ? 0.95 : 1 }}
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-dc-ink/10 bg-white/90 text-dc-ink/60 shadow-sm backdrop-blur-sm transition-all hover:border-dc-caramel/30 hover:text-dc-caramel disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-dc-ink/10 disabled:hover:text-dc-ink/60 sm:h-10 sm:w-10 sm:rounded-xl"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-dc-ink/10 bg-white/90 text-dc-ink/60 shadow-sm backdrop-blur-sm transition-all hover:border-dc-caramel/30 hover:text-dc-caramel disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-dc-ink/10 disabled:hover:text-dc-ink/60 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:border-dc-sand/30 dark:hover:text-dc-sand dark:disabled:hover:border-white/10 dark:disabled:hover:text-white/60 sm:h-10 sm:w-10 sm:rounded-xl"
         aria-label="Previous page"
       >
         <svg
@@ -93,7 +93,7 @@ export default function Pagination({
             return (
               <span
                 key={`ellipsis-${index}`}
-                className="flex h-9 w-9 items-center justify-center text-xs text-dc-ink/40 sm:h-10 sm:w-10 sm:text-sm"
+                className="flex h-9 w-9 items-center justify-center text-xs text-dc-ink/40 dark:text-white/40 sm:h-10 sm:w-10 sm:text-sm"
               >
                 ...
               </span>
@@ -112,7 +112,7 @@ export default function Pagination({
               className={`flex h-9 w-9 items-center justify-center rounded-lg border text-xs font-semibold shadow-sm backdrop-blur-sm transition-all sm:h-10 sm:w-10 sm:rounded-xl sm:text-sm ${
                 isActive
                   ? "border-dc-caramel bg-dc-caramel text-white shadow-md"
-                  : "border-dc-ink/10 bg-white/90 text-dc-ink/60 hover:border-dc-caramel/30 hover:text-dc-caramel"
+                  : "border-dc-ink/10 bg-white/90 text-dc-ink/60 hover:border-dc-caramel/30 hover:text-dc-caramel dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:border-dc-sand/30 dark:hover:text-dc-sand"
               }`}
               aria-label={`Go to page ${pageNumber}`}
               aria-current={isActive ? "page" : undefined}
@@ -129,7 +129,7 @@ export default function Pagination({
         whileTap={{ scale: currentPage < totalPages ? 0.95 : 1 }}
         onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-dc-ink/10 bg-white/90 text-dc-ink/60 shadow-sm backdrop-blur-sm transition-all hover:border-dc-caramel/30 hover:text-dc-caramel disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-dc-ink/10 disabled:hover:text-dc-ink/60 sm:h-10 sm:w-10 sm:rounded-xl"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-dc-ink/10 bg-white/90 text-dc-ink/60 shadow-sm backdrop-blur-sm transition-all hover:border-dc-caramel/30 hover:text-dc-caramel disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-dc-ink/10 disabled:hover:text-dc-ink/60 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:border-dc-sand/30 dark:hover:text-dc-sand dark:disabled:hover:border-white/10 dark:disabled:hover:text-white/60 sm:h-10 sm:w-10 sm:rounded-xl"
         aria-label="Next page"
       >
         <svg

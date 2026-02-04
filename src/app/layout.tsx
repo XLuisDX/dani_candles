@@ -3,7 +3,8 @@ import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { ToastContainer } from "react-toastify";
+import { SkipNavigation } from "@/components/SkipNavigation";
+import { ToastProvider } from "@/components/Toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -131,8 +132,26 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${cormorant.variable} overflow-x-hidden`}
+      suppressHydrationWarning
     >
       <head>
+        {/* Prevent theme flash - runs before React hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -184,9 +203,10 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-screen flex-col overflow-x-hidden">
+        <SkipNavigation />
         <Header />
-        <ToastContainer />
-        <main className="flex-1 overflow-x-hidden pt-[73px] sm:pt-[81px]">
+        <ToastProvider />
+        <main id="main-content" className="flex-1 overflow-x-hidden pt-[73px] sm:pt-[81px]">
           {children}
         </main>
         <Footer />

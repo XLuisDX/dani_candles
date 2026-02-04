@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
@@ -31,6 +31,7 @@ export default function ResetPasswordPage() {
       return;
     }
 
+    const supabase = createClient();
     const { error: updateError } = await supabase.auth.updateUser({
       password: password,
     });
@@ -46,19 +47,6 @@ export default function ResetPasswordPage() {
 
   return (
     <main className="relative mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16 md:py-20 overflow-y-hidden">
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.4 }}
-        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -top-20 right-6 h-48 w-48 rounded-full bg-dc-sand blur-3xl sm:right-10 sm:h-56 sm:w-56 md:h-64 md:w-64"
-      />
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.2 }}
-        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none absolute -bottom-20 left-6 h-56 w-56 rounded-full bg-dc-caramel blur-3xl sm:left-10 sm:h-64 sm:w-64 md:h-72 md:w-72"
-      />
-
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
