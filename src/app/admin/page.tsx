@@ -223,20 +223,39 @@ export default function AdminPage() {
           </div>
         </motion.button>
 
-        <motion.div className="rounded-3xl border border-dc-ink/8 bg-white/50 p-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/50">
-          <h2 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60 dark:text-white/60">
-            Coming soon
-          </h2>
-          <p className="mt-4 text-sm leading-relaxed text-dc-ink/65 dark:text-white/65">
-            Collections, promos & more tools for Dani.
-          </p>
+        <motion.button
+          whileHover={{ y: -8, scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          type="button"
+          onClick={() => router.push("/admin/emails")}
+          className="group rounded-3xl border border-dc-ink/8 bg-white/95 p-8 text-left shadow-sm backdrop-blur-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dc-caramel/50 dark:border-white/10 dark:bg-[#1a1a1a]/95"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.25em] text-dc-ink/60 dark:text-white/60">
+                Emails
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-dc-ink/70 dark:text-white/70">
+                Send custom emails to customers.
+              </p>
+            </div>
+
+            <motion.span
+              whileHover={{ x: 3 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-dc-ink/8 bg-gradient-to-br from-white to-dc-sand/30 text-lg text-dc-ink/70 shadow-sm transition-colors group-hover:border-dc-caramel/30 group-hover:text-dc-caramel dark:border-white/10 dark:from-white/10 dark:to-white/5 dark:text-white/70"
+            >
+              →
+            </motion.span>
+          </div>
 
           <div className="mt-6 rounded-2xl border border-dc-ink/8 bg-dc-sand/20 px-5 py-3.5 dark:border-white/10 dark:bg-white/5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-dc-ink/60 dark:text-white/60">
-              In progress
+              Open email composer
             </p>
           </div>
-        </motion.div>
+        </motion.button>
       </motion.section>
     </main>
   );
