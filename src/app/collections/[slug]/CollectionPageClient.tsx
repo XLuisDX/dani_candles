@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useCartStore } from "@/store/cartStore";
-import { toast } from "@/components/Toast";
 import { Collection, Product } from "@/types/types";
+import { FragranceSelectorModal } from "@/components/FragranceSelectorModal";
 
 interface ProductWithCollection extends Product {
   collection_id: string | null;
@@ -19,20 +19,12 @@ export default function CollectionPageClient({
   collection,
   products,
 }: CollectionPageClientProps) {
-  const addItem = useCartStore((state) => state.addItem);
+  const [modalProduct, setModalProduct] = useState<ProductWithCollection | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddToCart = (product: ProductWithCollection) => {
-    addItem({
-      productId: product.id,
-      name: product.name,
-      slug: product.slug,
-      priceCents: product.price_cents,
-      currencyCode: product.currency_code,
-      quantity: 1,
-      imageUrl: product.image_url,
-    });
-
-    toast.cart(`${product.name} added to cart`);
+    setModalProduct(product);
+    setIsModalOpen(true);
   };
 
   const containerVariants = {
@@ -244,6 +236,12 @@ export default function CollectionPageClient({
           ))}
         </motion.section>
       )}
+
+      <FragranceSelectorModal
+        product={modalProduct}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   );
 }

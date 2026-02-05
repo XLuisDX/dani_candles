@@ -63,6 +63,7 @@ export interface AdminOrderItem {
   quantity: number;
   unit_price_cents: number;
   total_cents: number;
+  variant_data?: { fragrance?: string } | null;
 }
 
 export interface OrderItem {
@@ -169,6 +170,7 @@ export interface OrderItemEmail {
   quantity: number;
   unitPriceFormatted: string;
   lineTotalFormatted: string;
+  fragrance?: string;
 }
 
 export interface OrderConfirmationEmailProps {
@@ -204,13 +206,14 @@ export interface CartItem {
   currencyCode: string;
   quantity: number;
   imageUrl?: string | null;
+  fragrance: string;
 }
 
 export interface CartState {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string, fragrance: string) => void;
+  updateQuantity: (productId: string, fragrance: string, quantity: number) => void;
   clearCart: () => void;
   totalCents: () => number;
   totalItems: () => number;

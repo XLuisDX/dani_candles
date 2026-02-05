@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useCartStore } from "@/store/cartStore";
-import { toast } from "@/components/Toast";
+import { FragranceSelectorModal } from "@/components/FragranceSelectorModal";
 
 interface RelatedProduct {
   id: string;
@@ -29,7 +28,8 @@ export function RelatedProducts({
 }: RelatedProductsProps) {
   const [products, setProducts] = useState<RelatedProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const addItem = useCartStore((state) => state.addItem);
+  const [modalProduct, setModalProduct] = useState<RelatedProduct | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
@@ -78,16 +78,8 @@ export function RelatedProducts({
   }, [currentProductId, collectionId, limit]);
 
   const handleAddToCart = (product: RelatedProduct) => {
-    addItem({
-      productId: product.id,
-      name: product.name,
-      slug: product.slug,
-      priceCents: product.price_cents,
-      currencyCode: product.currency_code,
-      quantity: 1,
-      imageUrl: product.image_url,
-    });
-    toast.cart(`${product.name} added to cart`);
+    setModalProduct(product);
+    setIsModalOpen(true);
   };
 
   if (loading) {
@@ -195,6 +187,12 @@ export function RelatedProducts({
           </motion.article>
         ))}
       </div>
+
+      <FragranceSelectorModal
+        product={modalProduct}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </motion.section>
   );
 }

@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
       // Load order items
       const { data: items, error: itemsError } = await supabaseServer
         .from("order_items")
-        .select("id, product_name, quantity, unit_price_cents, total_cents")
+        .select("id, product_name, quantity, unit_price_cents, total_cents, variant_data")
         .eq("order_id", orderId)
         .order("created_at", { ascending: true });
 

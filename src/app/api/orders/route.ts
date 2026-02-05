@@ -21,6 +21,7 @@ const createOrderSchema = z.object({
       name: z.string().min(1),
       priceCents: z.number().int().min(0),
       quantity: z.number().int().min(1),
+      fragrance: z.string().min(1),
     })
   ).min(1),
   subtotalCents: z.number().int().min(0),
@@ -213,7 +214,7 @@ export async function POST(req: NextRequest) {
       unit_price_cents: item.priceCents,
       quantity: item.quantity,
       total_cents: item.priceCents * item.quantity,
-      variant_data: null,
+      variant_data: { fragrance: item.fragrance },
     }));
 
     const { error: itemsError } = await supabaseServer

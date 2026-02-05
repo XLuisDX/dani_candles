@@ -125,7 +125,7 @@ export default function CartPage() {
           >
             {items.map((item) => (
               <motion.div
-                key={item.productId}
+                key={`${item.productId}-${item.fragrance}`}
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 className="flex flex-col gap-4 rounded-2xl border border-dc-ink/8 bg-white/95 p-5 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1a1a]/95 sm:flex-row sm:items-start sm:gap-5 sm:rounded-3xl sm:p-6"
@@ -152,6 +152,10 @@ export default function CartPage() {
                     {item.name}
                   </Link>
 
+                  <p className="mt-1 text-xs font-medium text-dc-caramel dark:text-dc-caramel/80">
+                    {item.fragrance}
+                  </p>
+
                   <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-dc-ink/40 dark:text-white/40 sm:mt-2 sm:text-[10px]">
                     {(item.priceCents / 100).toFixed(2)} {item.currencyCode}
                   </p>
@@ -163,7 +167,7 @@ export default function CartPage() {
                         whileTap={{ scale: 0.95 }}
                         type="button"
                         onClick={() =>
-                          updateQuantity(item.productId, item.quantity - 1)
+                          updateQuantity(item.productId, item.fragrance, item.quantity - 1)
                         }
                         className="px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel dark:text-white/60 sm:px-5 sm:py-2.5 sm:text-[10px]"
                       >
@@ -177,7 +181,7 @@ export default function CartPage() {
                         whileTap={{ scale: 0.95 }}
                         type="button"
                         onClick={() =>
-                          updateQuantity(item.productId, item.quantity + 1)
+                          updateQuantity(item.productId, item.fragrance, item.quantity + 1)
                         }
                         className="px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/60 transition-colors hover:text-dc-caramel dark:text-white/60 sm:px-5 sm:py-2.5 sm:text-[10px]"
                       >
@@ -189,7 +193,7 @@ export default function CartPage() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       type="button"
-                      onClick={() => removeItem(item.productId)}
+                      onClick={() => removeItem(item.productId, item.fragrance)}
                       className="text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/40 transition-colors hover:text-red-600 dark:text-white/40 sm:text-[10px]"
                     >
                       Remove

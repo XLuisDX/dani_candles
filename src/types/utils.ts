@@ -232,6 +232,62 @@ export const FRAGRANCES = [
     imageUrl: "/fragrance6.jpg",
     notes: "Top: Bergamot · Heart: Creamy Sandalwood · Base: Amber",
   },
+  {
+    id: 7,
+    name: "Chocolate",
+    description:
+      "Indulgent and rich, our chocolate fragrance is a decadent treat for the senses. Deep cocoa notes blend with subtle sweetness to create a warm, comforting atmosphere reminiscent of artisan chocolateries.",
+    benefits: [
+      "Elevates mood and creates happiness",
+      "Satisfies sweet cravings naturally",
+      "Creates a cozy, indulgent atmosphere",
+      "Perfect for romantic evenings",
+    ],
+    imageUrl: "/fragrance7.jpg",
+    notes: "Top: Dark Cocoa · Heart: Toasted Hazelnut · Base: Warm Vanilla",
+  },
+  {
+    id: 8,
+    name: "Japanese Cherry",
+    description:
+      "Delicate and enchanting, our Japanese cherry blossom fragrance captures the ephemeral beauty of spring in Kyoto. Soft floral notes dance with subtle fruity undertones for a truly elegant experience.",
+    benefits: [
+      "Inspires renewal and fresh beginnings",
+      "Creates a serene, peaceful ambiance",
+      "Uplifts spirits with gentle florals",
+      "Brings the beauty of nature indoors",
+    ],
+    imageUrl: "/fragrance8.jpg",
+    notes: "Top: Cherry Blossom · Heart: White Peach · Base: Soft Musk",
+  },
+  {
+    id: 9,
+    name: "Bamboo",
+    description:
+      "Clean and refreshing, our bamboo fragrance evokes the tranquility of a zen garden. Fresh green notes combine with subtle aquatic hints for a purifying, spa-like experience.",
+    benefits: [
+      "Promotes mental clarity and focus",
+      "Creates a clean, fresh atmosphere",
+      "Encourages mindfulness and calm",
+      "Perfect for meditation spaces",
+    ],
+    imageUrl: "/fragrance9.jpg",
+    notes: "Top: Green Bamboo · Heart: White Tea · Base: Light Cedar",
+  },
+  {
+    id: 10,
+    name: "Bergamot",
+    description:
+      "Bright and sophisticated, our bergamot fragrance brings the citrus groves of Calabria to your home. This elegant scent balances zesty freshness with subtle floral depth for an uplifting experience.",
+    benefits: [
+      "Boosts mood and reduces anxiety",
+      "Creates an elegant, refined atmosphere",
+      "Energizes without overwhelming",
+      "Perfect for morning rituals",
+    ],
+    imageUrl: "/fragrance10.jpg",
+    notes: "Top: Italian Bergamot · Heart: Neroli · Base: White Amber",
+  },
 ];
 
 export const CARE_SECTIONS = [

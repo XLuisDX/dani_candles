@@ -225,6 +225,18 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
                           >
                             {item.name}
                           </Text>
+                          {item.fragrance && (
+                            <Text
+                              style={{
+                                margin: "0 0 4px 0",
+                                fontSize: "13px",
+                                fontWeight: 500,
+                                color: "#d4a574",
+                              }}
+                            >
+                              {item.fragrance}
+                            </Text>
+                          )}
                           <Text
                             style={{
                               margin: 0,

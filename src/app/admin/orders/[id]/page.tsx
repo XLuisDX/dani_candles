@@ -275,6 +275,7 @@ export default function AdminOrderDetailPage() {
               {items.map((item, index) => {
                 const unit = (item.unit_price_cents / 100).toFixed(2);
                 const line = (item.total_cents / 100).toFixed(2);
+                const fragrance = item.variant_data?.fragrance;
                 return (
                   <motion.div
                     key={item.id}
@@ -288,6 +289,11 @@ export default function AdminOrderDetailPage() {
                       <p className="font-display text-lg font-semibold leading-tight text-dc-ink dark:text-white">
                         {item.product_name}
                       </p>
+                      {fragrance && (
+                        <p className="mt-1 text-sm font-medium text-dc-caramel dark:text-dc-caramel/80">
+                          {fragrance}
+                        </p>
+                      )}
                       <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-dc-ink/40 dark:text-white/40">
                         Qty {item.quantity} · {unit} {order.currency_code} each
                       </p>

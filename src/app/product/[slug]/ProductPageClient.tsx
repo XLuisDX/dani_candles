@@ -10,6 +10,7 @@ import { QuantitySelector } from "@/components/QuantitySelector";
 import { RelatedProducts } from "@/components/RelatedProducts";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { toast } from "@/components/Toast";
+import { FragranceSelector } from "@/components/FragranceSelector";
 
 interface ProductPageClientProps {
   product: ProductWithCollection;
@@ -18,9 +19,16 @@ interface ProductPageClientProps {
 export default function ProductPageClient({ product }: ProductPageClientProps) {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
+  const [fragrance, setFragrance] = useState("");
+  const [fragranceError, setFragranceError] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = () => {
+    if (!fragrance) {
+      setFragranceError(true);
+      return;
+    }
+    setFragranceError(false);
     addItem({
       productId: product.id,
       name: product.name,
@@ -29,9 +37,11 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       currencyCode: product.currency_code,
       quantity: quantity,
       imageUrl: product.image_url,
+      fragrance: fragrance,
     });
-    toast.cart(`${quantity} × ${product.name} added to cart`);
+    toast.cart(`${quantity} × ${product.name} (${fragrance}) added to cart`);
     setQuantity(1);
+    setFragrance("");
   };
 
   return (
@@ -179,11 +189,31 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             </span>
           </motion.div>
 
-          {/* Quantity Selector */}
+          {/* Fragrance Selector */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.65, duration: 0.5 }}
+            className="mt-6 sm:mt-8"
+          >
+            <label className="mb-2 block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/50 dark:text-white/50 sm:text-[10px]">
+              Fragrance
+            </label>
+            <FragranceSelector
+              value={fragrance}
+              onChange={(f) => {
+                setFragrance(f);
+                setFragranceError(false);
+              }}
+              error={fragranceError}
+            />
+          </motion.div>
+
+          {/* Quantity Selector */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
             className="mt-6 sm:mt-8"
           >
             <label className="mb-2 block text-[9px] font-bold uppercase tracking-[0.2em] text-dc-ink/50 dark:text-white/50 sm:text-[10px]">
@@ -201,7 +231,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
+            transition={{ delay: 0.75, duration: 0.5 }}
             className="mt-4 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:gap-3"
           >
             <motion.button
@@ -227,7 +257,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
+              transition={{ delay: 0.85, duration: 0.5 }}
               className="mt-8 sm:mt-10"
             >
               <h2 className="text-[9px] font-bold uppercase tracking-[0.25em] text-dc-ink/50 dark:text-white/50 sm:text-[10px]">
@@ -244,7 +274,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.5 }}
+            transition={{ delay: 0.95, duration: 0.5 }}
             className="mt-8 grid grid-cols-3 gap-3 sm:mt-10 sm:gap-4"
           >
             {[
@@ -256,7 +286,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 key={item.label}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 + index * 0.1, duration: 0.4 }}
+                transition={{ delay: 1.05 + index * 0.1, duration: 0.4 }}
                 whileHover={{ y: -2 }}
                 className="rounded-xl border border-dc-ink/8 bg-dc-sand/20 px-3 py-3 dark:border-white/10 dark:bg-white/5 sm:rounded-2xl sm:px-5 sm:py-4"
               >

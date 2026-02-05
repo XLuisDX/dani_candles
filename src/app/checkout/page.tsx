@@ -122,6 +122,7 @@ export default function CheckoutPage() {
             name: item.name,
             priceCents: item.priceCents,
             quantity: item.quantity,
+            fragrance: item.fragrance,
           })),
           subtotalCents: subtotal,
           shippingCents: shippingCents,
@@ -148,7 +149,7 @@ export default function CheckoutPage() {
           orderId,
           currency: "USD",
           items: items.map((item) => ({
-            name: item.name,
+            name: `${item.name} - ${item.fragrance}`,
             quantity: item.quantity,
             unit_amount_cents: item.priceCents,
           })),
@@ -450,7 +451,7 @@ export default function CheckoutPage() {
           <div className="mt-5 space-y-2.5 sm:mt-6 sm:space-y-3">
             {items.map((item, index) => (
               <motion.div
-                key={item.productId}
+                key={`${item.productId}-${item.fragrance}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
@@ -459,6 +460,9 @@ export default function CheckoutPage() {
                 <div>
                   <p className="text-xs font-semibold text-dc-ink dark:text-white sm:text-sm">
                     {item.name}
+                  </p>
+                  <p className="mt-0.5 text-[10px] font-medium text-dc-caramel dark:text-dc-caramel/80 sm:text-xs">
+                    {item.fragrance}
                   </p>
                   <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-dc-ink/40 dark:text-white/40 sm:mt-1.5 sm:text-[10px]">
                     Qty {item.quantity}

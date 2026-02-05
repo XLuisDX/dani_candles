@@ -4,12 +4,11 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useCartStore } from "@/store/cartStore";
-import { toast } from "@/components/Toast";
 import { Product, ProductType } from "@/types/types";
 import ProductSort, { SortOption } from "@/components/ProductSort";
 import ProductFilter, { FilterState } from "@/components/ProductFilter";
 import Pagination from "@/components/Pagination";
+import { FragranceSelectorModal } from "@/components/FragranceSelectorModal";
 
 type ProductTypeFilter = ProductType | "all";
 
@@ -64,6 +63,8 @@ export default function ShopPage() {
     collection: "",
     priceRange: null,
   });
+  const [modalProduct, setModalProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Get initial type from URL params
   const typeFromUrl = searchParams.get("type") as ProductTypeFilter | null;
@@ -193,20 +194,9 @@ export default function ShopPage() {
     setCurrentPage(1);
   };
 
-  const addItem = useCartStore((state) => state.addItem);
-
   const handleAddToCart = (product: Product) => {
-    addItem({
-      productId: product.id,
-      name: product.name,
-      slug: product.slug,
-      priceCents: product.price_cents,
-      currencyCode: product.currency_code,
-      quantity: 1,
-      imageUrl: product.image_url,
-    });
-
-    toast.cart(`${product.name} added to cart`);
+    setModalProduct(product);
+    setIsModalOpen(true);
   };
 
   const handlePageChange = (page: number) => {
@@ -488,6 +478,12 @@ export default function ShopPage() {
           />
         </>
       )}
+
+      <FragranceSelectorModal
+        product={modalProduct}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   );
 }

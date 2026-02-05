@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
 
           const { data: orderItems, error: itemsError } = await supabaseServer
             .from("order_items")
-            .select("product_name, quantity, unit_price_cents, total_cents")
+            .select("product_name, quantity, unit_price_cents, total_cents, variant_data")
             .eq("order_id", orderId);
 
           if (itemsError) {
@@ -127,16 +127,20 @@ export async function POST(req: NextRequest) {
           }
 
           const items: OrderItemEmail[] =
-            orderItems?.map((item) => ({
-              name: item.product_name as string,
-              quantity: item.quantity as number,
-              unitPriceFormatted: (
-                (item.unit_price_cents as number) / 100
-              ).toFixed(2),
-              lineTotalFormatted: ((item.total_cents as number) / 100).toFixed(
-                2
-              ),
-            })) ?? [];
+            orderItems?.map((item) => {
+              const variantData = item.variant_data as { fragrance?: string } | null;
+              return {
+                name: item.product_name as string,
+                quantity: item.quantity as number,
+                unitPriceFormatted: (
+                  (item.unit_price_cents as number) / 100
+                ).toFixed(2),
+                lineTotalFormatted: ((item.total_cents as number) / 100).toFixed(
+                  2
+                ),
+                fragrance: variantData?.fragrance,
+              };
+            }) ?? [];
 
           const totalFormatted = (order.total_cents / 100).toFixed(2);
           const shippingRaw = (order.shipping_address ?? {}) as Record<
