@@ -3,12 +3,15 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "@/components/Toast";
-import { Product } from "@/types/types";
+import { Product, ProductType } from "@/types/types";
 import ProductSort, { SortOption } from "@/components/ProductSort";
 import ProductFilter, { FilterState } from "@/components/ProductFilter";
 import Pagination from "@/components/Pagination";
+
+type ProductTypeFilter = ProductType | "all";
 
 function DecorativeBackground() {
   return (
@@ -43,7 +46,15 @@ function DecorativeBackground() {
 
 const ITEMS_PER_PAGE = 9;
 
+const PRODUCT_TYPE_TABS: { value: ProductTypeFilter; label: string; icon: string }[] = [
+  { value: "all", label: "All", icon: "✨" },
+  { value: "aromatic", label: "Aromatic", icon: "🌸" },
+  { value: "decorative", label: "Decorative", icon: "🕯️" },
+];
+
 export default function ShopPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +64,30 @@ export default function ShopPage() {
     collection: "",
     priceRange: null,
   });
+
+  // Get initial type from URL params
+  const typeFromUrl = searchParams.get("type") as ProductTypeFilter | null;
+  const [selectedType, setSelectedType] = useState<ProductTypeFilter>(
+    typeFromUrl && (typeFromUrl === "aromatic" || typeFromUrl === "decorative")
+      ? typeFromUrl
+      : "all"
+  );
+
+  // Update URL when type changes
+  const handleTypeChange = (type: ProductTypeFilter) => {
+    setSelectedType(type);
+    setCurrentPage(1);
+
+    // Update URL without full page reload
+    const params = new URLSearchParams(searchParams.toString());
+    if (type === "all") {
+      params.delete("type");
+    } else {
+      params.set("type", type);
+    }
+    const newUrl = params.toString() ? `/shop?${params.toString()}` : "/shop";
+    router.push(newUrl, { scroll: false });
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -83,6 +118,13 @@ export default function ShopPage() {
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
 
+    // Filter by product type (tabs)
+    if (selectedType !== "all") {
+      filtered = filtered.filter(
+        (product) => product.product_type === selectedType
+      );
+    }
+
     // Filter by collection
     if (filters.collection) {
       filtered = filtered.filter(
@@ -99,7 +141,7 @@ export default function ShopPage() {
     }
 
     return filtered;
-  }, [products, filters]);
+  }, [products, filters, selectedType]);
 
   // Calculate price range for filter
   const priceRange = useMemo(() => {
@@ -224,6 +266,39 @@ export default function ShopPage() {
         >
           Awaken your space with handcrafted candles by Dani.
         </motion.p>
+
+        {/* Product Type Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mt-8 flex flex-wrap gap-2 sm:gap-3"
+        >
+          {PRODUCT_TYPE_TABS.map((tab) => (
+            <motion.button
+              key={tab.value}
+              onClick={() => handleTypeChange(tab.value)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`relative flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 sm:px-6 sm:py-3 sm:text-sm ${
+                selectedType === tab.value
+                  ? "bg-dc-caramel text-white shadow-lg shadow-dc-caramel/25 dark:bg-dc-caramel-dark"
+                  : "border border-dc-ink/10 bg-white/80 text-dc-ink/70 hover:border-dc-caramel/30 hover:bg-white hover:text-dc-ink dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:border-dc-caramel-dark/30 dark:hover:bg-white/10 dark:hover:text-white"
+              }`}
+            >
+              <span className="text-base sm:text-lg">{tab.icon}</span>
+              <span>{tab.label}</span>
+              {selectedType === tab.value && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 rounded-full bg-dc-caramel dark:bg-dc-caramel-dark"
+                  style={{ zIndex: -1 }}
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </motion.div>
       </motion.section>
 
       {!loading && !error && products.length > 0 && (
@@ -290,7 +365,31 @@ export default function ShopPage() {
         </motion.div>
       )}
 
-      {!loading && !error && paginatedProducts.length > 0 && (
+      {!loading && !error && products.length > 0 && filteredProducts.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-xl border border-dc-ink/8 bg-white/90 px-6 py-8 text-center backdrop-blur-sm dark:border-white/10 dark:bg-white/5 sm:rounded-2xl sm:px-8 sm:py-12"
+        >
+          <span className="mb-4 block text-4xl">
+            {selectedType === "aromatic" ? "🌸" : selectedType === "decorative" ? "🕯️" : "✨"}
+          </span>
+          <p className="text-sm font-medium text-dc-ink/70 dark:text-white/70 sm:text-base">
+            No {selectedType === "aromatic" ? "aromatic" : selectedType === "decorative" ? "decorative" : ""} candles available with the selected filters.
+          </p>
+          <button
+            onClick={() => {
+              handleTypeChange("all");
+              setFilters({ collection: "", priceRange: null });
+            }}
+            className="mt-4 text-xs font-semibold uppercase tracking-[0.15em] text-dc-caramel hover:text-dc-clay dark:text-dc-caramel-dark dark:hover:text-dc-sand sm:text-sm"
+          >
+            View all candles
+          </button>
+        </motion.div>
+      )}
+
+      {!loading && !error && filteredProducts.length > 0 && paginatedProducts.length > 0 && (
         <>
           <motion.section
             variants={containerVariants}

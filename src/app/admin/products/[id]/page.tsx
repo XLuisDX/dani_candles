@@ -100,6 +100,7 @@ export default function EditProductPage() {
           description:
             values.description.trim() === "" ? null : values.description.trim(),
           collection_id: categoryIdValue,
+          product_type: values.product_type,
         }),
       });
 
@@ -205,6 +206,7 @@ export default function EditProductPage() {
     shortDescription: product.short_description ?? "",
     description: product.description ?? "",
     collection_id: product.collection_id ?? "",
+    product_type: product.product_type ?? "aromatic",
   };
 
   return (

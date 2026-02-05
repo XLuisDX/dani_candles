@@ -26,7 +26,7 @@ export async function getProducts(
     let query = supabase
       .from("products")
       .select(
-        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, collection_id",
+        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, collection_id, product_type",
         { count: "exact" }
       )
       .eq("active", filters.active ?? true)
@@ -88,6 +88,7 @@ export async function getProductBySlug(
         currency_code,
         image_url,
         collection_id,
+        product_type,
         collections!products_collection_id_fkey (
           id,
           name,
@@ -125,7 +126,7 @@ export async function getFeaturedProducts(
     const { data, error } = await supabase
       .from("products")
       .select(
-        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url"
+        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, product_type"
       )
       .eq("active", true)
       .eq("is_featured", true)
@@ -155,7 +156,7 @@ export async function searchProducts(
     const { data, error } = await supabase
       .from("products")
       .select(
-        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url"
+        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, product_type"
       )
       .eq("active", true)
       .or(`name.ilike.%${query}%,short_description.ilike.%${query}%`)
@@ -186,7 +187,7 @@ export async function getRelatedProducts(
     let query = supabase
       .from("products")
       .select(
-        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url"
+        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, product_type"
       )
       .eq("active", true)
       .neq("id", currentProductId)
@@ -205,7 +206,7 @@ export async function getRelatedProducts(
       const { data: fallbackData, error: fallbackError } = await supabase
         .from("products")
         .select(
-          "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url"
+          "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, product_type"
         )
         .eq("active", true)
         .neq("id", currentProductId)

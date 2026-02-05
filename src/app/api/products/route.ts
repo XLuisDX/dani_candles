@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get("featured");
     const limit = searchParams.get("limit");
     const search = searchParams.get("search");
+    const productType = searchParams.get("type");
 
     // Fetch single product by slug
     if (slug) {
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
           currency_code,
           image_url,
           collection_id,
+          product_type,
           collections!products_collection_id_fkey (
             id,
             name,
@@ -51,7 +53,7 @@ export async function GET(request: NextRequest) {
     let query = supabaseServer
       .from("products")
       .select(
-        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, created_at, collection_id"
+        "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, created_at, collection_id, product_type"
       )
       .eq("active", true)
       .order("created_at", { ascending: false });
@@ -62,6 +64,10 @@ export async function GET(request: NextRequest) {
 
     if (featured === "true") {
       query = query.eq("is_featured", true);
+    }
+
+    if (productType && (productType === "aromatic" || productType === "decorative")) {
+      query = query.eq("product_type", productType);
     }
 
     if (search) {

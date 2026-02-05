@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       const { data, error } = await supabaseServer
         .from("products")
         .select(
-          "id, name, price_cents, currency_code, active, short_description, description, collection_id, image_url, created_at"
+          "id, name, price_cents, currency_code, active, short_description, description, collection_id, image_url, created_at, product_type"
         )
         .eq("id", productId)
         .maybeSingle();
@@ -122,6 +122,7 @@ export async function POST(request: NextRequest) {
       short_description,
       description,
       collection_id,
+      product_type,
     } = body;
 
     if (!name || price_cents === undefined) {
@@ -142,6 +143,7 @@ export async function POST(request: NextRequest) {
         short_description: short_description || null,
         description: description || null,
         collection_id: collection_id || null,
+        product_type: product_type || "aromatic",
       })
       .select("id")
       .maybeSingle();
@@ -199,13 +201,14 @@ export async function PUT(request: NextRequest) {
     if (body.short_description !== undefined) updateData.short_description = body.short_description;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.collection_id !== undefined) updateData.collection_id = body.collection_id;
+    if (body.product_type !== undefined) updateData.product_type = body.product_type;
 
     const { data, error } = await supabaseServer
       .from("products")
       .update(updateData)
       .eq("id", productId)
       .select(
-        "id, name, price_cents, currency_code, active, short_description, description, collection_id, image_url, created_at"
+        "id, name, price_cents, currency_code, active, short_description, description, collection_id, image_url, created_at, product_type"
       )
       .maybeSingle();
 

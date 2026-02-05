@@ -1,7 +1,12 @@
 "use client";
 
-import { Collection, ProductFormProps, ProductFormValues } from "@/types/types";
+import { Collection, ProductFormProps, ProductFormValues, ProductType } from "@/types/types";
 import { useState, useEffect } from "react";
+
+const PRODUCT_TYPES: { value: ProductType; label: string; description: string }[] = [
+  { value: "aromatic", label: "Aromatic", description: "Candles with fragrances and scents" },
+  { value: "decorative", label: "Decorative", description: "Decorative candles without scent" },
+];
 
 export function ProductForm({
   initialValues,
@@ -20,6 +25,7 @@ export function ProductForm({
       shortDescription: "",
       description: "",
       collection_id: "",
+      product_type: "aromatic",
     }
   );
 
@@ -190,36 +196,75 @@ export function ProductForm({
           Organization
         </p>
 
-        <div className="mt-5">
-          <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60 dark:text-white/60">
-            Collection
-          </label>
-
-          {loadingCollections ? (
-            <div className="mt-2 flex h-11 items-center rounded-2xl border border-black/10 bg-white/70 px-4 dark:border-white/10 dark:bg-white/5">
-              <span className="text-sm text-dc-ink/40 dark:text-white/40">
-                Loading collections...
-              </span>
-            </div>
-          ) : (
-            <select
-              name="collection_id"
-              value={values.collection_id}
-              onChange={handleChange}
-              className="mt-2 h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:bg-white/10"
-            >
-              <option value="">No collection</option>
-              {collections.map((collection) => (
-                <option key={collection.id} value={collection.id}>
-                  {collection.name}
-                </option>
+        <div className="mt-5 space-y-5">
+          {/* Product Type */}
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60 dark:text-white/60">
+              Candle type
+            </label>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {PRODUCT_TYPES.map((type) => (
+                <label
+                  key={type.value}
+                  className={`relative flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition-all ${
+                    values.product_type === type.value
+                      ? "border-dc-caramel/50 bg-dc-caramel/5 ring-2 ring-dc-caramel/20 dark:border-dc-caramel-dark/50 dark:bg-dc-caramel-dark/10 dark:ring-dc-caramel-dark/20"
+                      : "border-black/10 bg-white/70 hover:border-dc-caramel/30 dark:border-white/10 dark:bg-white/5 dark:hover:border-dc-caramel-dark/30"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="product_type"
+                    value={type.value}
+                    checked={values.product_type === type.value}
+                    onChange={handleChange}
+                    className="mt-0.5 h-4 w-4 border-dc-ink/30 text-dc-caramel focus:ring-dc-caramel/30 dark:border-white/30 dark:text-dc-caramel-dark"
+                  />
+                  <div>
+                    <span className="block text-sm font-medium text-dc-ink dark:text-white">
+                      {type.label}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] text-dc-ink/50 dark:text-white/50">
+                      {type.description}
+                    </span>
+                  </div>
+                </label>
               ))}
-            </select>
-          )}
+            </div>
+          </div>
 
-          <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-dc-ink/45 dark:text-white/45">
-            Assign this product to a collection for better organization.
-          </p>
+          {/* Collection */}
+          <div>
+            <label className="block text-[11px] font-medium uppercase tracking-[0.18em] text-dc-ink/60 dark:text-white/60">
+              Collection
+            </label>
+
+            {loadingCollections ? (
+              <div className="mt-2 flex h-11 items-center rounded-2xl border border-black/10 bg-white/70 px-4 dark:border-white/10 dark:bg-white/5">
+                <span className="text-sm text-dc-ink/40 dark:text-white/40">
+                  Loading collections...
+                </span>
+              </div>
+            ) : (
+              <select
+                name="collection_id"
+                value={values.collection_id}
+                onChange={handleChange}
+                className="mt-2 h-11 w-full rounded-2xl border border-black/10 bg-white/70 px-4 text-sm text-dc-ink outline-none transition focus:border-dc-caramel/35 focus:bg-white focus:ring-4 focus:ring-dc-caramel/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:bg-white/10"
+              >
+                <option value="">No collection</option>
+                {collections.map((collection) => (
+                  <option key={collection.id} value={collection.id}>
+                    {collection.name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-dc-ink/45 dark:text-white/45">
+              Assign this product to a collection for better organization.
+            </p>
+          </div>
         </div>
       </section>
 

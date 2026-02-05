@@ -35,7 +35,7 @@ async function getCollectionProducts(
   const { data, error } = await supabaseServer
     .from("products")
     .select(
-      "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, created_at, collection_id"
+      "id, name, slug, short_description, price_cents, currency_code, is_featured, image_url, created_at, collection_id, product_type"
     )
     .eq("collection_id", collectionId)
     .eq("active", true)

@@ -45,6 +45,7 @@ export default function NewProductPage() {
           description:
             values.description.trim() === "" ? null : values.description.trim(),
           collection_id: values.collection_id || null,
+          product_type: values.product_type,
         }),
       });
 

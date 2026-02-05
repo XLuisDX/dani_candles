@@ -1,3 +1,5 @@
+export type ProductType = 'aromatic' | 'decorative';
+
 export interface Product {
   id: string;
   name: string;
@@ -7,6 +9,7 @@ export interface Product {
   currency_code: string;
   is_featured: boolean;
   image_url: string;
+  product_type: ProductType;
 }
 
 export interface UserInfo {
@@ -89,6 +92,7 @@ export interface AdminProduct {
   collection_id: string | null;
   image_url: string | null;
   created_at: string | null;
+  product_type: ProductType;
 }
 
 export interface CurrentUser {
@@ -120,6 +124,7 @@ export interface ProductDetail {
 
 export interface ProductWithCollection extends ProductDetail {
   collection_id: string | null;
+  product_type: ProductType;
   collections?: {
     id: string;
     name: string;
@@ -144,6 +149,7 @@ export interface ProductFormValues {
   shortDescription: string;
   description: string;
   collection_id: string;
+  product_type: ProductType;
 }
 
 export interface ProductFormProps {
